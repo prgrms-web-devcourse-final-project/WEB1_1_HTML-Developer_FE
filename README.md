@@ -1,50 +1,63 @@
-# React + TypeScript + Vite
+# 💻 Convention
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🤝 Branch Naming Convention
 
-Currently, two official plugins are available:
+| 머릿말  | 설명                               |
+| ------- | ---------------------------------- |
+| main    | 서비스 브랜치                      |
+| develop | 배포 전 작업 기준                  |
+| feature | 기능 단위 구현                     |
+| hotfix  | 서비스 중 긴급 수정 건에 대한 처리 |
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+`예시: feature/ARV-이슈번호_작업내용`
 
-## Expanding the ESLint configuration
+## 🤝 Commit Convention
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+| 머릿말   | 설명                                                |
+| -------- | --------------------------------------------------- |
+| feat     | 새로운 기능 추가                                    |
+| fix      | 버그 수정                                           |
+| design   | CSS 디자인 등 사용자 UI                             |
+| style    | 코드 포맷 변경                                      |
+| refactor | 프로덕션 코드 리팩토링업                            |
+| docs     | 문서 수정                                           |
+| chore    | 빌드 테스트 업데이트, 패키지 매니저를 설정하는 경우 |
+| rename   | 파일 혹은 폴더명을 수정하거나 옮기는 작업만인 경우  |
+| remove   | 파일을 삭제하는 작업만 수행한 경우                  |
+| deploy   | 배포 관련 변경 사항의 경우                          |
 
-- Configure the top-level `parserOptions` property like this:
+## 🤝 Naming Convention
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### 기본 네이밍 컨벤션
+
+1. 컴포넌트는 `PascalCase` 사용
+2. 폴더명은 `camelCase` 사용
+3. 파일 명(**컴포넌트 제외**)은 camelCase 사용
+4. 변수 및 함수는 `camelCase` 사용
+5. 파라미터는 `camelCase` 사용
+6. 상수는 `BIG_SNAKE_CASE` 사용
+   <br/>
+
+### 타입(Type) 컨벤션
+
+1. prop 타입 interface 선언 시 → `컴포넌트명+Props`
+
+```tsx
+// 예시
+interface PostPageProps {
+		title: string | undefined;
+		setContentWithoutTag: (content: string) => void;
+}
+
+const PostPage = (props: PostPageProps) => {
+		const {title,
+		setContentWithoutTag
+		...
+}
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### 스타일(style) 컨벤션
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+- 컴포넌트 네이밍 규칙 : `Container` → `Wrapper` → `Box`
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+<br/>
