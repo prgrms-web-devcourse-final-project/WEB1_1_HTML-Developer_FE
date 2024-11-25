@@ -1,33 +1,33 @@
-import { useState } from 'react';
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import reactLogo from './assets/react.svg';
+import useScreenSize from './hook/useScreenSize';
 
-import viteLogo from '/vite.svg';
-import './App.css';
+const router = createBrowserRouter([]);
 
 function App() {
-  const [count, setCount] = useState(0);
+  useScreenSize();
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img alt="Vite logo" className="logo" src={viteLogo} />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img alt="React logo" className="logo react" src={reactLogo} />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
-    </>
+    <div css={mobileWrapperStyle}>
+      <RouterProvider router={router} />
+    </div>
   );
 }
+
+const mobileWrapperStyle = css`
+  width: 100%;
+  max-width: 430px;
+  height: calc(var(--vh, 1vh) * 100);
+  margin: auto;
+  position: relative;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  background-color: pink;
+`;
 
 export default App;

@@ -9,7 +9,7 @@
 | feature | 기능 단위 구현                     |
 | hotfix  | 서비스 중 긴급 수정 건에 대한 처리 |
 
-`예시: feature/ARV-이슈번호_작업내용`
+`예시: ARV-이슈번호-feat/작업내용`
 
 ## 🤝 Commit Convention
 
