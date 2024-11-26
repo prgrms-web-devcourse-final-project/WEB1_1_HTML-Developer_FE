@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import useScreenSize from 'hook/useScreenSize';
+import useScreenSize from 'hooks/useScreenSize';
 import GlobalStyle from 'styles/GlobalStyle';
 
 const router = createBrowserRouter([]);
