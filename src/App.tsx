@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import useScreenSize from 'hook/useScreenSize';
+import GlobalStyle from 'styles/GlobalStyle';
 
 const router = createBrowserRouter([]);
 
@@ -10,9 +11,12 @@ function App() {
   useScreenSize();
 
   return (
-    <div css={mobileWrapperStyle}>
-      <RouterProvider router={router} />
-    </div>
+    <>
+      <GlobalStyle />
+      <div css={mobileWrapperStyle}>
+        <RouterProvider router={router} />
+      </div>
+    </>
   );
 }
 
