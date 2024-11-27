@@ -10,8 +10,6 @@ const meta = {
     layout: 'centered',
   },
 
-  tags: ['autodocs'],
-
   argTypes: {
     onClick: fn(),
     children: { control: 'text' },

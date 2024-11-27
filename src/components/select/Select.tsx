@@ -5,14 +5,14 @@ import { TbChevronDown } from 'react-icons/tb';
 import { BodyRegularText } from 'styles/Typography';
 
 interface SelectProps {
-  value: string;
+  value?: string;
   children?: string;
-  onClick?: MouseEventHandler<HTMLButtonElement>;
+  onClick?: MouseEventHandler<HTMLDivElement>;
 }
 
 const Select = ({ value, children = '선택해주세요', onClick }: SelectProps) => {
   return (
-    <SelectContainer hasValue={!!value}>
+    <SelectContainer hasValue={!!value} onClick={onClick}>
       <BodyRegularText>{value || children}</BodyRegularText>
       <TbChevronDown size={24} />
     </SelectContainer>
