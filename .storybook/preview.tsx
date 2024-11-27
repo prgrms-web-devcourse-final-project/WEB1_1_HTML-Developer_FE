@@ -6,7 +6,12 @@ import theme from '../src/styles/theme';
 const GlobalStyles = css`
   @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
-  body {
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     font-family:
       'Pretendard',
       -apple-system,
