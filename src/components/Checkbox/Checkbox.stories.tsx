@@ -12,7 +12,7 @@ const meta = {
   tags: ['autodocs'],
 
   argTypes: {
-    date: { control: 'color' },
+    text: { control: 'color' },
   },
 } satisfies Meta<typeof Checkbox>;
 
@@ -21,6 +21,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    date: '2024.09.20(금)',
+    text: '2024.09.20(금)',
   },
 };

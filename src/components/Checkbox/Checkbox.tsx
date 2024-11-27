@@ -2,16 +2,16 @@ import styled from '@emotion/styled';
 import { TbCheck } from 'react-icons/tb';
 
 interface CheckboxProps {
-  date: string;
+  text: string;
 }
-const Checkbox = ({ date }: CheckboxProps) => {
+const Checkbox = ({ text }: CheckboxProps) => {
   return (
     <Wrapper>
       <CheckboxContainer>
-        <StyledInput id={date} name={date} type="checkbox" />
+        <StyledInput id={text} name={text} type="checkbox" />
         <TbCheck size={18} />
       </CheckboxContainer>
-      <StyledP>{date}</StyledP>
+      <StyledP>{text}</StyledP>
     </Wrapper>
   );
 };
