@@ -6,6 +6,10 @@ import theme from '../src/styles/theme';
 const GlobalStyles = css`
   @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
+  .sb-show-main.sb-main-padded {
+    padding: 0;
+  }
+
   body {
     font-family:
       'Pretendard',
@@ -16,7 +20,16 @@ const GlobalStyles = css`
 
 export const decorators = [
   (Story) => (
-    <div style={{ padding: '8px', height: '100vh', background: '#1B1D1F' }}>
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'baseline',
+        justifyContent: 'flex-start',
+        padding: '8px',
+        height: '100vh',
+        background: '#1B1D1F',
+      }}
+    >
       <ThemeProvider theme={theme}>
         <Global styles={GlobalStyles} />
         <Story />
