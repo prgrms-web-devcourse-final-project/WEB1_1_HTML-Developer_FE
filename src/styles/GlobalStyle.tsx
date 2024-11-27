@@ -2,13 +2,7 @@
 import { Global, css } from '@emotion/react';
 
 const globalStyle = css`
-  @font-face {
-    font-family: 'Pretendard';
-    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard.woff')
-      format('woff');
-    font-weight: normal;
-    font-style: normal;
-  }
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
   *,
   *::before,
