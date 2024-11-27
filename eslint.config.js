@@ -56,7 +56,12 @@ const typescriptConfig = {
     '@typescript-eslint/no-unused-vars': 'warn',
     '@typescript-eslint/no-require-imports': 'error',
     '@typescript-eslint/no-import-type-side-effects': 'error',
-    '@typescript-eslint/consistent-type-imports': 'warn',
+    '@typescript-eslint/consistent-type-imports': [
+      'warn',
+      {
+        prefer: 'type-imports',
+      },
+    ],
     '@typescript-eslint/no-misused-promises': [
       'error',
       {
