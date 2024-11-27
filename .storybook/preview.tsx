@@ -5,9 +5,11 @@ import theme from '../src/styles/theme';
 
 export const decorators = [
   (Story) => (
-    <ThemeProvider theme={theme}>
-      <Story />
-    </ThemeProvider>
+    <div style={{ padding: '8px', height: '100vh', background: '#1B1D1F' }}>
+      <ThemeProvider theme={theme}>
+        <Story />
+      </ThemeProvider>
+    </div>
   ),
 ];
 
