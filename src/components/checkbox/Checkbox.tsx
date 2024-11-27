@@ -1,29 +1,32 @@
 import styled from '@emotion/styled';
 import { TbCheck } from 'react-icons/tb';
 
+import { BodyRegularText } from 'styles/Typography';
+
 interface CheckboxProps {
   text: string;
 }
 const Checkbox = ({ text }: CheckboxProps) => {
   return (
-    <Wrapper>
-      <CheckboxContainer>
+    <CheckboxContainer>
+      <InputWrapper>
         <StyledInput id={text} name={text} type="checkbox" />
         <TbCheck size={18} />
-      </CheckboxContainer>
-      <StyledP>{text}</StyledP>
-    </Wrapper>
+      </InputWrapper>
+      <BodyRegularText>{text}</BodyRegularText>
+    </CheckboxContainer>
   );
 };
 
-const Wrapper = styled.label`
+const CheckboxContainer = styled.label`
   display: flex;
   align-items: center;
   gap: 12px;
   user-select: none;
+  color: ${({ theme }) => theme.colors.dark[100]};
 `;
 
-const CheckboxContainer = styled.div`
+const InputWrapper = styled.div`
   position: relative;
   display: inline-block;
 `;
@@ -32,7 +35,7 @@ const StyledInput = styled.input`
   appearance: none;
   width: 1.25rem;
   height: 1.25rem;
-  border: 1.5px solid gainsboro;
+  border: 1.5px solid ${({ theme }) => theme.colors.dark[300]};
   border-radius: 0.25rem;
 
   & + svg {
@@ -52,11 +55,6 @@ const StyledInput = styled.input`
   &:checked + svg {
     display: block;
   }
-`;
-
-const StyledP = styled.p`
-  ${({ theme }) => theme.typography.bodyR}
-  color: ${({ theme }) => theme.colors.dark[100]};
 `;
 
 export default Checkbox;
