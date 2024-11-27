@@ -12,7 +12,7 @@ const meta = {
   tags: ['autodocs'],
 
   argTypes: {
-    text: { control: 'color' },
+    text: { control: 'text' },
   },
 } satisfies Meta<typeof Checkbox>;
 
