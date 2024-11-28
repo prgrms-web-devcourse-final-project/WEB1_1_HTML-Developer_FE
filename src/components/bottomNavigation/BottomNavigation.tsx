@@ -5,15 +5,17 @@ import { LuUser2 } from 'react-icons/lu';
 import { TbMessageCircle, TbBell } from 'react-icons/tb';
 import { useNavigate } from 'react-router-dom';
 
+import type { BottomNavIcons, BottomNavKey } from './types';
+
 import { ChipText } from 'styles/Typography';
 
 const BottomNavigation = () => {
-  const [selectedIcon, setSelectedIcon] = useState('홈');
+  const [selectedIcon, setSelectedIcon] = useState<BottomNavKey>('홈');
   const navigate = useNavigate();
   /**
    * @TODO path 경로 수정
    */
-  const bottomNavIcons = {
+  const bottomNavIcons: BottomNavIcons = {
     홈: {
       icon: <BiHomeAlt size={20} />,
       path: '/',
@@ -32,15 +34,19 @@ const BottomNavigation = () => {
     },
   };
 
-  const handleClick = (key: string) => {
+  const handleClick = (key: BottomNavKey) => {
     setSelectedIcon(key);
-    navigate(bottomNavIcons[key as keyof typeof bottomNavIcons].path);
+    navigate(bottomNavIcons[key].path);
   };
 
   return (
     <BottomNavigationContainer>
       {Object.entries(bottomNavIcons).map(([key, { icon }]) => (
-        <IconWrapper isSelected={selectedIcon === key} key={key} onClick={() => handleClick(key)}>
+        <IconWrapper
+          isSelected={selectedIcon === key}
+          key={key}
+          onClick={() => handleClick(key as BottomNavKey)}
+        >
           {icon}
           <ChipText>{key}</ChipText>
         </IconWrapper>
