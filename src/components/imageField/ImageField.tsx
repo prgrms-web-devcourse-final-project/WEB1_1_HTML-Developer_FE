@@ -102,13 +102,13 @@ export default ImageField;
 const ImageFieldWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 1.2rem;
   flex-wrap: wrap;
 
   & > div,
   label {
-    width: 120px;
-    height: 120px;
+    width: 12rem;
+    height: 12rem;
   }
 `;
 
@@ -120,7 +120,7 @@ const ImageAddButton = styled.label`
   color: ${({ theme }) => theme.colors.dark[300]};
   background-color: ${({ theme }) => theme.colors.dark[700]};
   border-radius: 8px;
-  gap: 4px;
+  gap: 0.4rem;
   cursor: pointer;
 
   svg {
@@ -148,10 +148,10 @@ const DeleteButton = styled.div`
   align-items: center;
   justify-content: center;
   position: absolute;
-  top: 0px;
-  right: 0px;
-  width: 28px;
-  height: 28px;
+  top: 0;
+  right: 0;
+  width: 2.8rem;
+  height: 2.8rem;
   background-color: ${({ theme }) => hexToRgba(theme.colors.dark[700], 0.4)};
   border: none;
   cursor: pointer;
