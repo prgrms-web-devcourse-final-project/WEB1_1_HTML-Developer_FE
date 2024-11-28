@@ -21,7 +21,6 @@ const colors = {
     50: '#F8F9FA',
   },
   red: '#FF595E',
-  redBg: 'rgba(255, 100, 91, 0.2)',
   yellow: '#FEB336',
   green: '#00CD70',
   blue: '#2890FF',
