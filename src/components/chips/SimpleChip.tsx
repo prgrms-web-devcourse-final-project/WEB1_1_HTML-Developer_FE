@@ -17,9 +17,9 @@ const ChipContainer = styled.div<ChipStyle>`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 4px;
+  gap: 0.4rem;
   width: fit-content;
-  padding: ${({ hasDeleteIcon }) => (hasDeleteIcon ? '8px 12px 8px 16px' : '8px 16px')};
+  padding: ${({ hasDeleteIcon }) => (hasDeleteIcon ? '.8rem 1.2rem .8rem 1.6rem' : '.8rem 1.6rem')};
   border: 1px solid ${({ theme }) => theme.colors.dark[500]};
   border-radius: 24px;
   color: ${({ theme }) => theme.colors.dark[300]};
@@ -29,7 +29,6 @@ const DeleteButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0;
   border: none;
   background-color: transparent;
   color: ${({ theme }) => theme.colors.dark[300]};

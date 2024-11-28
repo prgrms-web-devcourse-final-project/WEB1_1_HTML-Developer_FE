@@ -56,10 +56,10 @@ const OutlineStyle = ({ color, theme }: BaseButtonColor & { theme: Theme }) => c
 `;
 
 const BaseButtonContainer = styled.button<BaseButtonStyle>`
-  width: ${({ isFullWidth }) => (isFullWidth ? '100%' : 'auto')};
-  min-width: 88px;
-  height: ${({ size }) => (size === 'medium' ? '48px' : '40px')};
-  padding: 0 12px;
+  width: ${({ isFullWidth }) => (isFullWidth ? '100%' : 'fit-content')};
+  min-width: 8.8rem;
+  height: ${({ size }) => (size === 'medium' ? '4.8rem' : '4rem')};
+  padding: 0 1.2rem;
   border-radius: 8px;
   outline: none;
   cursor: pointer;

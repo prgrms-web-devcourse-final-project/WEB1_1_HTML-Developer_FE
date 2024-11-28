@@ -17,9 +17,9 @@ const ChipContainer = styled.div<ChipStyle>`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 4px;
+  gap: 0.4rem;
   width: fit-content;
-  padding: 8px 12px 8px 16px;
+  padding: 0.8rem 1.2rem 0.8rem 1.6rem;
   border: 1px solid
     ${({ isActive, theme }) => (isActive ? theme.colors.primaryLight : theme.colors.dark[300])};
   border-radius: 24px;

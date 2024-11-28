@@ -6,9 +6,6 @@ import FilterChip from './FilterChip';
 const meta = {
   title: 'FilterChip',
   component: FilterChip,
-  parameters: {
-    layout: 'fullscreen',
-  },
 } satisfies Meta<typeof FilterChip>;
 
 export default meta;
