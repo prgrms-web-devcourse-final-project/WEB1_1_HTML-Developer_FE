@@ -7,7 +7,7 @@ const meta = {
   title: 'Select',
   component: Select,
   parameters: {
-    layout: 'centered',
+    layout: 'padded',
   },
 
   argTypes: {
