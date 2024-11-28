@@ -59,8 +59,8 @@ const BottomNavContainer = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  height: 3.62rem;
-  padding: 0.5rem 1rem;
+  height: 5.8rem;
+  padding: 0.8rem 1.6rem;
   background-color: ${({ theme }) => theme.colors.dark[700]};
 `;
 
@@ -71,7 +71,7 @@ const IconWrapper = styled.div<{ isSelected: boolean }>`
   justify-content: center;
   align-items: center;
   text-align: center;
-  gap: 2px;
+  gap: 0.2rem;
   flex-shrink: 0;
   color: ${({ theme, isSelected }) => (isSelected ? theme.colors.white : theme.colors.dark[300])};
 
