@@ -6,5 +6,6 @@ declare module '@emotion/react' {
     colors: ColorsTypes;
     typography: TypographyTypes;
     backdrop: backdropTypes;
+    maxWidth: string;
   }
 }
