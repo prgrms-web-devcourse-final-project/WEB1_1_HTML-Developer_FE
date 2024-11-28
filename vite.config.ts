@@ -7,5 +7,13 @@ export default defineConfig({
     port: 3000,
     open: true,
   },
-  plugins: [react(), tsconfigPaths()],
+  plugins: [
+    react({
+      jsxImportSource: '@emotion/react',
+      babel: {
+        plugins: ['@emotion/babel-plugin'],
+      },
+    }),
+    tsconfigPaths(),
+  ],
 });
