@@ -1,3 +1,4 @@
+import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import FilterChip from './FilterChip';
@@ -16,6 +17,7 @@ type Story = StoryObj<typeof meta>;
 export const Chip: Story = {
   args: {
     children: '지역',
+    onClick: action('click'),
     isActive: false,
   },
 };
@@ -23,7 +25,7 @@ export const Chip: Story = {
 export const ChipWithButton: Story = {
   args: {
     children: '천안',
-    onClick: () => {},
+    onClick: action('click'),
     isActive: true,
   },
 };
