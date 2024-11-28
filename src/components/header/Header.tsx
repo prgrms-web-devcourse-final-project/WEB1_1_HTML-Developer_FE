@@ -30,21 +30,21 @@ const HeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  min-width: 360px;
-  height: 52px;
-  padding: 0 1rem;
+  min-width: 36rem;
+  height: 5.2rem;
+  padding: 0 1.6rem;
   background-color: ${({ theme }) => theme.colors.black};
   border-bottom: 1px solid ${({ theme }) => theme.colors.dark[500]};
 
   img {
-    width: 110px;
+    width: 11rem;
   }
 `;
 
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 1.6rem;
   color: ${({ theme }) => theme.colors.white};
 `;
 
