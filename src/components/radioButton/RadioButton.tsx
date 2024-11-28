@@ -17,14 +17,14 @@ const RadioButton = ({ text }: RadioButtonProps) => {
 const RadioButtonContainer = styled.label`
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 1.2rem;
   color: ${({ theme }) => theme.colors.dark[100]};
 `;
 
 const StyledInput = styled.input`
   appearance: none;
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 2rem;
+  height: 2rem;
   border: 1.5px solid ${({ theme }) => theme.colors.dark[300]};
   border-radius: 50%;
 
