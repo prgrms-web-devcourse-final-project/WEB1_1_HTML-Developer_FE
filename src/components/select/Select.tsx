@@ -31,7 +31,6 @@ const SelectContainer = styled.div<{ hasValue: boolean }>`
   align-items: center;
   gap: 8px;
   width: 100%;
-  max-width: 430px;
   min-width: 327px;
   height: 2.5rem;
   border-radius: 0.25rem;
