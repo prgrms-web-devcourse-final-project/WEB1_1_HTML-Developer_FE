@@ -7,15 +7,14 @@ interface RadioButtonProps {
 }
 const RadioButton = ({ text }: RadioButtonProps) => {
   return (
-    <Wrapper>
+    <RadioButtonContainer>
       <StyledInput id={text} name={text} type="radio" />
-
       <StyledBodyRegularText>{text}</StyledBodyRegularText>
-    </Wrapper>
+    </RadioButtonContainer>
   );
 };
 
-const Wrapper = styled.label`
+const RadioButtonContainer = styled.label`
   display: flex;
   align-items: center;
   gap: 12px;
