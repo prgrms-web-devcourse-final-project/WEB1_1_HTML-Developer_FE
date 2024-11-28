@@ -1,4 +1,4 @@
-export type BottomNavKey = '홈' | '채팅' | '알림' | '마이페이지';
+export type BottomNavKey = '홈' | '채팅' | '알림' | 'MY';
 interface NavIconInfo {
   icon: JSX.Element;
   path: string;

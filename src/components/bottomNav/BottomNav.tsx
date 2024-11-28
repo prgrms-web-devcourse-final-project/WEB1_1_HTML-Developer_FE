@@ -28,7 +28,7 @@ const BottomNav = () => {
       icon: <TbBell size={20} />,
       path: '/notification',
     },
-    마이페이지: {
+    MY: {
       icon: <LuUser2 size={20} />,
       path: '/mypage',
     },
@@ -60,18 +60,18 @@ const BottomNavContainer = styled.div`
   justify-content: space-between;
   width: 100%;
   height: 3.62rem;
-  padding: 0.5rem 1.5rem;
+  padding: 0.5rem 1rem;
   background-color: ${({ theme }) => theme.colors.dark[700]};
 `;
 
 const IconWrapper = styled.div<{ isSelected: boolean }>`
   display: flex;
+  flex: 1;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
   gap: 2px;
-  padding: 0 22px;
   flex-shrink: 0;
   color: ${({ theme, isSelected }) => (isSelected ? theme.colors.white : theme.colors.dark[300])};
 
