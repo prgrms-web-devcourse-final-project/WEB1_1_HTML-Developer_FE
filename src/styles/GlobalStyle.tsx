@@ -25,6 +25,7 @@ const globalStyle = css`
     justify-content: center;
     align-items: center;
     background-color: #f9f9f9;
+    font-size: 62.5%;
   }
 
   #root {
