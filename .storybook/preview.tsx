@@ -1,40 +1,21 @@
-import React from 'react';
 import type { Preview } from '@storybook/react';
-import { css, Global, ThemeProvider } from '@emotion/react';
+import { ThemeProvider } from '@emotion/react';
+import { StoryFn } from '@storybook/react';
 import theme from '../src/styles/theme';
-
-const GlobalStyles = css`
-  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-
-  .sb-show-main.sb-main-padded {
-    padding: 0;
-  }
-
-  body {
-    font-family:
-      'Pretendard',
-      -apple-system,
-      sans-serif;
-  }
-`;
+import GlobalStyle from 'styles/GlobalStyle';
 
 export const decorators = [
-  (Story) => (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'baseline',
-        justifyContent: 'flex-start',
-        padding: '8px',
-        height: '100vh',
-        background: '#1B1D1F',
-      }}
-    >
-      <ThemeProvider theme={theme}>
-        <Global styles={GlobalStyles} />
+  (Story: StoryFn) => (
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <div
+        style={{
+          padding: '8px',
+        }}
+      >
         <Story />
-      </ThemeProvider>
-    </div>
+      </div>
+    </ThemeProvider>
   ),
 ];
 
@@ -45,6 +26,15 @@ const preview: Preview = {
         color: /(background|color)$/i,
         date: /Date$/i,
       },
+    },
+    backgrounds: {
+      default: 'dark',
+      values: [
+        {
+          name: 'dark',
+          value: '#1B1D1F',
+        },
+      ],
     },
   },
 };
