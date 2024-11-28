@@ -9,7 +9,7 @@ import type { BottomNavIcons, BottomNavKey } from './types';
 
 import { ChipText } from 'styles/Typography';
 
-const BottomNavigation = () => {
+const BottomNav = () => {
   const [selectedIcon, setSelectedIcon] = useState<BottomNavKey>('홈');
   const navigate = useNavigate();
   /**
@@ -40,7 +40,7 @@ const BottomNavigation = () => {
   };
 
   return (
-    <BottomNavigationContainer>
+    <BottomNavContainer>
       {Object.entries(bottomNavIcons).map(([key, { icon }]) => (
         <IconWrapper
           isSelected={selectedIcon === key}
@@ -51,11 +51,11 @@ const BottomNavigation = () => {
           <ChipText>{key}</ChipText>
         </IconWrapper>
       ))}
-    </BottomNavigationContainer>
+    </BottomNavContainer>
   );
 };
 
-const BottomNavigationContainer = styled.div`
+const BottomNavContainer = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -80,4 +80,4 @@ const IconWrapper = styled.div<{ isSelected: boolean }>`
   }
 `;
 
-export default BottomNavigation;
+export default BottomNav;

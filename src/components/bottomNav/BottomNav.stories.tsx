@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { MemoryRouter } from 'react-router-dom';
 
-import BottomNavigation from './BottomNavigation';
+import BottomNav from './BottomNav';
 
 const meta = {
-  title: 'BottomNavigation',
-  component: BottomNavigation,
+  title: 'BottomNav',
+  component: BottomNav,
   parameters: {
     layout: 'fullscreen',
   },
@@ -17,7 +17,7 @@ const meta = {
       </MemoryRouter>
     ),
   ],
-} satisfies Meta<typeof BottomNavigation>;
+} satisfies Meta<typeof BottomNav>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
