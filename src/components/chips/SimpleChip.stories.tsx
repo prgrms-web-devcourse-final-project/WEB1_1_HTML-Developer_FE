@@ -6,9 +6,6 @@ import SimpleChip from './SimpleChip';
 const meta = {
   title: 'SimpleChip',
   component: SimpleChip,
-  parameters: {
-    layout: 'fullscreen',
-  },
 } satisfies Meta<typeof SimpleChip>;
 
 export default meta;

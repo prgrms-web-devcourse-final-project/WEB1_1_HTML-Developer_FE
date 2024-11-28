@@ -5,10 +5,6 @@ import Badge from './Badge';
 const meta = {
   title: 'Badge',
   component: Badge,
-  parameters: {
-    layout: 'fullscreen',
-  },
-  args: {},
 } satisfies Meta<typeof Badge>;
 
 export default meta;

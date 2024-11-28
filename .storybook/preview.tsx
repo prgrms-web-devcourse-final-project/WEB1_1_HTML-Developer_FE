@@ -10,7 +10,7 @@ export const decorators = [
       <GlobalStyle />
       <div
         style={{
-          padding: '8px',
+          padding: '0.8rem',
         }}
       >
         <Story />
