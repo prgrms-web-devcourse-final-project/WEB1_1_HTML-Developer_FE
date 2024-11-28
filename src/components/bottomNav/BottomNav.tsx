@@ -9,7 +9,7 @@ import type { BottomNavIcons, BottomNavKey } from './types';
 
 import { ChipText } from 'styles/Typography';
 
-const BottomNavigation = () => {
+const BottomNav = () => {
   const [selectedIcon, setSelectedIcon] = useState<BottomNavKey>('홈');
   const navigate = useNavigate();
   /**
@@ -28,7 +28,7 @@ const BottomNavigation = () => {
       icon: <TbBell size={20} />,
       path: '/notification',
     },
-    마이페이지: {
+    MY: {
       icon: <LuUser2 size={20} />,
       path: '/mypage',
     },
@@ -40,7 +40,7 @@ const BottomNavigation = () => {
   };
 
   return (
-    <BottomNavigationContainer>
+    <BottomNavContainer>
       {Object.entries(bottomNavIcons).map(([key, { icon }]) => (
         <IconWrapper
           isSelected={selectedIcon === key}
@@ -51,27 +51,27 @@ const BottomNavigation = () => {
           <ChipText>{key}</ChipText>
         </IconWrapper>
       ))}
-    </BottomNavigationContainer>
+    </BottomNavContainer>
   );
 };
 
-const BottomNavigationContainer = styled.div`
+const BottomNavContainer = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
   height: 3.62rem;
-  padding: 0.5rem 1.5rem;
+  padding: 0.5rem 1rem;
   background-color: ${({ theme }) => theme.colors.dark[700]};
 `;
 
 const IconWrapper = styled.div<{ isSelected: boolean }>`
   display: flex;
+  flex: 1;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
   gap: 2px;
-  padding: 0 22px;
   flex-shrink: 0;
   color: ${({ theme, isSelected }) => (isSelected ? theme.colors.white : theme.colors.dark[300])};
 
@@ -80,4 +80,4 @@ const IconWrapper = styled.div<{ isSelected: boolean }>`
   }
 `;
 
-export default BottomNavigation;
+export default BottomNav;

@@ -36,6 +36,5 @@ const StyledInput = styled.input`
 
 const StyledBodyRegularText = styled(BodyRegularText)`
   margin: 0;
-  height: 1.25rem;
 `;
 export default RadioButton;

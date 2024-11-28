@@ -28,10 +28,10 @@ const CheckboxContainer = styled.label`
 
 const InputWrapper = styled.div`
   position: relative;
-  display: inline-block;
 `;
 
 const StyledInput = styled.input`
+  display: block;
   appearance: none;
   width: 1.25rem;
   height: 1.25rem;
@@ -40,7 +40,7 @@ const StyledInput = styled.input`
 
   & + svg {
     position: absolute;
-    top: 40%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     color: ${({ theme }) => theme.colors.white};
