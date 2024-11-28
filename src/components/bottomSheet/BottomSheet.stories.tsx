@@ -6,7 +6,7 @@ import BottomSheet from './BottomSheet';
 import { useBottomSheetStore } from 'stores/useBottomSheetStore';
 
 const meta: Meta<typeof BottomSheet> = {
-  title: 'Components/BottomSheet',
+  title: 'BottomSheet',
   component: BottomSheet,
   decorators: [
     (Story) => (
@@ -27,7 +27,6 @@ const Container = styled.div`
   height: 100vh;
   margin: 0 auto;
   position: relative;
-  background-color: #f3f4f6;
 `;
 
 const Button = styled.button`
