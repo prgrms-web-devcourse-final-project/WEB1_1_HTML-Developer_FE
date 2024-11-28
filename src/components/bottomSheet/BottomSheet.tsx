@@ -60,7 +60,7 @@ export default BottomSheet;
 
 const Overlay = styled(motion.div)`
   position: fixed;
-  bottom: 0px;
+  bottom: 0;
   max-width: ${({ theme }) => theme.maxWidth};
   width: 100%;
   height: 100%;
@@ -72,7 +72,7 @@ const StyledMotionDiv = styled(motion.div)`
   display: flex;
   flex-direction: column;
   position: fixed;
-  bottom: 0px;
+  bottom: 0;
   max-width: ${({ theme }) => theme.maxWidth};
   max-height: 85vh;
   width: 100%;
@@ -85,22 +85,21 @@ const StyledMotionDiv = styled(motion.div)`
 
 const HeaderWrapper = styled.div`
   flex-shrink: 0;
-  padding: 1.5rem 1rem;
+  padding: 1.6rem 1.2rem;
   border-bottom: 1px solid #f3f4f6;
 `;
 
 const HandleBar = styled.div`
-  width: 2rem;
-  height: 0.25rem;
+  width: 5rem;
+  height: 0.3rem;
   margin: 0 auto;
-  margin-top: -0.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2.4rem;
   background-color: #e5e7eb;
   border-radius: 9999px;
 `;
 
 const ContentWrapper = styled.div`
-  padding: 12px;
+  padding: 2.4rem;
   overflow-y: auto;
 
   &::-webkit-scrollbar {
@@ -112,8 +111,8 @@ const ContentWrapper = styled.div`
 
 const FooterWrapper = styled.div`
   display: flex;
-  gap: 0.5rem;
-  padding: 1rem;
+  gap: 1.2rem;
+  padding: 1.2rem;
   border-top: 1px solid #f3f4f6;
   background: white;
 `;

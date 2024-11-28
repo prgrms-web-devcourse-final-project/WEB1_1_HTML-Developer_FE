@@ -33,7 +33,7 @@ const Button = styled.button`
   padding: 0.5rem 1rem;
   background-color: #3b82f6;
   color: white;
-  border-radius: 0.25rem;
+  border-radius: 6px;
   border: none;
   cursor: pointer;
 
@@ -43,19 +43,19 @@ const Button = styled.button`
 `;
 
 const Title = styled.h2`
-  font-size: 1.125rem;
+  font-size: 2rem;
   font-weight: 600;
   margin: 0;
 `;
 
 const ContentText = styled.p`
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
 `;
 
 const FooterButton = styled.button<{ variant?: 'primary' | 'secondary' }>`
   flex: 1;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: 6px;
   border: none;
   cursor: pointer;
 
@@ -78,9 +78,10 @@ const FooterButton = styled.button<{ variant?: 'primary' | 'secondary' }>`
 `;
 
 const ListItem = styled.div`
-  padding: 1rem;
+  padding: 1.2rem;
   border-bottom: 1px solid #e5e7eb;
   cursor: pointer;
+  margin-bottom: 1.2rem;
 
   &:hover {
     background-color: #f9fafb;
