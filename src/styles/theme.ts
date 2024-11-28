@@ -88,6 +88,8 @@ const backdrop = {
   default: 'rgba(27, 29, 31, 0.6)',
 };
 
+const maxWidth = '430px';
+
 export type ColorsTypes = typeof colors;
 export type TypographyTypes = typeof typography;
 export type BackdropTypes = typeof backdrop;
@@ -96,6 +98,7 @@ const theme: Theme = {
   colors,
   typography,
   backdrop,
+  maxWidth,
 };
 
 export default theme;

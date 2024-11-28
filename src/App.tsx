@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import type { Theme } from '@emotion/react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import useScreenSize from 'hooks/useScreenSize';
@@ -20,9 +21,9 @@ function App() {
   );
 }
 
-const mobileWrapperStyle = css`
+const mobileWrapperStyle = (theme: Theme) => css`
   width: 100%;
-  max-width: 430px;
+  max-width: ${theme.maxWidth};
   height: calc(var(--vh, 1vh) * 100);
   margin: auto;
   position: relative;
