@@ -5,10 +5,10 @@ import { TbX } from 'react-icons/tb';
 import { ChipText } from 'styles/Typography';
 
 interface ChipStyle {
-  hasDeleteIcon: boolean;
+  hasDeleteIcon?: boolean;
 }
 
-interface SimpleChipProps {
+interface SimpleChipProps extends ChipStyle {
   children: string;
   onDeleteClick?: MouseEventHandler<HTMLButtonElement>;
 }
@@ -18,7 +18,7 @@ const ChipContainer = styled.div<ChipStyle>`
   justify-content: center;
   align-items: center;
   gap: 4px;
-  width: auto;
+  width: fit-content;
   padding: ${({ hasDeleteIcon }) => (hasDeleteIcon ? '8px 12px 8px 16px' : '8px 16px')};
   border: 1px solid ${({ theme }) => theme.colors.dark[500]};
   border-radius: 24px;
@@ -42,11 +42,11 @@ const DeleteButton = styled.button`
   }
 `;
 
-const SimpleChip = ({ children, onDeleteClick }: SimpleChipProps) => {
+const SimpleChip = ({ hasDeleteIcon = false, children, onDeleteClick }: SimpleChipProps) => {
   return (
-    <ChipContainer hasDeleteIcon={onDeleteClick ? true : false}>
+    <ChipContainer hasDeleteIcon={hasDeleteIcon}>
       <ChipText>{children}</ChipText>
-      {onDeleteClick && (
+      {hasDeleteIcon && (
         <DeleteButton aria-label="delete" onClick={onDeleteClick}>
           <TbX size={18} />
         </DeleteButton>

@@ -1,3 +1,4 @@
+import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import SimpleChip from './SimpleChip';
@@ -22,6 +23,7 @@ export const Chip: Story = {
 export const ChipWithButton: Story = {
   args: {
     children: 'DAY6',
-    onDeleteClick: () => {},
+    hasDeleteIcon: true,
+    onDeleteClick: action('delete-chip'),
   },
 };

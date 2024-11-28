@@ -18,7 +18,7 @@ const ChipContainer = styled.div<ChipStyle>`
   justify-content: center;
   align-items: center;
   gap: 4px;
-  width: auto;
+  width: fit-content;
   padding: 8px 12px 8px 16px;
   border: 1px solid
     ${({ isActive, theme }) => (isActive ? theme.colors.primaryLight : theme.colors.dark[300])};
