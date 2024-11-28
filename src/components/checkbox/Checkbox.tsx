@@ -21,7 +21,7 @@ const Checkbox = ({ text }: CheckboxProps) => {
 const CheckboxContainer = styled.label`
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 1.2rem;
   user-select: none;
   color: ${({ theme }) => theme.colors.dark[100]};
 `;
@@ -33,10 +33,10 @@ const InputWrapper = styled.div`
 const StyledInput = styled.input`
   display: block;
   appearance: none;
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 2rem;
+  height: 2rem;
   border: 1.5px solid ${({ theme }) => theme.colors.dark[300]};
-  border-radius: 0.25rem;
+  border-radius: 0.4rem;
 
   & + svg {
     position: absolute;
