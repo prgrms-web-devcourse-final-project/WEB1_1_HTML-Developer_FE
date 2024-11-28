@@ -29,12 +29,12 @@ const SelectContainer = styled.div<{ hasValue: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 8px;
+  gap: 0.8rem;
   width: 100%;
-  min-width: 327px;
-  height: 2.5rem;
-  border-radius: 0.25rem;
-  padding: 0 0.75rem 0 1rem;
+  min-width: 32.7rem;
+  height: 4rem;
+  border-radius: 0.4rem;
+  padding: 0 1.2rem 0 1.6rem;
   background-color: ${({ theme }) => theme.colors.dark[500]};
   color: ${({ theme, hasValue }) => (hasValue ? theme.colors.white : theme.colors.dark[300])};
   cursor: pointer;
