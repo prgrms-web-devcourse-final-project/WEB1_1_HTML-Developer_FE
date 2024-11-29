@@ -1,13 +1,15 @@
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 
+import type { TopNavData } from './types';
+
 import { TitleText2 } from 'styles/Typography';
 
 const TopNav = () => {
   /**
    * @TODO path 경로 지정
    */
-  const topNavInfo = {
+  const topNavInfo: TopNavData = {
     rental: {
       name: '차 대절',
       path: '/',
@@ -28,8 +30,8 @@ const TopNav = () => {
   return (
     <TopNavContainer>
       {Object.entries(topNavInfo).map(([key, { name, path }]) => (
-        <StyledLink to={path}>
-          <TitleText2 key={key}>{name}</TitleText2>
+        <StyledLink key={key} to={path}>
+          <TitleText2>{name}</TitleText2>
         </StyledLink>
       ))}
     </TopNavContainer>
