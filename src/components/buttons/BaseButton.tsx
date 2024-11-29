@@ -25,7 +25,6 @@ interface BaseButtonProps extends BaseButtonStyle {
 }
 
 const FilledStyle = ({ color, theme }: BaseButtonColor & { theme: Theme }) => css`
-  border: none;
   background-color: ${color === 'primary' ? theme.colors.primary : theme.colors.dark[500]};
   color: ${theme.colors.white};
 
@@ -61,8 +60,6 @@ const BaseButtonContainer = styled.button<BaseButtonStyle>`
   height: ${({ size }) => (size === 'medium' ? '4.8rem' : '4rem')};
   padding: 0 1.2rem;
   border-radius: 8px;
-  outline: none;
-  cursor: pointer;
 
   ${({ variant, color, theme }) =>
     variant === 'fill' ? FilledStyle({ color, theme }) : OutlineStyle({ color, theme })}

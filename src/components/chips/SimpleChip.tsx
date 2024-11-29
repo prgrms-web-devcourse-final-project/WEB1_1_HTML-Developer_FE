@@ -29,11 +29,7 @@ const DeleteButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  border: none;
-  background-color: transparent;
   color: ${({ theme }) => theme.colors.dark[300]};
-  outline: none;
-  cursor: pointer;
 
   &:hover,
   &:active {

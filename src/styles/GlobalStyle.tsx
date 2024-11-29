@@ -28,6 +28,12 @@ const globalStyle = css`
     font-size: 62.5%;
   }
 
+  button {
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+
   #root {
     width: 100%;
     height: 100%;

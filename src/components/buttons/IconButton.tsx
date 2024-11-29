@@ -19,12 +19,9 @@ const IconButtonContainer = styled.button<IconButtonStyle>`
   align-items: center;
   width: ${({ size }) => (size === 'medium' ? '40px' : '28px')};
   height: ${({ size }) => (size === 'medium' ? '40px' : '28px')};
-  border: none;
   border-radius: 50%;
   background-color: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.white};
-  outline: none;
-  cursor: pointer;
 
   &:active {
     background-color: ${({ theme }) => theme.colors.primaryDark};
