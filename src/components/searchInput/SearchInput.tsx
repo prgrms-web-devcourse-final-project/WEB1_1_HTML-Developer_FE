@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { FaCircleXmark } from 'react-icons/fa6';
 import { IoSearch } from 'react-icons/io5';
 
+// spaceholder 값인 text, 검색 활성/비활성화 유무에 따른 isActive 값을 넘겨주시면 됩니다!
 interface SearchInputProps {
   text: string;
   isActive: boolean;
