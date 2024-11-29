@@ -59,7 +59,7 @@ const BottomNavContainer = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  height: 5.8rem;
+  height: 5.2rem;
   padding: 0.8rem 1.6rem;
   background-color: ${({ theme }) => theme.colors.dark[700]};
 `;
