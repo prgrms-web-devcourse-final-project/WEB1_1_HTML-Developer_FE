@@ -39,10 +39,7 @@ const DropdownButton = styled.button`
   justify-content: center;
   align-items: center;
   padding: 0;
-  border: none;
-  background: none;
   color: ${({ theme }) => theme.colors.dark[300]};
-  cursor: pointer;
 `;
 
 const FilterChip = ({ isActive = false, children, onClick }: FilterChipProps) => {

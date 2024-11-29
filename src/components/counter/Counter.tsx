@@ -22,10 +22,7 @@ const counterBox = css`
 
 const counterButton = ({ theme }: { theme: Theme }) => css`
   border: 2px solid ${theme.colors.dark[500]};
-  background: none;
   color: ${theme.colors.dark[300]};
-  outline: none;
-  cursor: pointer;
 
   &:hover,
   &:active {
