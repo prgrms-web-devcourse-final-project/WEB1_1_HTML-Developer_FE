@@ -18,7 +18,7 @@ const SearchInput = ({ text, isActive, onSearch }: SearchInputProps) => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && searchValue.trim()) {
       onSearch(searchValue);
     }
   };
