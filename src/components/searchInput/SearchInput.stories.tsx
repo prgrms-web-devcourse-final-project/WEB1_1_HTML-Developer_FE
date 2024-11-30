@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { fn } from '@storybook/test';
 
 import SearchInput from './SearchInput';
 
@@ -24,5 +25,6 @@ export const Primary: Story = {
   args: {
     text: '공연을 입력해주세요',
     isActive: true,
+    onSearch: fn(),
   },
 };
