@@ -59,7 +59,7 @@ const BaseButtonContainer = styled.button<BaseButtonStyle>`
   min-width: 8.8rem;
   height: ${({ size }) => (size === 'medium' ? '4.8rem' : '4rem')};
   padding: 0 1.2rem;
-  border-radius: 8px;
+  border-radius: ${({ size }) => (size === 'medium' ? '8px' : '4px')};
 
   ${({ variant, color, theme }) =>
     variant === 'fill' ? FilledStyle({ color, theme }) : OutlineStyle({ color, theme })}
