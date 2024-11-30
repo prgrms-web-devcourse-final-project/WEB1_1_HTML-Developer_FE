@@ -18,15 +18,19 @@ interface InputFieldProps extends InputStyle {
   pattern?: string; // 입력 포맷
   isNumber?: boolean; // 입력 값 숫자인지 여부
   isDisabled?: boolean;
-  onChangeValue: (value: string | number) => void;
+  onValueChange: (value: string | number) => void;
 }
 
-const InputFieldContainer = styled.div``;
+const InputFieldContainer = styled.div`
+  width: 100%;
+`;
 
 const InputFieldWrapper = styled.div<{ isError: boolean }>`
   display: flex;
   align-items: center;
   gap: 0.8rem;
+  width: 100%;
+  min-width: 24rem;
   height: 4rem;
   margin-bottom: 0.8rem;
   padding: 0 1.6rem;
@@ -48,6 +52,7 @@ const InputFieldWrapper = styled.div<{ isError: boolean }>`
 `;
 
 const Input = styled.input<InputStyle>`
+  width: 100%;
   border: none;
   background: none;
   color: ${({ theme }) => theme.colors.dark[100]};
@@ -75,12 +80,12 @@ const InputField = ({
   pattern,
   isNumber = false,
   isDisabled = false,
-  onChangeValue,
+  onValueChange,
 }: InputFieldProps) => {
   const { control } = useFormContext();
 
   const handleChange = (value: string | number) => {
-    onChangeValue(value);
+    onValueChange(value);
   };
 
   const renderNumericInput = (field: ControllerRenderProps<FieldValues, string>) => (

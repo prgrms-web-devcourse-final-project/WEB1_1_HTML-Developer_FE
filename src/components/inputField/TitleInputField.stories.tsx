@@ -5,22 +5,20 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { create } from 'zustand';
 
-import InputField from './InputField';
+import TitleInputField from './TitleInputField';
 
 import BaseButton from 'components/buttons/BaseButton';
 
 const meta = {
-  title: 'InputField',
-  component: InputField,
-} satisfies Meta<typeof InputField>;
+  title: 'TitleInputField',
+  component: TitleInputField,
+} satisfies Meta<typeof TitleInputField>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export interface InitialValues {
-  phoneNumber: string;
-  price: number;
-  text: string;
+  title: string;
 }
 
 // store 예시 (추후 삭제)
@@ -31,9 +29,7 @@ type InputStore = {
 
 const useInputStore = create<InputStore>((set) => ({
   inputs: {
-    phoneNumber: '',
-    price: 0,
-    text: '',
+    title: '',
   },
   setInput: (name, value) =>
     set((state) => ({
@@ -47,12 +43,7 @@ const useInputStore = create<InputStore>((set) => ({
 const requiredString = () => z.string().min(1, '필수 입력 항목입니다.');
 
 const formSchema = z.object({
-  phoneNumber: requiredString().regex(
-    /^\d{3}-\d{3,4}-\d{4}$/,
-    '전화번호 형식이 올바르지 않습니다.'
-  ),
-  text: requiredString(),
-  price: requiredString(),
+  title: requiredString(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -60,22 +51,18 @@ type FormData = z.infer<typeof formSchema>;
 const InputTemplate = (args: {
   name: string;
   placeholder?: string;
-  unit?: string;
-  pattern?: string;
-  isNumber?: boolean;
+  maxCount?: number;
   isDisabled?: boolean;
 }) => {
   const { inputs, setInput } = useInputStore();
   const methods = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      text: inputs.text || '',
-      phoneNumber: inputs.phoneNumber || '',
-      price: inputs.price ? String(inputs.price) : '',
+      title: inputs.title || '',
     },
   });
 
-  const { name, placeholder, unit, pattern, isNumber, isDisabled } = { ...args };
+  const { name, placeholder, maxCount, isDisabled } = { ...args };
 
   const onSubmit = methods.handleSubmit((data) => {
     action('Form Submitted')(data);
@@ -86,14 +73,12 @@ const InputTemplate = (args: {
       <FormProvider {...methods}>
         <form onSubmit={onSubmit}>
           <div style={{ display: 'flex', gap: '.8rem' }}>
-            <InputField
+            <TitleInputField
               isDisabled={isDisabled}
-              isNumber={isNumber}
+              maxCount={maxCount}
               name={name}
               onValueChange={(value) => setInput(name as keyof InitialValues, value)}
-              pattern={pattern}
               placeholder={placeholder}
-              unit={unit}
               value={inputs[name as keyof InitialValues] || ''}
             />
             <BaseButton
@@ -114,31 +99,10 @@ const InputTemplate = (args: {
 
 export const InputExample: Story = {
   args: {
-    name: 'text',
+    name: 'title',
     value: '',
-    onValueChange: () => {},
-  },
-  render: (args) => <InputTemplate {...args} />,
-};
-
-export const NumberInputExample: Story = {
-  args: {
-    name: 'price',
-    placeholder: '30,000',
-    value: 0,
-    unit: '원',
-    isNumber: true,
-    onValueChange: () => {},
-  },
-  render: (args) => <InputTemplate {...args} />,
-};
-
-export const PhoneInputExample: Story = {
-  args: {
-    name: 'phoneNumber',
-    placeholder: '010-1234-5678',
-    value: '',
-    pattern: '###-####-####',
+    placeholder: '닉네임을 입력해주세요',
+    maxCount: 8,
     onValueChange: () => {},
   },
   render: (args) => <InputTemplate {...args} />,
