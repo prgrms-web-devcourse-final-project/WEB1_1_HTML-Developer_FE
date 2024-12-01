@@ -8,13 +8,26 @@ import App from './App';
 import theme from 'styles/theme';
 
 const queryClient = new QueryClient();
+async function enableMocking() {
+  if (import.meta.env.MODE !== 'development') return;
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <App />
-      </ThemeProvider>
-    </QueryClientProvider>
-  </StrictMode>
-);
+  const { worker } = await import('./mocks/browser');
+
+  return worker.start();
+}
+
+enableMocking()
+  .then(() => {
+    createRoot(document.getElementById('root')!).render(
+      <StrictMode>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider theme={theme}>
+            <App />
+          </ThemeProvider>
+        </QueryClientProvider>
+      </StrictMode>
+    );
+  })
+  .catch((error) => {
+    console.error('Error enabling mocking:', error);
+  });
