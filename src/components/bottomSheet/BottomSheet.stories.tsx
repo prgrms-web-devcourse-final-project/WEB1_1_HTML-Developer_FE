@@ -3,7 +3,9 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import BottomSheet from './BottomSheet';
 
-import { useBottomSheetStore } from 'stores/useBottomSheetStore';
+import BaseButton from 'components/buttons/BaseButton';
+import { useModalStore } from 'stores';
+import { BodyRegularText } from 'styles/Typography';
 
 const meta: Meta<typeof BottomSheet> = {
   title: 'BottomSheet',
@@ -29,163 +31,184 @@ const Container = styled.div`
   position: relative;
 `;
 
-const Button = styled.button`
-  padding: 0.5rem 1rem;
-  background-color: #3b82f6;
-  color: white;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #2563eb;
-  }
-`;
-
 const Title = styled.h2`
+  margin: 0;
   font-size: 2rem;
   font-weight: 600;
-  margin: 0;
 `;
 
 const ContentText = styled.p`
   margin-bottom: 1.2rem;
 `;
 
-const FooterButton = styled.button<{ variant?: 'primary' | 'secondary' }>`
-  flex: 1;
-  padding: 0.8rem 1.2rem;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-
-  ${({ variant }) =>
-    variant === 'primary'
-      ? `
-    background-color: #3b82f6;
-    color: white;
-    &:hover {
-      background-color: #2563eb;
-    }
-  `
-      : `
-    background-color: #e5e7eb;
-    color: #1f2937;
-    &:hover {
-      background-color: #d1d5db;
-    }
-  `}
+const OptionList = styled.ul`
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 `;
-
-const ListItem = styled.div`
+const ListItem = styled.li`
   padding: 1.2rem;
-  border-bottom: 1px solid #e5e7eb;
   cursor: pointer;
-  margin-bottom: 1.2rem;
+  border-radius: 8px;
 
   &:hover {
-    background-color: #f9fafb;
+    background-color: ${({ theme }) => theme.colors.dark[500]};
   }
 `;
 
+// BasicBottomSheet
 const BasicTemplate = () => {
-  const { openBottomSheet } = useBottomSheetStore(['openBottomSheet']);
+  const { openModal } = useModalStore(['openModal']);
 
   return (
     <>
-      <Button onClick={openBottomSheet}>Open Basic Bottom Sheet</Button>
-
-      <BottomSheet>
-        <BottomSheet.Header>
-          <Title>Basic Bottom Sheet</Title>
-        </BottomSheet.Header>
-        <BottomSheet.Content>
-          <ContentText>This is a basic bottom sheet with header and content.</ContentText>
-        </BottomSheet.Content>
-      </BottomSheet>
+      <BaseButton
+        color="primary"
+        onClick={() => openModal('bottomSheet', 'basic', <BasicBottomSheet />)}
+        size="medium"
+        variant="fill"
+      >
+        열기
+      </BaseButton>
     </>
   );
 };
+const BasicBottomSheet = () => {
+  return (
+    <BottomSheet name="basic">
+      <BottomSheet.Header>
+        <Title>기본 바텀시트</Title>
+      </BottomSheet.Header>
 
+      <BottomSheet.Content>
+        <ContentText>기본적인 헤더와 내용이 포함된 바텀시트입니다.</ContentText>
+      </BottomSheet.Content>
+    </BottomSheet>
+  );
+};
+
+// LongContentBottomSheet
 const LongContentTemplate = () => {
-  const { openBottomSheet } = useBottomSheetStore(['openBottomSheet']);
+  const { openModal } = useModalStore(['openModal']);
 
   return (
     <>
-      <Button onClick={openBottomSheet}>Open Long Content</Button>
-
-      <BottomSheet>
-        <BottomSheet.Header>
-          <Title>Scrollable Content</Title>
-        </BottomSheet.Header>
-        <BottomSheet.Content>
-          {Array.from({ length: 20 }).map((_, i) => (
-            <ContentText key={i}>
-              Scrollable content paragraph {i + 1}. This is a longer text to demonstrate how the
-              bottom sheet handles overflow content with scrolling.
-            </ContentText>
-          ))}
-        </BottomSheet.Content>
-      </BottomSheet>
+      <BaseButton
+        color="primary"
+        onClick={() => openModal('bottomSheet', 'longContent', <LongContentBottomSheet />)}
+        size="medium"
+        variant="fill"
+      >
+        열기
+      </BaseButton>
     </>
   );
 };
+const LongContentBottomSheet = () => {
+  return (
+    <BottomSheet name="longContent">
+      <BottomSheet.Header>
+        <Title>스크롤 가능한 내용</Title>
+      </BottomSheet.Header>
 
+      <BottomSheet.Content>
+        {Array.from({ length: 30 }).map((_, i) => (
+          <ContentText key={i}>스크롤 가능한 내용 {i + 1}</ContentText>
+        ))}
+      </BottomSheet.Content>
+    </BottomSheet>
+  );
+};
+
+// WithFooterBottomSheet
 const WithFooterTemplate = () => {
-  const { openBottomSheet, closeBottomSheet } = useBottomSheetStore([
-    'openBottomSheet',
-    'closeBottomSheet',
-  ]);
+  const { openModal } = useModalStore(['openModal']);
 
   return (
     <>
-      <Button onClick={openBottomSheet}>Open With Footer</Button>
-
-      <BottomSheet>
-        <BottomSheet.Header>
-          <Title>Bottom Sheet with Footer</Title>
-        </BottomSheet.Header>
-        <BottomSheet.Content>
-          <ContentText>
-            This bottom sheet includes footer buttons for common actions like confirm and cancel.
-          </ContentText>
-        </BottomSheet.Content>
-        <BottomSheet.Footer>
-          <FooterButton onClick={closeBottomSheet} variant="secondary">
-            Cancel
-          </FooterButton>
-          <FooterButton onClick={closeBottomSheet} variant="primary">
-            Confirm
-          </FooterButton>
-        </BottomSheet.Footer>
-      </BottomSheet>
+      <BaseButton
+        color="primary"
+        onClick={() => openModal('bottomSheet', 'withFooter', <WithFooterBottomSheet />)}
+        size="medium"
+        variant="fill"
+      >
+        열기
+      </BaseButton>
     </>
   );
 };
+const WithFooterBottomSheet = () => {
+  const { closeModal } = useModalStore(['closeModal']);
 
+  return (
+    <BottomSheet name="withFooter">
+      <BottomSheet.Header>
+        <Title>푸터가 있는 바텀시트</Title>
+      </BottomSheet.Header>
+
+      <BottomSheet.Content>
+        <ContentText>확인과 취소 버튼이 포함된 바텀시트입니다.</ContentText>
+      </BottomSheet.Content>
+
+      <BottomSheet.Footer>
+        <BaseButton
+          color="primary"
+          onClick={() => closeModal('bottomSheet', 'withFooter')}
+          size="small"
+          variant="outline"
+        >
+          닫기
+        </BaseButton>
+        <BaseButton
+          color="primary"
+          onClick={() => closeModal('bottomSheet', 'withFooter')}
+          size="small"
+          variant="fill"
+        >
+          확인
+        </BaseButton>
+      </BottomSheet.Footer>
+    </BottomSheet>
+  );
+};
+
+// ListItemBottomSheet
 const ListTemplate = () => {
-  const { openBottomSheet, closeBottomSheet } = useBottomSheetStore([
-    'openBottomSheet',
-    'closeBottomSheet',
-  ]);
+  const { openModal } = useModalStore(['openModal']);
 
   return (
     <>
-      <Button onClick={openBottomSheet}>Open List Bottom Sheet</Button>
+      <BaseButton
+        color="primary"
+        onClick={() => openModal('bottomSheet', 'list', <ListItemBottomSheet />)}
+        size="medium"
+        variant="fill"
+      >
+        열기
+      </BaseButton>
+    </>
+  );
+};
+const ListItemBottomSheet = () => {
+  const { closeModal } = useModalStore(['closeModal']);
 
-      <BottomSheet>
-        <BottomSheet.Header>
-          <Title>Select an Option</Title>
-        </BottomSheet.Header>
-        <BottomSheet.Content>
+  return (
+    <BottomSheet name="list">
+      <BottomSheet.Header>
+        <Title>옵션 선택</Title>
+      </BottomSheet.Header>
+
+      <BottomSheet.Content>
+        <OptionList>
           {Array.from({ length: 5 }).map((_, i) => (
-            <ListItem key={i} onClick={closeBottomSheet}>
-              Option {i + 1}
+            <ListItem key={i} onClick={() => closeModal('bottomSheet', 'list')}>
+              <BodyRegularText>옵션 {i + 1}</BodyRegularText>
             </ListItem>
           ))}
-        </BottomSheet.Content>
-      </BottomSheet>
-    </>
+        </OptionList>
+      </BottomSheet.Content>
+    </BottomSheet>
   );
 };
 
