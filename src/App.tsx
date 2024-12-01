@@ -3,9 +3,25 @@ import type { Theme } from '@emotion/react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import useScreenSize from 'hooks/useScreenSize';
+import Home from 'pages/home/Home';
+import SignIn from 'pages/signIn/SignIn';
+import SignUp from 'pages/signUp/SignUp';
 import GlobalStyle from 'styles/GlobalStyle';
 
-const router = createBrowserRouter([]);
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Home />,
+  },
+  {
+    path: '/signin',
+    element: <SignIn />,
+  },
+  {
+    path: '/signup',
+    element: <SignUp />,
+  },
+]);
 
 function App() {
   useScreenSize();
@@ -31,7 +47,7 @@ const mobileWrapperStyle = (theme: Theme) => css`
   &::-webkit-scrollbar {
     display: none;
   }
-  background-color: pink;
+  background-color: #1b1d1f;
 `;
 
 export default App;

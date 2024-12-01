@@ -5,6 +5,14 @@ import mainLogoTitle from 'assets/mainLogoTitle.svg';
 import { MediumButtonText } from 'styles/Typography';
 
 const SignIn = () => {
+  const Rest_api_key = import.meta.env.VITE_REST_API_KEY;
+  const redirect_uri = import.meta.env.VITE_REDIRECT_URI;
+
+  const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${Rest_api_key}&redirect_uri=${redirect_uri}&response_type=code`;
+  const handleLogin = () => {
+    window.location.href = kakaoURL;
+  };
+
   return (
     <SignInContainer>
       <LogoWrapper>
@@ -12,10 +20,10 @@ const SignIn = () => {
         <img alt="logo" src={logo} />
       </LogoWrapper>
       <ButtonWrapper>
-        <KaKaoBtn>
+        <KaKaoBtn onClick={handleLogin}>
           <MediumButtonText>카카오톡으로 시작하기</MediumButtonText>
         </KaKaoBtn>
-        <GoogleBtn>
+        <GoogleBtn onClick={handleLogin}>
           <MediumButtonText>구글로 시작하기</MediumButtonText>
         </GoogleBtn>
       </ButtonWrapper>
