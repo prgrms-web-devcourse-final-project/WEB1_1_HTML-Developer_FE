@@ -1,11 +1,10 @@
-import { css } from '@emotion/react';
-import type { Theme } from '@emotion/react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import styled from '@emotion/styled';
+import { Suspense } from 'react';
+import { RouterProvider } from 'react-router-dom';
 
 import useScreenSize from 'hooks/useScreenSize';
+import { router } from 'routes/routes';
 import GlobalStyle from 'styles/GlobalStyle';
-
-const router = createBrowserRouter([]);
 
 function App() {
   useScreenSize();
@@ -13,25 +12,27 @@ function App() {
   return (
     <>
       <GlobalStyle />
-      <div css={mobileWrapperStyle}>
-        <RouterProvider router={router} />
-      </div>
+      <Suspense fallback={<div>loading...</div>}>
+        <MobileWrapper>
+          <RouterProvider router={router} />
+        </MobileWrapper>
+      </Suspense>
     </>
   );
 }
 
-const mobileWrapperStyle = (theme: Theme) => css`
+const MobileWrapper = styled.div`
   width: 100%;
-  max-width: ${theme.maxWidth};
-  height: calc(var(--vh, 1vh) * 100);
-  margin: auto;
-  position: relative;
+  max-width: ${({ theme }) => theme.maxWidth};
+  min-height: 100%;
+  margin: 0 auto;
+  background-color: ${({ theme }) => theme.colors.black};
+
   -ms-overflow-style: none;
   scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
   }
-  background-color: pink;
 `;
 
 export default App;
