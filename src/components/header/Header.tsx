@@ -18,7 +18,7 @@ const Header = () => {
         <StyledLink to="/search">
           <IoSearch size={24} />
         </StyledLink>
-        <StyledLink to="/login">
+        <StyledLink to="/signin">
           <TitleText2>로그인</TitleText2>
         </StyledLink>
       </Wrapper>

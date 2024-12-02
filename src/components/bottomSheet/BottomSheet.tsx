@@ -83,8 +83,8 @@ const StyledMotionDiv = styled(motion.div)`
   max-height: 85vh;
   width: 100%;
   padding: 0 2.4rem;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
   background-color: ${({ theme }) => theme.colors.dark[700]};
   z-index: 1002;
   color: ${({ theme }) => theme.colors.dark[50]};
