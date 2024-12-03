@@ -30,7 +30,6 @@ const InputFieldWrapper = styled.div<{ isError: boolean }>`
   align-items: center;
   gap: 0.8rem;
   width: 100%;
-  min-width: 24rem;
   height: 4rem;
   margin-bottom: 0.8rem;
   padding: 0 1.6rem;
