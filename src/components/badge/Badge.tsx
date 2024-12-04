@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import { ChipText, SmallText } from 'styles/Typography';
-import { hexToRgba } from 'utils/hexToRgba';
+import { hexToRgba } from 'utils';
 
 type BadgeVariant = 'square' | 'round';
 type BadgeSize = 'small' | 'medium';

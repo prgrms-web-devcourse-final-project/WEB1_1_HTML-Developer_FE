@@ -4,7 +4,7 @@ import { LuCamera } from 'react-icons/lu';
 import { TbX } from 'react-icons/tb';
 
 import { ChipText } from 'styles/Typography';
-import { hexToRgba } from 'utils/hexToRgba';
+import { hexToRgba } from 'utils';
 
 interface ImageFieldProps {
   initialImages?: string[];
