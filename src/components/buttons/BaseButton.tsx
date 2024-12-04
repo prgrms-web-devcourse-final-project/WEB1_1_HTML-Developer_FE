@@ -18,7 +18,7 @@ interface BaseButtonStyle extends BaseButtonColor {
 }
 
 interface BaseButtonProps extends BaseButtonStyle {
-  children: string;
+  children: React.ReactNode;
   isDisabled?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   type?: 'button' | 'submit';
@@ -55,6 +55,9 @@ const OutlineStyle = ({ color, theme }: BaseButtonColor & { theme: Theme }) => c
 `;
 
 const BaseButtonContainer = styled.button<BaseButtonStyle>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: ${({ isFullWidth }) => (isFullWidth ? '100%' : 'fit-content')};
   min-width: 8.8rem;
   height: ${({ size }) => (size === 'medium' ? '4.8rem' : '4rem')};
