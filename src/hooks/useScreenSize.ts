@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const useScreenSize = () => {
+export const useScreenSize = () => {
   const setScreenSize = () => {
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
@@ -14,4 +14,3 @@ const useScreenSize = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 };
-export default useScreenSize;

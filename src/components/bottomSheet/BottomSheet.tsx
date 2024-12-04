@@ -32,6 +32,7 @@ const BottomSheet = ({ children, name }: BottomSheetProps) => {
           mass: 0.8,
         }}
       >
+        <HandleBar />
         {children}
       </StyledMotionDiv>
     </>
@@ -39,12 +40,7 @@ const BottomSheet = ({ children, name }: BottomSheetProps) => {
 };
 
 const Header = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <HeaderWrapper>
-      <HandleBar />
-      {children}
-    </HeaderWrapper>
-  );
+  return <HeaderWrapper>{children}</HeaderWrapper>;
 };
 
 const Content = ({ children }: { children: React.ReactNode }) => {
@@ -74,7 +70,7 @@ const Overlay = styled(motion.div)`
 const StyledMotionDiv = styled(motion.div)`
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 1.6rem;
   position: fixed;
   bottom: 0;
   left: 50%;
@@ -82,7 +78,7 @@ const StyledMotionDiv = styled(motion.div)`
   max-width: ${({ theme }) => theme.maxWidth};
   max-height: 85vh;
   width: 100%;
-  padding: 0 2.4rem;
+  padding: 1.2rem 2.4rem 1.6rem;
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
   background-color: ${({ theme }) => theme.colors.dark[700]};
@@ -92,7 +88,7 @@ const StyledMotionDiv = styled(motion.div)`
 
 const HeaderWrapper = styled.div`
   text-align: center;
-  padding: 2.4rem 0 1.6rem;
+  padding-bottom: 1.6rem;
   border-bottom: 1px solid ${({ theme }) => theme.colors.dark[500]};
 `;
 
@@ -100,12 +96,12 @@ const HandleBar = styled.div`
   width: 5rem;
   height: 0.3rem;
   margin: 0 auto;
-  margin-bottom: 2.4rem;
   background-color: ${({ theme }) => theme.colors.dark[100]};
   border-radius: 9999px;
 `;
 
 const ContentWrapper = styled.div`
+  padding: 1.6rem 0;
   overflow-y: auto;
   &::-webkit-scrollbar {
     display: none;
@@ -116,8 +112,9 @@ const ContentWrapper = styled.div`
 
 const FooterWrapper = styled.div`
   display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 1.2rem;
-  padding: 2.4rem 0;
 `;
 
 export default BottomSheet;

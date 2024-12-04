@@ -1,4 +1,4 @@
-import type { DialogTypes, BottomSheetTypes } from 'constants/ModalTypes';
+import type { DialogTypes, BottomSheetTypes } from 'constants/modalType';
 
 type ValueOf<T> = T[keyof T];
 
