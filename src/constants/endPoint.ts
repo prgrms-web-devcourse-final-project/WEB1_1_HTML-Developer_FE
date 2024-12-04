@@ -30,7 +30,8 @@ export const endPoint = {
   GET_CONCERT_SEARCH: '/search/concert',
   GET_CONCERT_SEARCH_LIST: '/search/concert/list',
 
-  GET_CONCERT_LIST: '/concerts/list',
+  GET_CONCERT_LIST: (region: string, sortDirection: string, pageSize: number) =>
+    `/concerts/list?region=${encodeURIComponent(region)}&sortDirection=${sortDirection}&PageSize=${pageSize}`,
   GET_CONCERT_DETAIL: (concertId: string) => `/concerts/${concertId}`,
 
   SEARCH_ARTISTS: '/artists/search',
