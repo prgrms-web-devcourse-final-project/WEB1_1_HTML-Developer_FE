@@ -9,4 +9,5 @@ export const BottomSheetTypes = {
   LONG_CONTENT: 'longContent',
   WITH_FOOTER: 'withFooter',
   LIST: 'list',
+  REFUND_ACCOUNT: 'refundAccount',
 } as const;
