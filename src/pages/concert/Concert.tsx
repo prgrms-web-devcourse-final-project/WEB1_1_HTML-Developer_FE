@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import ConcertItem from './components/ConcertItem';
@@ -8,23 +8,29 @@ import ListItem from './components/ListItem';
 import type { FilterCategory, Result } from './type';
 
 import { getConcertList } from 'api/concerts';
+import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
 import { useModalStore } from 'stores';
 import { BodyRegularText, HeaderText } from 'styles/Typography';
 
-const PAGE_SIZE = 7;
-
+type Param = [number, string] | null;
 const Concert = () => {
   const { openModal } = useModalStore(['openModal']);
   const [selectedRegion, setSelectedRegion] = useState('전체');
   const [selectedDirection, setSelectedDirection] = useState('DATE');
 
-  const { data } = useQuery<Result>({
-    queryKey: ['concerts', selectedRegion, selectedDirection, PAGE_SIZE],
-    queryFn: async () => {
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery<Result>({
+    queryKey: ['concerts', selectedRegion, selectedDirection],
+    queryFn: async ({ pageParam }) => {
       const {
         data: { result },
-      } = await getConcertList(selectedRegion, selectedDirection, PAGE_SIZE);
+      } = await getConcertList(selectedRegion, selectedDirection, pageParam as Param);
+      console.log('searchAfter 값:', result.searchAfter);
       return result;
+    },
+    initialPageParam: null,
+    getNextPageParam: (lastPage) => {
+      console.log('searchAfter 값:', lastPage.searchAfter);
+      return lastPage.searchAfter || undefined;
     },
   });
 
@@ -40,6 +46,16 @@ const Concert = () => {
     openModal('bottomSheet', 'list', <ListItem onSelect={onSelect} title={title} />);
   };
 
+  const handleObserver = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      if (hasNextPage) {
+        void fetchNextPage();
+      }
+    }
+  };
+
+  const targetRef = useIntersectionObserver(handleObserver);
+
   return (
     <ConcertContainer>
       <ExpectedConcert>
@@ -54,8 +70,13 @@ const Concert = () => {
         selectedRegion={selectedRegion}
       />
       <ConcertList>
-        {data?.concertThumbnails.map((concert) => <ConcertItem concert={concert} />)}
+        {data?.pages.map((page) =>
+          page.concertThumbnails.map((concert) => (
+            <ConcertItem concert={concert} key={concert.id} />
+          ))
+        )}
       </ConcertList>
+      <div ref={targetRef} />
     </ConcertContainer>
   );
 };
