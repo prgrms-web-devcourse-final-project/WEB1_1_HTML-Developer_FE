@@ -16,7 +16,7 @@ const SORT_DIRECTION = 'DATE';
 
 const Concert = () => {
   const { openModal } = useModalStore(['openModal']);
-  const [selectedRegion, setSelectedRegion] = useState('서울');
+  const [selectedRegion, setSelectedRegion] = useState('전체');
 
   const { data, refetch } = useQuery<Result>({
     queryKey: ['concerts', selectedRegion, SORT_DIRECTION, PAGE_SIZE],
@@ -27,7 +27,6 @@ const Concert = () => {
       return result;
     },
   });
-  console.log(data);
 
   const handleRegionSelect = async (region: string) => {
     setSelectedRegion(region);

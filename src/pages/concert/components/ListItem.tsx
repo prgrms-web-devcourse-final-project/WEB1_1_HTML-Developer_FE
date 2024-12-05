@@ -5,6 +5,7 @@ import { useModalStore } from 'stores';
 import { BodyRegularText } from 'styles/Typography';
 
 const region = [
+  '전체',
   '서울',
   '경기',
   '인천',
