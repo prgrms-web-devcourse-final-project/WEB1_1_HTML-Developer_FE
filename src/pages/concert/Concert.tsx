@@ -1,10 +1,47 @@
 import styled from '@emotion/styled';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { LuCalendar } from 'react-icons/lu';
 
+import ListItem from './components/ListItem';
+import type { Result } from './type';
+
+import { getConcertList } from 'api/concerts';
 import FilterChip from 'components/chips/FilterChip';
+import { useModalStore } from 'stores';
 import { BodyRegularText, ChipText, HeaderText, SmallText } from 'styles/Typography';
 
+const PAGE_SIZE = 7;
+const SORT_DIRECTION = 'DATE';
+
 const Concert = () => {
+  const { openModal } = useModalStore(['openModal']);
+  const [selectedRegion, setSelectedRegion] = useState('서울');
+
+  const { data, refetch } = useQuery<Result>({
+    queryKey: ['concerts', selectedRegion, SORT_DIRECTION, PAGE_SIZE],
+    queryFn: async () => {
+      const {
+        data: { result },
+      } = await getConcertList(selectedRegion, SORT_DIRECTION, PAGE_SIZE);
+      return result;
+    },
+  });
+  console.log(data);
+
+  const handleRegionSelect = async (region: string) => {
+    setSelectedRegion(region);
+    try {
+      await refetch();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleRegionClick = () => {
+    openModal('bottomSheet', 'list', <ListItem onRegionSelect={handleRegionSelect} />);
+  };
+
   return (
     <ConcertContainer>
       <ExpectedConcert>
@@ -12,7 +49,9 @@ const Concert = () => {
         <BodyRegularText>ALLREVA에서 예정된 공연들을 손쉽게 확인해보세요!</BodyRegularText>
       </ExpectedConcert>
       <Filter>
-        <FilterChip isActive={false}>지역</FilterChip>
+        <FilterChip isActive={false} onClick={handleRegionClick}>
+          {selectedRegion}
+        </FilterChip>
         <FilterChip isActive={false}>최근 공연순</FilterChip>
       </Filter>
       <ConcertList>
