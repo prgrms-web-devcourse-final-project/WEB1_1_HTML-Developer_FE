@@ -100,14 +100,14 @@ const RefundBottomSheet = ({ accountInfo }: RefundBottomSheetProps) => {
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  padding: 0 2rem;
+  padding: 0 1.2rem;
 `;
 
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
-  min-height: 10rem;
+  min-height: 9.3rem;
 `;
 
 const Label = styled.label`

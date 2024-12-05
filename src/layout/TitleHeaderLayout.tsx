@@ -26,5 +26,8 @@ export const TitleHeaderLayout = () => {
 };
 
 const MainWrapper = styled.main<{ isTransparent?: boolean }>`
+  display: flex;
+  flex-direction: column;
   padding-top: ${({ isTransparent }) => (isTransparent ? '0' : '5.2rem')};
+  min-height: 100vh;
 `;
