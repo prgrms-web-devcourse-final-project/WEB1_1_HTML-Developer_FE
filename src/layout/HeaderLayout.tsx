@@ -26,6 +26,6 @@ const HeaderWrapper = styled.header`
   width: 100%;
 `;
 const MainWrapper = styled.main`
-  padding: 5.2rem 0;
+  padding: 5.2rem 0 5.8rem;
   min-width: 32rem;
 `;

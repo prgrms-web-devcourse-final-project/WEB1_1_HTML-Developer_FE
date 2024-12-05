@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Suspense } from 'react';
 import { RouterProvider } from 'react-router-dom';
 
-import useScreenSize from 'hooks/useScreenSize';
+import { useScreenSize } from 'hooks';
 import { router } from 'routes/routes';
 import GlobalStyle from 'styles/GlobalStyle';
 

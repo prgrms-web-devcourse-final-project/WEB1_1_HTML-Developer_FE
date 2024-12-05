@@ -29,6 +29,6 @@ const HeaderWrapper = styled.header`
 `;
 const MainWrapper = styled.main`
   padding-top: calc(5.2rem * 2);
-  padding-bottom: 5.2rem;
+  padding-bottom: 5.8rem;
   min-width: 32rem;
 `;
