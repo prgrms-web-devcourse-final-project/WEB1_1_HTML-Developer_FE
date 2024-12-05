@@ -3,11 +3,11 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { LuCalendar } from 'react-icons/lu';
 
-import ListItem, { sortValue } from './components/ListItem';
-import type { Result } from './type';
+import FilterChips from './components/FilterChips';
+import ListItem from './components/ListItem';
+import type { FilterCategory, Result } from './type';
 
 import { getConcertList } from 'api/concerts';
-import FilterChip from 'components/chips/FilterChip';
 import { useModalStore } from 'stores';
 import { BodyRegularText, ChipText, HeaderText, SmallText } from 'styles/Typography';
 
@@ -36,7 +36,7 @@ const Concert = () => {
     setSelectedDirection(sortDirection);
   };
 
-  const handleModalOpen = (title: '지역' | '정렬', onSelect: (value: string) => void) => {
+  const handleModalOpen = (title: FilterCategory, onSelect: (value: string) => void) => {
     openModal('bottomSheet', 'list', <ListItem onSelect={onSelect} title={title} />);
   };
 
@@ -46,14 +46,13 @@ const Concert = () => {
         <HeaderText>예정 공연</HeaderText>
         <BodyRegularText>ALLREVA에서 예정된 공연들을 손쉽게 확인해보세요!</BodyRegularText>
       </ExpectedConcert>
-      <Filter>
-        <FilterChip isActive={false} onClick={() => handleModalOpen('지역', handleRegionSelect)}>
-          {selectedRegion}
-        </FilterChip>
-        <FilterChip isActive={false} onClick={() => handleModalOpen('정렬', handleDirectionSelect)}>
-          {sortValue[selectedDirection as keyof typeof sortValue]}
-        </FilterChip>
-      </Filter>
+      <FilterChips
+        handleDirectionSelect={handleDirectionSelect}
+        handleModalOpen={handleModalOpen}
+        handleRegionSelect={handleRegionSelect}
+        selectedDirection={selectedDirection}
+        selectedRegion={selectedRegion}
+      />
       <ConcertList>
         {data?.concertThumbnails.map((concert) => (
           <ConcertItem key={concert.id}>
@@ -95,12 +94,6 @@ const ExpectedConcert = styled.div`
   p {
     color: ${({ theme }) => theme.colors.dark[500]};
   }
-`;
-
-const Filter = styled.div`
-  display: flex;
-  gap: 12px;
-  padding: 2.4rem 2.4rem 0 2.4rem;
 `;
 
 const ConcertList = styled.div`

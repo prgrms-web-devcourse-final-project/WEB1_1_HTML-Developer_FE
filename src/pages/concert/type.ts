@@ -23,3 +23,5 @@ export interface ConcertsType {
   message: string;
   result: Result;
 }
+
+export type FilterCategory = '지역' | '정렬';
