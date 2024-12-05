@@ -12,7 +12,7 @@ import BaseButton from 'components/buttons/BaseButton';
 import SimpleChip from 'components/chips/SimpleChip';
 import { useRentalDetails } from 'hooks/useRentalDetails';
 import { BodyRegularText, TitleText1, TitleText2 } from 'styles/Typography';
-import { formatDateWithDay, getDday } from 'utils/dateUtils';
+import { formatDateWithDay, getDday } from 'utils';
 
 const DetailContainer = styled.div`
   position: relative;
