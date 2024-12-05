@@ -13,28 +13,26 @@ type Toast = {
 };
 
 type ToastStore = {
-  toasts: Toast[];
-  activeContent: string | null;
+  toast: Toast | null;
   addToast: (content: string, icon?: ReactNode) => void;
 };
 
 const toastStore = createWithEqualityFn(
   immer<ToastStore>((set) => ({
-    toasts: [],
-    activeContent: null,
+    toast: null,
     addToast: (content: string, icon?: ReactNode) => {
       set((state) => {
         // 같은 내용이면 연속 활성화 차단
-        if (state.activeContent === content) return;
+        if (state.toast?.content === content) return;
 
         const id = nanoid();
-        state.toasts = [{ id, content, icon }];
-        state.activeContent = content;
+        state.toast = { id, content, icon };
 
         setTimeout(() => {
           set((state) => {
-            state.toasts = state.toasts.filter((toast) => toast.id !== id);
-            if (state.activeContent === content) state.activeContent = null;
+            if (state.toast?.id === id) {
+              state.toast = null;
+            }
           });
         }, 2000);
       });

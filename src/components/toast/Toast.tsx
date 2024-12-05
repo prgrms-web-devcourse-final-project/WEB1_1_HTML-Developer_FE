@@ -18,20 +18,20 @@ const ToastItem = styled(motion.div)`
 `;
 
 const Toast = () => {
-  const { toasts } = useToastStore(['toasts']);
+  const { toast } = useToastStore(['toast']);
 
   return (
     <AnimatePresence>
-      {toasts.length > 0 && (
+      {toast && (
         <ToastItem
           animate={{ x: '-50%', y: 0, opacity: 1 }}
           exit={{ x: '-50%', y: 100, opacity: 0 }}
           initial={{ x: '-50%', y: 100, opacity: 0 }}
-          key={toasts[0].id}
+          key={toast.id}
           transition={{ duration: 0.35, ease: 'easeOut' }}
         >
-          {toasts[0].icon}
-          <CaptionText>{toasts[0].content}</CaptionText>
+          {toast.icon}
+          <CaptionText>{toast.content}</CaptionText>
         </ToastItem>
       )}
     </AnimatePresence>
