@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import { PiPencilSimpleLineBold } from 'react-icons/pi';
 
 import ConcertItem from './components/ConcertItem';
 import FilterChips from './components/FilterChips';
@@ -8,6 +9,7 @@ import ListItem from './components/ListItem';
 import type { FilterCategory, Result } from './type';
 
 import { getConcertList } from 'api/concerts';
+import IconButton from 'components/buttons/IconButton';
 import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
 import { useModalStore } from 'stores';
 import { BodyRegularText, HeaderText } from 'styles/Typography';
@@ -24,12 +26,10 @@ const Concert = () => {
       const {
         data: { result },
       } = await getConcertList(selectedRegion, selectedDirection, pageParam as Param);
-      console.log('searchAfter 값:', result.searchAfter);
       return result;
     },
     initialPageParam: null,
     getNextPageParam: (lastPage) => {
-      console.log('searchAfter 값:', lastPage.searchAfter);
       return lastPage.searchAfter || undefined;
     },
   });
@@ -77,6 +77,13 @@ const Concert = () => {
         )}
       </ConcertList>
       <div ref={targetRef} />
+      <FloatingAside>
+        <FloatingButton>
+          <IconButton isDisabled={false} size="medium">
+            <PiPencilSimpleLineBold size={20} />
+          </IconButton>
+        </FloatingButton>
+      </FloatingAside>
     </ConcertContainer>
   );
 };
@@ -104,6 +111,21 @@ const ExpectedConcert = styled.div`
 const ConcertList = styled.div`
   width: 100%;
   padding: 2.4rem;
+`;
+
+const FloatingAside = styled.aside`
+  max-width: ${({ theme }) => theme.maxWidth};
+  margin: 0 auto;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+`;
+
+const FloatingButton = styled.div`
+  position: absolute;
+  bottom: 8rem;
+  right: 2rem;
 `;
 
 export default Concert;
