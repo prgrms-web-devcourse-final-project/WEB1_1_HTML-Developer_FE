@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { AnimatePresence, motion } from 'framer-motion';
 
-import { useToastStore } from 'stores/useToastStore';
+import { useToastStore } from 'stores';
 import { CaptionText } from 'styles/Typography';
 
 const ToastItem = styled(motion.div)`

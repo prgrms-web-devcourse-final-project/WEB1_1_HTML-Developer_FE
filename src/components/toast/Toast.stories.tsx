@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import Toast from './Toast';
 
 import BaseButton from 'components/buttons/BaseButton';
-import { useToastStore } from 'stores/useToastStore';
+import { useToastStore } from 'stores';
 
 const meta = {
   title: 'Toast',
