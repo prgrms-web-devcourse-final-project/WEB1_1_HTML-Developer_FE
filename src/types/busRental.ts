@@ -1,6 +1,6 @@
 import type { ApiResponse } from './api';
 
-import type { Region } from 'constants/FilterTypes';
+import type { Region } from 'constants/filterTypes';
 
 export const BUS_SIZE = {
   LARGE: '대형',
