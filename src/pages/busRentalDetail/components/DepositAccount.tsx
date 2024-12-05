@@ -1,6 +1,9 @@
 import styled from '@emotion/styled';
+import { BiCreditCard } from 'react-icons/bi';
 import { TbCopy } from 'react-icons/tb';
 
+import { TOAST_MESSAGES } from 'constants/toastMessage';
+import { useToastStore } from 'stores';
 import { BodyRegularText } from 'styles/Typography';
 
 interface DepositAccountProps {
@@ -43,12 +46,21 @@ const Blur = styled.div`
 `;
 
 const DepositAccount = ({ depositAccount }: DepositAccountProps) => {
+  const { addToast } = useToastStore(['addToast']);
+
+  const handleCopyAccount = async () => {
+    if (depositAccount) {
+      await navigator.clipboard.writeText(depositAccount);
+      addToast(TOAST_MESSAGES.COPY_DEPOSIT_ACCOUNT, <BiCreditCard size={16} />);
+    }
+  };
+
   return (
     <AccountWrapper>
       {depositAccount ? (
         <>
           <BodyRegularText>{depositAccount}</BodyRegularText>
-          <AccountCopyButton onClick={() => {}}>
+          <AccountCopyButton onClick={handleCopyAccount}>
             <TbCopy size={20} />
           </AccountCopyButton>
         </>
