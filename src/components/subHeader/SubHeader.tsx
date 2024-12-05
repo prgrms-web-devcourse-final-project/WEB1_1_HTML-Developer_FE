@@ -26,6 +26,7 @@ const SubHeaderContainer = styled.div<{ isTransparent: boolean }>`
   grid-template-columns: 24px 1fr 24px;
   align-items: center;
   position: fixed;
+  z-index: 900;
   max-width: ${({ theme }) => theme.maxWidth};
   width: 100%;
   height: 5.2rem;

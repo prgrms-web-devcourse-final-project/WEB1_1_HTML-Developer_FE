@@ -27,7 +27,7 @@ const globalStyle = (theme: Theme) => css`
     align-items: center;
     background-color: #f9f9f9;
     font-size: 62.5%;
-    color: ${theme.colors.white};
+    color: ${theme.colors.dark[100]};
   }
 
   button {
