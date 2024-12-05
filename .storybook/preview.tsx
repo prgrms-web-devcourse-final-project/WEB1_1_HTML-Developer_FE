@@ -5,6 +5,7 @@ import theme from '../src/styles/theme';
 import GlobalStyle from 'styles/GlobalStyle';
 import ModalRenderer from 'components/modalRenderer/ModalRenderer';
 import { BrowserRouter } from 'react-router-dom';
+import ToastRenderer from 'components/toast/ToastRenderer';
 
 export const decorators = [
   (Story: StoryFn) => {
@@ -20,6 +21,7 @@ export const decorators = [
           <GlobalStyle />
           <div style={{ padding: '0.8rem' }}>
             <ModalRenderer />
+            <ToastRenderer />
             <Story />
           </div>
         </ThemeProvider>

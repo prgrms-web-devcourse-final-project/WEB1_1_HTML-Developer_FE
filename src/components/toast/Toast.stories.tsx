@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import type { ReactNode } from 'react';
-import { PiLinkBold } from 'react-icons/pi';
 
 import Toast from './Toast';
 
@@ -23,25 +22,18 @@ const ToastTemplate = (args: { content: string; icon?: ReactNode }) => {
   };
 
   return (
-    <>
-      <BaseButton
-        color="primary"
-        isFullWidth={false}
-        onClick={handleClick}
-        size="medium"
-        variant="fill"
-      >
-        토스트 버튼
-      </BaseButton>
-      <Toast />
-    </>
+    <BaseButton
+      color="primary"
+      isFullWidth={false}
+      onClick={handleClick}
+      size="medium"
+      variant="fill"
+    >
+      토스트 버튼
+    </BaseButton>
   );
 };
 
 export const TextExample: Story = {
   render: () => <ToastTemplate content="입금 계좌가 복사되었습니다." />,
-};
-
-export const WithIconExample: Story = {
-  render: () => <ToastTemplate content="링크가 복사되었습니다." icon={<PiLinkBold size={16} />} />,
 };
