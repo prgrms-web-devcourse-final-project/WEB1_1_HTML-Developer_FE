@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { LuCalendar } from 'react-icons/lu';
 
-import ListItem from './components/ListItem';
+import ListItem, { sortValue } from './components/ListItem';
 import type { Result } from './type';
 
 import { getConcertList } from 'api/concerts';
@@ -12,33 +12,32 @@ import { useModalStore } from 'stores';
 import { BodyRegularText, ChipText, HeaderText, SmallText } from 'styles/Typography';
 
 const PAGE_SIZE = 7;
-const SORT_DIRECTION = 'DATE';
 
 const Concert = () => {
   const { openModal } = useModalStore(['openModal']);
   const [selectedRegion, setSelectedRegion] = useState('전체');
+  const [selectedDirection, setSelectedDirection] = useState('DATE');
 
-  const { data, refetch } = useQuery<Result>({
-    queryKey: ['concerts', selectedRegion, SORT_DIRECTION, PAGE_SIZE],
+  const { data } = useQuery<Result>({
+    queryKey: ['concerts', selectedRegion, selectedDirection, PAGE_SIZE],
     queryFn: async () => {
       const {
         data: { result },
-      } = await getConcertList(selectedRegion, SORT_DIRECTION, PAGE_SIZE);
+      } = await getConcertList(selectedRegion, selectedDirection, PAGE_SIZE);
       return result;
     },
   });
 
-  const handleRegionSelect = async (region: string) => {
+  const handleRegionSelect = (region: string) => {
     setSelectedRegion(region);
-    try {
-      await refetch();
-    } catch (e) {
-      console.error(e);
-    }
   };
 
-  const handleRegionClick = () => {
-    openModal('bottomSheet', 'list', <ListItem onRegionSelect={handleRegionSelect} />);
+  const handleDirectionSelect = (sortDirection: string) => {
+    setSelectedDirection(sortDirection);
+  };
+
+  const handleModalOpen = (title: '지역' | '정렬', onSelect: (value: string) => void) => {
+    openModal('bottomSheet', 'list', <ListItem onSelect={onSelect} title={title} />);
   };
 
   return (
@@ -48,17 +47,19 @@ const Concert = () => {
         <BodyRegularText>ALLREVA에서 예정된 공연들을 손쉽게 확인해보세요!</BodyRegularText>
       </ExpectedConcert>
       <Filter>
-        <FilterChip isActive={false} onClick={handleRegionClick}>
+        <FilterChip isActive={false} onClick={() => handleModalOpen('지역', handleRegionSelect)}>
           {selectedRegion}
         </FilterChip>
-        <FilterChip isActive={false}>최근 공연순</FilterChip>
+        <FilterChip isActive={false} onClick={() => handleModalOpen('정렬', handleDirectionSelect)}>
+          {sortValue[selectedDirection as keyof typeof sortValue]}
+        </FilterChip>
       </Filter>
       <ConcertList>
         {data?.concertThumbnails.map((concert) => (
-          <ConcertItem>
-            <img alt="posterImg" key={concert.id} src={concert.poster} />
+          <ConcertItem key={concert.id}>
+            <img alt="posterImg" src={concert.poster} />
             <Content>
-              <ChipText>{concert.title}</ChipText>
+              <ChipText className="title">{concert.title}</ChipText>
               <ConcertInfo>
                 <SmallText>{concert.concertHallName}</SmallText>
                 <Place>
@@ -126,7 +127,7 @@ const Content = styled.div`
   justify-content: space-between;
   cursor: pointer;
 
-  & > span:first-child {
+  .title {
     color: ${({ theme }) => theme.colors.dark[100]};
   }
 `;

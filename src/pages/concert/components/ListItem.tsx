@@ -27,32 +27,54 @@ const region = [
   '전남',
 ];
 
+export const sortValue = {
+  DATE: '최근 공연순',
+  VIEWS: '인기순',
+};
+
 interface ListItemProps {
-  onRegionSelect: (region: string) => void;
+  title: string;
+  onSelect: (region: string) => void;
 }
 
-const ListItem = ({ onRegionSelect }: ListItemProps) => {
+const ListItem = ({ title, onSelect }: ListItemProps) => {
   const { closeModal } = useModalStore(['closeModal']);
 
   const handleRegionSelect = (selectedRegion: string) => {
-    onRegionSelect(selectedRegion);
+    onSelect(selectedRegion);
     closeModal('bottomSheet', 'list');
+  };
+
+  const handleDirectionSelect = (sortDirection: string) => {
+    onSelect(sortDirection);
+    closeModal('bottomSheet', 'list');
+  };
+
+  const renderItems = () => {
+    if (title === '지역') {
+      return region.map((regionName) => (
+        <Item key={regionName} onClick={() => handleRegionSelect(regionName)}>
+          <BodyRegularText>{regionName}</BodyRegularText>
+        </Item>
+      ));
+    }
+
+    if (title === '정렬') {
+      return Object.entries(sortValue).map(([key, value]) => (
+        <Item key={key} onClick={() => handleDirectionSelect(key)}>
+          <BodyRegularText>{value}</BodyRegularText>
+        </Item>
+      ));
+    }
   };
 
   return (
     <BottomSheet name="list">
       <BottomSheet.Header>
-        <Title>지역</Title>
+        <Title>{title}</Title>
       </BottomSheet.Header>
-
       <BottomSheet.Content>
-        <OptionList>
-          {region.map((regionName) => (
-            <Item key={regionName} onClick={() => handleRegionSelect(regionName)}>
-              <BodyRegularText>{regionName}</BodyRegularText>
-            </Item>
-          ))}
-        </OptionList>
+        <OptionList>{renderItems()}</OptionList>
       </BottomSheet.Content>
     </BottomSheet>
   );
