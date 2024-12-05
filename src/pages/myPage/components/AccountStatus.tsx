@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
 import { FiPlusCircle } from 'react-icons/fi';
-import { LuAlertCircle } from 'react-icons/lu';
 
 import RefundBottomSheet from './RefundBottomSheet';
 
@@ -19,9 +18,6 @@ const EmptyAccount = () => {
 
   return (
     <EmptyAccountWrapper>
-      <EmptyLogoWrapper>
-        <LuAlertCircle size={36} />
-      </EmptyLogoWrapper>
       <TitleText2>등록된 환불 계좌가 없습니다</TitleText2>
       <BaseButton color="primary" onClick={handleAccountBS} size="medium" variant="fill">
         <ButtonTextWrapper>
@@ -41,18 +37,17 @@ const RegisteredAccountView = ({ accountInfo }: { accountInfo: RefundAccountInfo
   };
 
   return (
-    <AccountInfoWrapper onClick={handleAccountBS}>
-      <AccountInfoContent>
-        <AccountDetails>
-          <BankName>
+    <AccountViewWrapper>
+      <TitleText2>환불 계좌</TitleText2>
+      <AccountInfoWrapper onClick={handleAccountBS}>
+        <AccountInfoContent>
+          <AccountDetails>
             <CaptionText>{accountInfo.bank}</CaptionText>
-          </BankName>
-          <AccountNumber>
-            <BodyMediumText>{accountInfo.accountNumber}</BodyMediumText>
-          </AccountNumber>
-        </AccountDetails>
-      </AccountInfoContent>
-    </AccountInfoWrapper>
+            <BodyMediumText>{accountInfo.number}</BodyMediumText>
+          </AccountDetails>
+        </AccountInfoContent>
+      </AccountInfoWrapper>
+    </AccountViewWrapper>
   );
 };
 
@@ -65,18 +60,13 @@ const AccountStatus = () => {
     // }
   );
 
-  return (
-    <AccountWrapper>
-      {accountInfo ? <RegisteredAccountView accountInfo={accountInfo} /> : <EmptyAccount />}
-    </AccountWrapper>
-  );
+  return accountInfo ? <RegisteredAccountView accountInfo={accountInfo} /> : <EmptyAccount />;
 };
 
-const AccountWrapper = styled.div`
-  width: 100%;
-  padding: 2.4rem;
-  background-color: ${({ theme }) => theme.colors.dark[700]};
-  border-radius: 16px;
+const AccountViewWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
 `;
 
 const EmptyAccountWrapper = styled.div`
@@ -84,15 +74,10 @@ const EmptyAccountWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 1.6rem;
-`;
-
-const EmptyLogoWrapper = styled.div`
-  padding: 1.4rem;
-  background-color: ${({ theme }) => theme.colors.dark[200]};
-  border-radius: 99999px;
-  svg {
-    color: ${({ theme }) => theme.colors.dark[500]};
-  }
+  width: 100%;
+  padding: 2.4rem;
+  background-color: ${({ theme }) => theme.colors.dark[700]};
+  border-radius: 16px;
 `;
 
 const ButtonTextWrapper = styled.div`
@@ -104,6 +89,9 @@ const ButtonTextWrapper = styled.div`
 const AccountInfoWrapper = styled.div`
   cursor: pointer;
   width: 100%;
+  padding: 1.6rem;
+  background-color: ${({ theme }) => theme.colors.dark[700]};
+  border-radius: 16px;
 `;
 
 const AccountInfoContent = styled.div`
@@ -117,14 +105,14 @@ const AccountDetails = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
-`;
 
-const BankName = styled.span`
-  color: ${({ theme }) => theme.colors.dark[200]};
-`;
+  span {
+    color: ${({ theme }) => theme.colors.dark[200]};
+  }
 
-const AccountNumber = styled.span`
-  color: ${({ theme }) => theme.colors.white};
+  p {
+    color: ${({ theme }) => theme.colors.white};
+  }
 `;
 
 export default AccountStatus;

@@ -1,14 +1,19 @@
 import { endPoint } from 'constants/endPoint';
+import type { RefundAccountRequest, RefundAccount } from 'types';
 import { tokenAxios } from 'utils';
 
-const createRefundAccount = async () => {
-  const response = await tokenAxios.post(endPoint.CREATE_REFUND_ACCOUNT);
-  return response;
+const createRefundAccount = async (formData: RefundAccountRequest): Promise<RefundAccount> => {
+  const { data } = await tokenAxios.post(endPoint.CREATE_REFUND_ACCOUNT, formData);
+  return data;
 };
 
-const deleteRefundAccount = async () => {
-  const response = await tokenAxios.delete(endPoint.DELETE_REFUND_ACCOUNT);
-  return response;
+const updateRefundAccount = async (formData: RefundAccount): Promise<RefundAccount> => {
+  const { data } = await tokenAxios.put(endPoint.UPDATE_REFUND_ACCOUNT, formData);
+  return data;
 };
 
-export { createRefundAccount, deleteRefundAccount };
+const deleteRefundAccount = async (): Promise<void> => {
+  await tokenAxios.delete(endPoint.DELETE_REFUND_ACCOUNT);
+};
+
+export { createRefundAccount, updateRefundAccount, deleteRefundAccount };

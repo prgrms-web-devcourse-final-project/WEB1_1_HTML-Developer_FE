@@ -6,20 +6,20 @@ import { Link } from 'react-router-dom';
 
 import { TitleText2, BodyMediumText } from 'styles/Typography';
 
-const ManagementSection = () => {
+const ApplicationSection = () => {
   return (
     <div css={container}>
       <TitleText2>내 관리</TitleText2>
 
       <div css={buttonContainer}>
-        <MenuLink to="/survey-management">
+        <MenuLink to="/my-survey-list">
           <TbClipboardText size={24} />
-          <BodyMediumText>수요 조사 관리</BodyMediumText>
+          <BodyMediumText>참여 중인 수요 조사</BodyMediumText>
         </MenuLink>
 
-        <MenuLink to="/rental-management">
+        <MenuLink to="/my-rental-list">
           <BiBus size={24} />
-          <BodyMediumText>차량 대절 관리</BodyMediumText>
+          <BodyMediumText>참여 중인 차량 대절</BodyMediumText>
         </MenuLink>
       </div>
     </div>
@@ -55,4 +55,4 @@ const MenuLink = styled(Link)`
   }
 `;
 
-export default ManagementSection;
+export default ApplicationSection;

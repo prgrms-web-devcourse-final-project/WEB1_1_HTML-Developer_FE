@@ -21,6 +21,7 @@ export const endPoint = {
   SIGNIN: '/oauth2/login',
 
   CREATE_REFUND_ACCOUNT: '/members/refund-account',
+  UPDATE_REFUND_ACCOUNT: '/members/refund-account',
   DELETE_REFUND_ACCOUNT: '/members/refund-account',
   UPDATE_PROFILE: '/members/info',
   GET_PROFILE: '/members',

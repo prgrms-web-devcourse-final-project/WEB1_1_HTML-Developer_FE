@@ -1,4 +1,7 @@
-export interface RefundAccountInfo {
+export interface RefundAccount {
   bank: string;
-  accountNumber: string;
+  number: string;
 }
+
+export type RefundAccountRequest = RefundAccount;
+export type RefundAccountInfo = RefundAccount;
