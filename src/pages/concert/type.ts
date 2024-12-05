@@ -1,4 +1,4 @@
-interface Concert {
+export interface Concert {
   poster: string;
   title: string;
   concertHallName: string;
