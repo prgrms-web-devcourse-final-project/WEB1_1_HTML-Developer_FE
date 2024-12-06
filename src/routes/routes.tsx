@@ -2,6 +2,7 @@ import { lazy } from 'react';
 import { createBrowserRouter, Outlet } from 'react-router-dom';
 
 import ModalRenderer from 'components/modalRenderer/ModalRenderer';
+import ToastRenderer from 'components/toast/ToastRenderer';
 import { FullLayout, HeaderLayout, TitleHeaderLayout } from 'layout';
 
 const Home = lazy(() => import('pages/home/Home'));
@@ -32,6 +33,7 @@ export const router = createBrowserRouter([
       <>
         <Outlet />
         <ModalRenderer />
+        <ToastRenderer />
       </>
     ),
     children: [
