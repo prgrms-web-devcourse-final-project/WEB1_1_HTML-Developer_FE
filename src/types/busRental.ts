@@ -1,5 +1,4 @@
-import type { ApiResponse } from './api';
-
+import type { ApiResponse } from 'api';
 import type { Region } from 'constants/filterTypes';
 
 export const BUS_SIZE = {
@@ -23,6 +22,14 @@ export const REFUND_TYPE = {
 export type BusSize = keyof typeof BUS_SIZE;
 export type BusType = keyof typeof BUS_TYPE;
 export type RefundType = keyof typeof REFUND_TYPE;
+
+export interface RentalList {
+  rentId: number;
+  title: string;
+  boardingArea: string;
+  endDate: string;
+  imageUrl: string;
+}
 
 export interface RentalDetail {
   concertName: string;
