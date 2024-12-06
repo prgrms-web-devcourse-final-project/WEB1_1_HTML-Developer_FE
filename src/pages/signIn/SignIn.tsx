@@ -5,10 +5,7 @@ import mainLogoTitle from 'assets/mainLogoTitle.svg';
 import { MediumButtonText } from 'styles/Typography';
 
 const SignIn = () => {
-  const Rest_api_key = import.meta.env.VITE_REST_API_KEY;
-  const redirect_uri = import.meta.env.VITE_REDIRECT_URI;
-
-  const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${Rest_api_key}&redirect_uri=${redirect_uri}&response_type=code`;
+  const kakaoURL = `${import.meta.env.VITE_API_URL}/oauth2/login/kakao`;
   const handleLogin = () => {
     window.location.href = kakaoURL;
   };
