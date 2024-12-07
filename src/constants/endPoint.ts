@@ -32,7 +32,7 @@ export const endPoint = {
   GET_CONCERT_SEARCH_LIST: '/search/concert/list',
 
   GET_CONCERT_LIST: '/concerts/list',
-  GET_CONCERT_DETAIL: (concertId: string) => `/concerts/${concertId}`,
+  GET_CONCERT_DETAIL: (concertId: number) => `/concerts/${concertId}`,
 
   SEARCH_ARTISTS: '/artists/search',
 };
