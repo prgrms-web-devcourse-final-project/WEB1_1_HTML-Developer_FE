@@ -1,13 +1,9 @@
 import styled from '@emotion/styled';
 
-import type { ConcertDetail, ConcertInfoProps } from '../ConcertDetail';
+import type { ConcertInfoProps, InfoItem } from '../type';
 
 import { BodyRegularText } from 'styles/Typography';
 
-interface InfoItem {
-  label: string;
-  value: string | string[];
-}
 const ConcertInfoItem = ({ label, value }: InfoItem) => (
   <ItemContainer>
     <BodyRegularText className="label">{label}</BodyRegularText>
@@ -34,6 +30,7 @@ const ConcertInfo = ({ data }: ConcertInfoProps) => {
       value: data?.concertInfo.price || '',
     },
   ];
+
   return (
     <Container>
       {infoItems.map((item, index) => (

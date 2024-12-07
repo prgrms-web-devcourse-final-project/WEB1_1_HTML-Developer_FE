@@ -6,83 +6,20 @@ import { TbChevronDown } from 'react-icons/tb';
 
 import ConcertInfo from './components/ConcertInfo';
 import SeatInfo from './components/SeatInfo';
+import type { ConcertDetailData } from './type';
 
 import Badge from 'components/badge/Badge';
 import { endPoint } from 'constants/endPoint';
-import {
-  BodyMediumText,
-  BodyRegularText,
-  CaptionText,
-  TitleText1,
-  TitleText2,
-} from 'styles/Typography';
+import { BodyRegularText, TitleText1, TitleText2 } from 'styles/Typography';
 import { publicAxios } from 'utils';
 
-export interface ConcertInfoProps {
-  data: ConcertDetail | undefined;
-}
-
-interface Poster {
-  url: string;
-}
-
-interface DetailImage {
-  url: string;
-}
-
-interface DateInfo {
-  startDate: string;
-  endDate: string;
-  timeTable: string;
-}
-
-interface ConcertInfo {
-  title: string;
-  price: string;
-  performStatus: string;
-  host: string;
-  dateInfo: DateInfo;
-}
-
-interface Seller {
-  name: string;
-  salesUrl: string;
-}
-
-interface ConvenienceInfo {
-  hasParkingLot: boolean;
-  hasRestaurant: boolean;
-  hasCafe: boolean;
-  hasStore: boolean;
-  hasDisabledParking: boolean;
-  hasDisabledToilet: boolean;
-  hasElevator: boolean;
-  hasRunway: boolean;
-}
-
-export interface ConcertDetail {
-  poster: Poster;
-  detailImages: DetailImage[];
-  concertInfo: ConcertInfo;
-  sellers: Seller[];
-  hallCode: string;
-  hallName: string;
-  seatScale: number;
-  convenienceInfo: ConvenienceInfo;
-  address: string;
-}
-
-interface ConcertResponse {
-  timeStamp: string;
-  code: string;
-  message: string;
-  result: ConcertDetail;
-}
 const id = 308;
 const ConcertDetail = () => {
-  const getConcertDetail = async (id: number): Promise<ConcertResponse> => {
-    const { data } = await publicAxios.get(endPoint.GET_CONCERT_DETAIL(id));
-    return data;
+  const getConcertDetail = async (id: number): Promise<ConcertDetailData> => {
+    const {
+      data: { result },
+    } = await publicAxios.get(endPoint.GET_CONCERT_DETAIL(id));
+    return result;
   };
 
   const { data } = useQuery({
@@ -91,25 +28,24 @@ const ConcertDetail = () => {
   });
 
   return (
-    <ConcertDetailContainer>
+    <div>
       <Poster>
-        <img alt="detailImg" src={data?.result.poster.url} />
+        <img alt="detailImg" src={data?.poster.url} />
         <BgWrapper>
           <Content>
             <Badge color="gray" size="medium" variant="round">
               공연 예정
             </Badge>
-            <TitleText1>{data?.result.concertInfo.title}</TitleText1>
+            <TitleText1>{data?.concertInfo.title}</TitleText1>
             <VenueInfo>
               <VenuePlace>
                 <PiMapPinFill size={20} />
-                <BodyRegularText>{data?.result.hallName}</BodyRegularText>
+                <BodyRegularText>{data?.hallName}</BodyRegularText>
               </VenuePlace>
               <VenueDate>
                 <LuCalendar size={20} />
                 <BodyRegularText>
-                  {data?.result.concertInfo.dateInfo.startDate} -{' '}
-                  {data?.result.concertInfo.dateInfo.endDate}
+                  {data?.concertInfo.dateInfo.startDate} - {data?.concertInfo.dateInfo.endDate}
                 </BodyRegularText>
               </VenueDate>
             </VenueInfo>
@@ -117,23 +53,21 @@ const ConcertDetail = () => {
         </BgWrapper>
       </Poster>
       <DetailWrapper>
-        <ConcertInfo data={data?.result} />
+        <ConcertInfo data={data} />
         <DetailImgContent>
           <TitleText2 className="concertDetail">공연 상세</TitleText2>
           <div>
-            <DetailImg alt="detailImg" src={data?.result.detailImages[0]?.url} />
+            <DetailImg alt="detailImg" src={data?.detailImages[0]?.url} />
             <IconWrapper>
               <TbChevronDown size={24} />
             </IconWrapper>
           </div>
         </DetailImgContent>
       </DetailWrapper>
-      <SeatInfo data={data?.result} />
-    </ConcertDetailContainer>
+      <SeatInfo data={data} />
+    </div>
   );
 };
-
-const ConcertDetailContainer = styled.div``;
 
 const Poster = styled.div`
   position: relative;

@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { PiMapPinFill } from 'react-icons/pi';
 import { TbArmchair, TbCheck } from 'react-icons/tb';
 
-import type { ConcertInfoProps } from '../ConcertDetail';
+import type { ConcertInfoProps } from '../type';
 
 import { BodyMediumText, CaptionText, TitleText2 } from 'styles/Typography';
 
