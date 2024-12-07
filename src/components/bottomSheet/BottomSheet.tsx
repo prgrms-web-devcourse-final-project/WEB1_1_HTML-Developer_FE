@@ -1,47 +1,46 @@
 import styled from '@emotion/styled';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
-import { useBottomSheetStore } from 'stores/useBottomSheetStore';
+import { useModalStore } from 'stores';
+import type { BottomSheetType } from 'types';
 
-const BottomSheet = ({ children }: { children: React.ReactNode }) => {
-  const { isOpen, closeBottomSheet } = useBottomSheetStore(['isOpen', 'closeBottomSheet']);
+interface BottomSheetProps {
+  children: React.ReactNode;
+  name: BottomSheetType;
+}
+
+const BottomSheet = ({ children, name }: BottomSheetProps) => {
+  const { closeModal } = useModalStore(['closeModal']);
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          <Overlay
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            initial={{ opacity: 0 }}
-            onClick={closeBottomSheet}
-          />
-          <StyledMotionDiv
-            animate={{ y: 0 }}
-            exit={{ y: '100%' }}
-            initial={{ y: '100%' }}
-            transition={{
-              type: 'spring',
-              damping: 60,
-              stiffness: 350,
-              mass: 0.8,
-            }}
-          >
-            {children}
-          </StyledMotionDiv>
-        </>
-      )}
-    </AnimatePresence>
+    <>
+      <Overlay
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        initial={{ opacity: 0 }}
+        onClick={() => closeModal('bottomSheet', name)}
+      />
+      <StyledMotionDiv
+        animate={{ y: 0 }}
+        exit={{ y: '100%' }}
+        initial={{ y: '100%' }}
+        style={{ x: '-50%' }}
+        transition={{
+          type: 'spring',
+          damping: 60,
+          stiffness: 350,
+          mass: 0.8,
+        }}
+      >
+        <HandleBar />
+        {children}
+      </StyledMotionDiv>
+    </>
   );
 };
 
 const Header = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <HeaderWrapper>
-      <HandleBar />
-      {children}
-    </HeaderWrapper>
-  );
+  return <HeaderWrapper>{children}</HeaderWrapper>;
 };
 
 const Content = ({ children }: { children: React.ReactNode }) => {
@@ -56,11 +55,11 @@ BottomSheet.Header = Header;
 BottomSheet.Content = Content;
 BottomSheet.Footer = Footer;
 
-export default BottomSheet;
-
 const Overlay = styled(motion.div)`
   position: fixed;
   bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
   max-width: ${({ theme }) => theme.maxWidth};
   width: 100%;
   height: 100%;
@@ -71,37 +70,39 @@ const Overlay = styled(motion.div)`
 const StyledMotionDiv = styled(motion.div)`
   display: flex;
   flex-direction: column;
+  gap: 1.6rem;
   position: fixed;
   bottom: 0;
+  left: 50%;
+  transform-origin: bottom center;
   max-width: ${({ theme }) => theme.maxWidth};
   max-height: 85vh;
   width: 100%;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  background-color: white;
-
+  padding: 1.2rem 2.4rem 1.6rem;
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  background-color: ${({ theme }) => theme.colors.dark[700]};
   z-index: 1002;
+  color: ${({ theme }) => theme.colors.dark[50]};
 `;
 
 const HeaderWrapper = styled.div`
-  flex-shrink: 0;
-  padding: 1.6rem 1.2rem;
-  border-bottom: 1px solid #f3f4f6;
+  text-align: center;
+  padding-bottom: 1.6rem;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.dark[500]};
 `;
 
 const HandleBar = styled.div`
   width: 5rem;
   height: 0.3rem;
   margin: 0 auto;
-  margin-bottom: 2.4rem;
-  background-color: #e5e7eb;
+  background-color: ${({ theme }) => theme.colors.dark[100]};
   border-radius: 9999px;
 `;
 
 const ContentWrapper = styled.div`
-  padding: 2.4rem;
+  padding: 1.6rem 0;
   overflow-y: auto;
-
   &::-webkit-scrollbar {
     display: none;
   }
@@ -111,8 +112,9 @@ const ContentWrapper = styled.div`
 
 const FooterWrapper = styled.div`
   display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 1.2rem;
-  padding: 1.2rem;
-  border-top: 1px solid #f3f4f6;
-  background: white;
 `;
+
+export default BottomSheet;

@@ -56,10 +56,13 @@ const BottomNav = () => {
 };
 
 const BottomNavContainer = styled.div`
+  position: fixed;
+  bottom: 0;
   display: flex;
   justify-content: space-between;
+  max-width: ${({ theme }) => theme.maxWidth};
   width: 100%;
-  height: 5.2rem;
+  height: 5.8rem;
   padding: 0.8rem 1.6rem;
   background-color: ${({ theme }) => theme.colors.dark[700]};
 `;

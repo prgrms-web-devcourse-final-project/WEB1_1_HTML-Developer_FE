@@ -20,7 +20,6 @@ const SignUp = () => {
 
   return (
     <FormProvider {...methods}>
-      <SubHeader text="회원가입" />
       <SignUpContainer>
         <ContentWrapper>
           <AvatarUploader />

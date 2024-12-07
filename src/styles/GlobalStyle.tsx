@@ -1,6 +1,7 @@
 import { Global, css } from '@emotion/react';
+import type { Theme } from '@emotion/react';
 
-const globalStyle = css`
+const globalStyle = (theme: Theme) => css`
   @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
   *,
@@ -26,6 +27,7 @@ const globalStyle = css`
     align-items: center;
     background-color: #f9f9f9;
     font-size: 62.5%;
+    color: ${theme.colors.dark[100]};
   }
 
   button {

@@ -12,15 +12,15 @@ const TopNav = () => {
   const topNavInfo: TopNavData = {
     rental: {
       name: '차 대절',
-      path: '/',
+      path: '/bus-rental',
     },
     survey: {
       name: '수요 조사',
-      path: '/',
+      path: '/surveys',
     },
     concert: {
       name: '공연 정보',
-      path: '/',
+      path: '/concert',
     },
     concertHall: {
       name: '공연장 정보',

@@ -73,4 +73,5 @@ const KaKaoBtn = styled.button`
 const GoogleBtn = styled.button`
   background-color: #f4f3ed;
 `;
+
 export default SignIn;

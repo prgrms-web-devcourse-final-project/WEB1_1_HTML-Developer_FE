@@ -2,6 +2,7 @@ import type { Theme } from '@emotion/react';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import type { MouseEventHandler } from 'react';
+import { Link } from 'react-router-dom';
 
 import type { ButtonColor, ButtonSize, ButtonVariant } from './types';
 
@@ -18,11 +19,21 @@ interface BaseButtonStyle extends BaseButtonColor {
 }
 
 interface BaseButtonProps extends BaseButtonStyle {
-  children: string;
+  children: React.ReactNode;
   isDisabled?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   type?: 'button' | 'submit';
+  to?: string;
 }
+
+const baseStyles = css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 8.8rem;
+  padding: 0 1.2rem;
+  text-decoration: none;
+`;
 
 const FilledStyle = ({ color, theme }: BaseButtonColor & { theme: Theme }) => css`
   background-color: ${color === 'primary' ? theme.colors.primary : theme.colors.dark[500]};
@@ -54,11 +65,10 @@ const OutlineStyle = ({ color, theme }: BaseButtonColor & { theme: Theme }) => c
   }
 `;
 
-const BaseButtonContainer = styled.button<BaseButtonStyle>`
+const StyledButton = styled.button<BaseButtonStyle>`
+  ${baseStyles}
   width: ${({ isFullWidth }) => (isFullWidth ? '100%' : 'fit-content')};
-  min-width: 8.8rem;
   height: ${({ size }) => (size === 'medium' ? '4.8rem' : '4rem')};
-  padding: 0 1.2rem;
   border-radius: ${({ size }) => (size === 'medium' ? '8px' : '4px')};
 
   ${({ variant, color, theme }) =>
@@ -67,6 +77,16 @@ const BaseButtonContainer = styled.button<BaseButtonStyle>`
   &:disabled {
     pointer-events: none;
   }
+`;
+
+const StyledLink = styled(Link)<BaseButtonStyle>`
+  ${baseStyles}
+  width: ${({ isFullWidth }) => (isFullWidth ? '100%' : 'fit-content')};
+  height: ${({ size }) => (size === 'medium' ? '4.8rem' : '4rem')};
+  border-radius: ${({ size }) => (size === 'medium' ? '8px' : '4px')};
+
+  ${({ variant, color, theme }) =>
+    variant === 'fill' ? FilledStyle({ color, theme }) : OutlineStyle({ color, theme })}
 `;
 
 const BaseButton = ({
@@ -78,9 +98,18 @@ const BaseButton = ({
   onClick,
   isFullWidth = true,
   type = 'button',
+  to,
 }: BaseButtonProps) => {
+  if (to) {
+    return (
+      <StyledLink color={color} isFullWidth={isFullWidth} size={size} to={to} variant={variant}>
+        <MediumButtonText>{children}</MediumButtonText>
+      </StyledLink>
+    );
+  }
+
   return (
-    <BaseButtonContainer
+    <StyledButton
       color={color}
       disabled={isDisabled}
       isFullWidth={isFullWidth}
@@ -90,7 +119,7 @@ const BaseButton = ({
       variant={variant}
     >
       <MediumButtonText>{children}</MediumButtonText>
-    </BaseButtonContainer>
+    </StyledButton>
   );
 };
 

@@ -23,4 +23,9 @@ dist-ssr
 
 *storybook.log
 
+
+# Environment Variables
 .env
+.env.local
+.env.development
+.env.production
