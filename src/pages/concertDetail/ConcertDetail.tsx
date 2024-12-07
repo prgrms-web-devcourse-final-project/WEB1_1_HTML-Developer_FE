@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { useQuery } from '@tanstack/react-query';
 import { TbChevronDown } from 'react-icons/tb';
+import { useParams } from 'react-router-dom';
 
 import ConcertInfo from './components/ConcertInfo';
 import PosterContent from './components/PosterContent';
@@ -11,18 +12,21 @@ import { endPoint } from 'constants/endPoint';
 import { TitleText2 } from 'styles/Typography';
 import { publicAxios } from 'utils';
 
-const id = 308;
 const ConcertDetail = () => {
-  const getConcertDetail = async (id: number): Promise<ConcertDetailData> => {
+  const { id } = useParams();
+  const numberId = id ? Number(id) : undefined;
+
+  const getConcertDetail = async (numberId: number): Promise<ConcertDetailData> => {
     const {
       data: { result },
-    } = await publicAxios.get(endPoint.GET_CONCERT_DETAIL(id));
+    } = await publicAxios.get(endPoint.GET_CONCERT_DETAIL(numberId));
     return result;
   };
 
   const { data } = useQuery({
-    queryKey: ['concert', id],
-    queryFn: () => getConcertDetail(id),
+    queryKey: ['concert', numberId],
+    queryFn: () => getConcertDetail(numberId!),
+    enabled: !!numberId,
   });
 
   return (

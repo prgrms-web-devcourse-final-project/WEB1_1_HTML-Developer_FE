@@ -5,9 +5,13 @@ import type { Concert } from '../type';
 
 import { ChipText, SmallText } from 'styles/Typography';
 
-const ConcertItem = ({ concert }: { concert: Concert }) => {
+interface ConcertItemProps {
+  concert: Concert;
+  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined;
+}
+const ConcertItem = ({ concert, onClick }: ConcertItemProps) => {
   return (
-    <Wrapper key={concert.id}>
+    <Wrapper key={concert.id} onClick={onClick}>
       <img alt="posterImg" src={concert.poster} />
       <Content>
         <ChipText className="title">{concert.title}</ChipText>
