@@ -1,4 +1,4 @@
 export * from './modal';
-export * from './busRental';
+export * from './rental';
 export * from './survey';
 export * from './user';
