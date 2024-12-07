@@ -1,7 +1,22 @@
 import type { ApiResponse } from './api';
 
-import type { Region } from 'constants/filterTypes';
+import type { DATE_SORT_ARRAY, Region, REGIONS } from 'constants/filterTypes';
 
+// Rental List
+export interface RentalList {
+  rentId: number;
+  title: string;
+  boardingArea: string;
+  endDate: string;
+  imageUrl: string;
+}
+
+// Rental Filter
+export type RentalFilterType = 'region' | 'sort';
+export type RentalFilterOptions = typeof REGIONS | typeof DATE_SORT_ARRAY;
+export type RentalFilterValue = RentalFilterOptions[number];
+
+// Rental Details
 export const BUS_SIZE = {
   LARGE: '대형',
   MEDIUM: '중형',
@@ -23,14 +38,6 @@ export const REFUND_TYPE = {
 export type BusSize = keyof typeof BUS_SIZE;
 export type BusType = keyof typeof BUS_TYPE;
 export type RefundType = keyof typeof REFUND_TYPE;
-
-export interface RentalList {
-  rentId: number;
-  title: string;
-  boardingArea: string;
-  endDate: string;
-  imageUrl: string;
-}
 
 export interface RentalDetail {
   concertName: string;

@@ -1,12 +1,15 @@
 import styled from '@emotion/styled';
-import dayjs from 'dayjs';
 import { BiSolidBus } from 'react-icons/bi';
 
+import RentalFilterSheet from './components/RentalFilterSheet';
 import RentalPostItem from './components/RentalPostItem';
 
 import rentalBanner from 'assets/images/bus-rental-banner.png';
 import FilterChip from 'components/chips/FilterChip';
-import { useRentalList } from 'queries/rent/queries/useRentList';
+import { RENTAL_FILTER } from 'constants/filterTypes';
+import { useRentalList } from 'queries/rent/useRentList';
+import { useModalStore } from 'stores';
+import { useRentalFilterStore } from 'stores/useRentalFilterStore';
 import { BodyRegularText } from 'styles/Typography';
 
 const BannerContainer = styled.div`
@@ -38,7 +41,21 @@ const EmptyRentalList = styled.div`
 `;
 
 const BusRental = () => {
+  const { openModal } = useModalStore(['openModal']);
+  const { filters } = useRentalFilterStore(['filters']);
   const { data: rentalList } = useRentalList();
+
+  const renderFilterChips = () => {
+    return RENTAL_FILTER.map((type) => (
+      <FilterChip
+        isActive={filters[type].isActive}
+        key={type}
+        onClick={() => openModal('bottomSheet', 'list', <RentalFilterSheet filterType={type} />)}
+      >
+        {filters[type].value}
+      </FilterChip>
+    ));
+  };
 
   return (
     <>
@@ -46,21 +63,14 @@ const BusRental = () => {
         <BannerImg alt="Bus Rental Banner" src={rentalBanner} />
       </BannerContainer>
       <ContentContainer>
-        <FilterWrapper>
-          <FilterChip isActive={false} onClick={() => {}}>
-            지역
-          </FilterChip>
-          <FilterChip isActive={false} onClick={() => {}}>
-            최신순
-          </FilterChip>
-        </FilterWrapper>
+        <FilterWrapper>{renderFilterChips()}</FilterWrapper>
         {rentalList?.length === 0 ? (
           <EmptyRentalList>
             <BiSolidBus size={80} />
             <BodyRegularText>아직 개설된 차량 대절 폼이 없어요.</BodyRegularText>
           </EmptyRentalList>
         ) : (
-          rentalList?.map((item) => dayjs() <= dayjs(item.endDate) && <RentalPostItem {...item} />)
+          rentalList?.map((item) => <RentalPostItem key={item.rentId} {...item} />)
         )}
       </ContentContainer>
     </>
