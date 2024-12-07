@@ -1,7 +1,5 @@
-import type { ApiResponse } from './api';
-
 import { endPoint } from 'constants/endPoint';
-import type { RentalList } from 'types';
+import type { RentalListResponse } from 'types';
 import { publicAxios } from 'utils';
 
 export interface RequestGetRentalList {
@@ -9,6 +7,6 @@ export interface RequestGetRentalList {
 }
 
 export const requestGetRentalList = async ({ query }: RequestGetRentalList) => {
-  return (await publicAxios.get<ApiResponse<RentalList[]>>(`${endPoint.GET_RENT_LIST}?${query}`))
-    .data.result;
+  return (await publicAxios.get<RentalListResponse>(`${endPoint.GET_RENT_LIST}?${query}`)).data
+    .result;
 };

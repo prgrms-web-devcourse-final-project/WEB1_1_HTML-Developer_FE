@@ -1,4 +1,5 @@
-import type { ApiResponse } from 'api';
+import type { ApiResponse } from './api';
+
 import type { Region } from 'constants/filterTypes';
 
 export const BUS_SIZE = {
@@ -62,5 +63,6 @@ export interface RentalAccount {
 
 export interface AllRentalDetail extends RentalDetail, RentalAccount {}
 
+export type RentalListResponse = ApiResponse<RentalList[]>;
 export type RentalDetailResponse = ApiResponse<RentalDetail>;
 export type RentalAccountResponse = ApiResponse<RentalAccount>;
