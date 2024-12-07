@@ -1,5 +1,28 @@
+import styled from '@emotion/styled';
+
+import EmptySurvey from './components/EmptySurvey';
+import SurveyItem from './components/SurveyItem';
+
+import { useCreatedSurveys } from 'queries/survey';
+
 const MySurveyManagement = () => {
-  return <div>MySurveyManagement</div>;
+  const { surveys } = useCreatedSurveys();
+
+  return (
+    <SurveyPageWrapper>
+      <EmptySurvey />
+    </SurveyPageWrapper>
+  );
 };
+
+const SurveyPageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.6rem;
+  padding: 2.4rem;
+  flex-grow: 1;
+`;
 
 export default MySurveyManagement;
