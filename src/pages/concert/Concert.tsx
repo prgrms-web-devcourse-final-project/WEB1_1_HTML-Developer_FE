@@ -1,39 +1,89 @@
 import styled from '@emotion/styled';
-import { LuCalendar } from 'react-icons/lu';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import { PiPencilSimpleLineBold } from 'react-icons/pi';
 
-import FilterChip from 'components/chips/FilterChip';
-import { BodyRegularText, ChipText, HeaderText, SmallText } from 'styles/Typography';
+import ConcertItem from './components/ConcertItem';
+import FilterChips from './components/FilterChips';
+import ListItem from './components/ListItem';
+import type { FilterCategory, Result } from './type';
 
+import { getConcertList } from 'api/concerts';
+import IconButton from 'components/buttons/IconButton';
+import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
+import { useModalStore } from 'stores';
+import { BodyRegularText, HeaderText } from 'styles/Typography';
+
+type Param = [number, string] | null;
 const Concert = () => {
+  const { openModal } = useModalStore(['openModal']);
+  const [selectedRegion, setSelectedRegion] = useState('전체');
+  const [selectedDirection, setSelectedDirection] = useState('DATE');
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery<Result>({
+    queryKey: ['concerts', selectedRegion, selectedDirection],
+    queryFn: async ({ pageParam }) => {
+      const {
+        data: { result },
+      } = await getConcertList(selectedRegion, selectedDirection, pageParam as Param);
+      return result;
+    },
+    initialPageParam: null,
+    getNextPageParam: (lastPage) => {
+      return lastPage.searchAfter || undefined;
+    },
+  });
+
+  const handleRegionSelect = (region: string) => {
+    setSelectedRegion(region);
+  };
+
+  const handleDirectionSelect = (sortDirection: string) => {
+    setSelectedDirection(sortDirection);
+  };
+
+  const handleModalOpen = (title: FilterCategory, onSelect: (value: string) => void) => {
+    openModal('bottomSheet', 'list', <ListItem onSelect={onSelect} title={title} />);
+  };
+
+  const handleObserver = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      if (hasNextPage) {
+        void fetchNextPage();
+      }
+    }
+  };
+
+  const targetRef = useIntersectionObserver(handleObserver);
+
   return (
     <ConcertContainer>
       <ExpectedConcert>
         <HeaderText>예정 공연</HeaderText>
         <BodyRegularText>ALLREVA에서 예정된 공연들을 손쉽게 확인해보세요!</BodyRegularText>
       </ExpectedConcert>
-      <Filter>
-        <FilterChip isActive={false}>지역</FilterChip>
-        <FilterChip isActive={false}>최근 공연순</FilterChip>
-      </Filter>
+      <FilterChips
+        handleDirectionSelect={handleDirectionSelect}
+        handleModalOpen={handleModalOpen}
+        handleRegionSelect={handleRegionSelect}
+        selectedDirection={selectedDirection}
+        selectedRegion={selectedRegion}
+      />
       <ConcertList>
-        {data?.concertThumbnails.map((concert) => (
-          <ConcertItem>
-            <img alt="posterImg" key={concert.id} src={concert.poster} />
-            <Content>
-              <ChipText>{concert.title}</ChipText>
-              <ConcertInfo>
-                <SmallText>{concert.concertHallName}</SmallText>
-                <Place>
-                  <LuCalendar size={16} />
-                  <SmallText>
-                    {concert.stdate} - {concert.eddate}
-                  </SmallText>
-                </Place>
-              </ConcertInfo>
-            </Content>
-          </ConcertItem>
-        ))}
+        {data?.pages.map((page) =>
+          page.concertThumbnails.map((concert) => (
+            <ConcertItem concert={concert} key={concert.id} />
+          ))
+        )}
       </ConcertList>
+      <div ref={targetRef} />
+      <FloatingAside>
+        <FloatingButton>
+          <IconButton isDisabled={false} size="medium">
+            <PiPencilSimpleLineBold size={20} />
+          </IconButton>
+        </FloatingButton>
+      </FloatingAside>
     </ConcertContainer>
   );
 };
@@ -58,51 +108,24 @@ const ExpectedConcert = styled.div`
   }
 `;
 
-const Filter = styled.div`
-  display: flex;
-  gap: 12px;
-  padding: 2.4rem 2.4rem 0 2.4rem;
-`;
-
 const ConcertList = styled.div`
   width: 100%;
   padding: 2.4rem;
 `;
 
-const ConcertItem = styled.div`
-  display: flex;
-  gap: 1.6rem;
-  padding: 1.2rem 0;
-
-  img {
-    width: 7.5rem;
-    height: 10rem;
-
-    cursor: pointer;
-  }
+const FloatingAside = styled.aside`
+  max-width: ${({ theme }) => theme.maxWidth};
+  margin: 0 auto;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
 `;
 
-const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  cursor: pointer;
-
-  & > span:first-child {
-    color: ${({ theme }) => theme.colors.dark[100]};
-  }
-`;
-
-const Place = styled.div`
-  display: flex;
-  gap: 0.8rem;
-`;
-
-const ConcertInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  color: ${({ theme }) => theme.colors.dark[200]};
+const FloatingButton = styled.div`
+  position: absolute;
+  bottom: 8rem;
+  right: 2rem;
 `;
 
 export default Concert;
