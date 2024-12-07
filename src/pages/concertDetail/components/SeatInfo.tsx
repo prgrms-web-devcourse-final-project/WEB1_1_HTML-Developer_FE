@@ -20,7 +20,7 @@ const SeatInfo = ({ data }: ConcertInfoProps) => {
           <SeatBox>
             <div>
               <TbArmchair size={18} />
-              <CaptionText>{data?.seatScale}석</CaptionText>
+              <CaptionText>{data?.seatScale.toLocaleString()}석</CaptionText>
             </div>
             <div>
               <TbCheck size={18} />
