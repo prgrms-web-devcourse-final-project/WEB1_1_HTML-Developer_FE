@@ -7,10 +7,12 @@ import RentalPostItem from './components/RentalPostItem';
 import rentalBanner from 'assets/images/bus-rental-banner.png';
 import FilterChip from 'components/chips/FilterChip';
 import { RENTAL_FILTER } from 'constants/filterTypes';
+import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
 import { useRentalList } from 'queries/rent/useRentList';
 import { useModalStore } from 'stores';
 import { useRentalFilterStore } from 'stores/useRentalFilterStore';
 import { BodyRegularText } from 'styles/Typography';
+import type { RentalFilterType } from 'types';
 
 const BannerContainer = styled.div`
   width: 100%;
@@ -43,19 +45,37 @@ const EmptyRentalList = styled.div`
 const BusRental = () => {
   const { openModal } = useModalStore(['openModal']);
   const { filters } = useRentalFilterStore(['filters']);
-  const { data: rentalList } = useRentalList();
+  const {
+    data: rentalList,
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useRentalList();
+
+  const handleFilterChipClick = (type: RentalFilterType) => {
+    openModal('bottomSheet', 'list', <RentalFilterSheet filterType={type} />);
+  };
 
   const renderFilterChips = () => {
     return RENTAL_FILTER.map((type) => (
       <FilterChip
         isActive={filters[type].isActive}
         key={type}
-        onClick={() => openModal('bottomSheet', 'list', <RentalFilterSheet filterType={type} />)}
+        onClick={() => handleFilterChipClick(type)}
       >
         {filters[type].value}
       </FilterChip>
     ));
   };
+
+  const targetRef = useIntersectionObserver(() => {
+    if (hasNextPage && !isFetchingNextPage) void fetchNextPage();
+  });
+
+  if (isLoading) return <div>로딩중...</div>;
+  if (isError) return <div>ERROR</div>;
 
   return (
     <>
@@ -64,14 +84,21 @@ const BusRental = () => {
       </BannerContainer>
       <ContentContainer>
         <FilterWrapper>{renderFilterChips()}</FilterWrapper>
-        {rentalList?.length === 0 ? (
+        {rentalList?.pages[0].length === 0 ? (
           <EmptyRentalList>
             <BiSolidBus size={80} />
             <BodyRegularText>아직 개설된 차량 대절 폼이 없어요.</BodyRegularText>
           </EmptyRentalList>
         ) : (
-          rentalList?.map((item) => <RentalPostItem key={item.rentId} {...item} />)
+          rentalList?.pages.map((page, pageIndex) => (
+            <div key={pageIndex}>
+              {page.map((item) => (
+                <RentalPostItem key={item.rentId} {...item} />
+              ))}
+            </div>
+          ))
         )}
+        {hasNextPage && !isFetchingNextPage && <div ref={targetRef} />}
       </ContentContainer>
     </>
   );
