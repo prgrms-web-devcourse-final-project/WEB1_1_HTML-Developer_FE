@@ -10,7 +10,7 @@ interface FABProps {
 
 const FABContainer = styled.aside`
   position: fixed;
-  inset: 0;
+  bottom: 0;
   z-index: 100;
   width: 100%;
   max-width: ${({ theme }) => theme.maxWidth};
