@@ -42,6 +42,10 @@ const EmptyRentalList = styled.div`
   padding: 12rem 0;
 `;
 
+const RentalList = styled.ul`
+  list-style: none;
+`;
+
 const BusRental = () => {
   const { openModal } = useModalStore(['openModal']);
   const { filters } = useRentalFilterStore(['filters']);
@@ -91,11 +95,11 @@ const BusRental = () => {
           </EmptyRentalList>
         ) : (
           rentalList?.pages.map((page, pageIndex) => (
-            <div key={pageIndex}>
+            <RentalList key={pageIndex}>
               {page.map((item) => (
                 <RentalPostItem key={item.rentId} {...item} />
               ))}
-            </div>
+            </RentalList>
           ))
         )}
         {hasNextPage && !isFetchingNextPage && <div ref={targetRef} />}
