@@ -99,7 +99,7 @@ const RentalPostItem = ({
           <SmallText>{boardingArea}</SmallText>
         </BoardingArea>
       </RentalContent>
-      <RentalItemLink to={endPoint.GET_RENT_DETAIL(String(rentId))} />
+      <RentalItemLink to={`/bus-rental/${rentId}`} />
     </RentalItemContainer>
   );
 };

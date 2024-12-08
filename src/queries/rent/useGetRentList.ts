@@ -9,7 +9,7 @@ export interface PageParam {
   lastEndDate: string | null;
 }
 
-export const useRentalList = () => {
+export const useGetRentalList = () => {
   const { filters, getFilterQuery } = useRentalFilterStore(['filters', 'getFilterQuery']);
 
   const fetchFilteredList = async (pageParam: PageParam): Promise<RentalList[]> => {
