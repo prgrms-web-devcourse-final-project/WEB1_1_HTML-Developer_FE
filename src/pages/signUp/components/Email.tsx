@@ -3,13 +3,17 @@ import styled from '@emotion/styled';
 import InputField from 'components/inputField/InputField';
 import { BodyMediumText } from 'styles/Typography';
 
-const Email = () => {
+interface EmailProps {
+  value: string;
+}
+const Email = ({ value }: EmailProps) => {
+  const emailValue = value || '';
   const handleEmail = (value: string | number) => {};
 
   return (
     <Wrapper>
       <BodyMediumText>이메일</BodyMediumText>
-      <InputField isDisabled={true} name="email" onValueChange={handleEmail} value="email" />
+      <InputField isDisabled={true} name="email" onValueChange={handleEmail} value={emailValue} />
     </Wrapper>
   );
 };

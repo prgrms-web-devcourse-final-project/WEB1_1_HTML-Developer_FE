@@ -8,23 +8,50 @@ import ShortBio from './components/ShortBio';
 
 import AvatarUploader from 'components/avatarUploader/AvatarUploader';
 import BaseButton from 'components/buttons/BaseButton';
-import SubHeader from 'components/subHeader/SubHeader';
+import { endPoint } from 'constants/endPoint';
+import { tokenAxios } from 'utils/axios';
 
 const SignUp = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get('accessToken');
+
   const methods = useForm({
-    defaultValues: {
-      nickname: '',
-      introduce: '',
+    defaultValues: async () => {
+      try {
+        const { data } = await tokenAxios.get(endPoint.GET_PROFILE, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        return {
+          email: data.result.email,
+          nickname: '',
+          introduce: '',
+          imageUrl: data.result.profileImageUrl,
+        };
+      } catch (error) {
+        console.error(error);
+        return {
+          email: '',
+          nickname: '',
+          introduce: '',
+          imageUrl: '',
+        };
+      }
     },
   });
+
+  const { watch } = methods;
+  const email = watch('email');
+  const imageUrl = watch('imageUrl');
 
   return (
     <FormProvider {...methods}>
       <SignUpContainer>
         <ContentWrapper>
-          <AvatarUploader />
+          <AvatarUploader imageUrl={imageUrl} />
           <Nickname />
-          <Email />
+          <Email value={email} />
           <ShortBio />
           <ArtistSelector />
         </ContentWrapper>
