@@ -77,22 +77,21 @@ const SignUp = () => {
     try {
       const formData = new FormData();
 
-      const signUpData = {
+      const memberInfoRequest = {
         nickname: data.nickname,
         introduce: null,
-        memberArtistRequests: null,
+        memberArtistRequests: [
+          {
+            spotifyArtistId: 'string',
+            name: 'string',
+          },
+        ],
       };
 
-      formData.append(
-        'data',
-        new Blob([JSON.stringify(signUpData)], {
-          type: 'application/json',
-        })
-      );
+      formData.append('memberInfoRequest', JSON.stringify(memberInfoRequest));
 
       if (data.imageFile) {
-        console.log(data.imageFile);
-        formData.append('file', data.imageFile);
+        formData.append('image', data.imageFile);
       }
 
       const response = await tokenAxios.post(endPoint.SIGNUP, formData);
