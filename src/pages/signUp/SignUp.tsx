@@ -96,8 +96,8 @@ const SignUp = () => {
 
       const response = await tokenAxios.post(endPoint.SIGNUP, formData);
 
-      if (response.data.success) {
-        window.location.href = '/';
+      if (response.status === 200) {
+        window.location.href = '/auth-success';
       }
     } catch (e) {
       console.error(e);
