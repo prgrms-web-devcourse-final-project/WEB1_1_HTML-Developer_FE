@@ -4,7 +4,6 @@ import { createBrowserRouter, Outlet } from 'react-router-dom';
 import ModalRenderer from 'components/modalRenderer/ModalRenderer';
 import ToastRenderer from 'components/toast/ToastRenderer';
 import { FullLayout, HeaderLayout, TitleHeaderLayout } from 'layout';
-import Callback from 'pages/callback/Callback';
 
 const Home = lazy(() => import('pages/home/Home'));
 const Concert = lazy(() => import('pages/concert/Concert'));
@@ -87,10 +86,6 @@ export const router = createBrowserRouter([
       {
         element: <Outlet />,
         children: [{ path: '/signin', element: <SignIn /> }],
-      },
-      {
-        element: <Outlet />,
-        children: [{ path: '/callback', element: <Callback /> }],
       },
 
       // TODO: protected routes 추가
