@@ -23,10 +23,12 @@ export const FullLayout = () => {
 const HeaderWrapper = styled.header`
   position: fixed;
   top: 0;
+  z-index: 100;
   max-width: ${({ theme }) => theme.maxWidth};
   min-width: 32rem;
   width: 100%;
 `;
+
 const MainWrapper = styled.main`
   padding-top: calc(5.2rem * 2);
   padding-bottom: 5.8rem;
