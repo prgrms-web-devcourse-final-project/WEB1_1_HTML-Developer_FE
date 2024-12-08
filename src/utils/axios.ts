@@ -11,6 +11,13 @@ export const tokenAxios = axios.create({
   },
 });
 
+tokenAxios.interceptors.request.use((config) => {
+  if (config.data instanceof FormData) {
+    delete config.headers['Content-Type'];
+  }
+  return config;
+});
+
 export const publicAxios = axios.create({
   baseURL: API_URL,
   timeout: 15000,

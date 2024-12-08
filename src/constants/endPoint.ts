@@ -29,7 +29,7 @@ export const endPoint = {
 
   // Auth API
   SIGNIN: '/oauth2/login',
-  SIGNUP: '/oauth2/register',
+  SIGNUP: '/members/register',
 
   // User API
   GET_PROFILE: '/members',

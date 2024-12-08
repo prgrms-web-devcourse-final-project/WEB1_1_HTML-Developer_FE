@@ -1,10 +1,15 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { BiSolidUser } from 'react-icons/bi';
 import { LuCamera } from 'react-icons/lu';
 
-const AvatarUploader = () => {
-  const [imageSrc, setImageSrc] = useState<string | null>(null);
+interface AvatarUploaderProps {
+  imageUrl: string;
+}
+const AvatarUploader = ({ imageUrl }: AvatarUploaderProps) => {
+  const { setValue } = useFormContext();
+  const [imageSrc, setImageSrc] = useState<string | null>(imageUrl || null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -20,10 +25,19 @@ const AvatarUploader = () => {
 
     const reader = new FileReader();
     reader.onloadend = () => {
-      setImageSrc(reader.result as string);
+      const result = reader.result as string;
+      setImageSrc(result);
+      setValue('imageFile', file);
+      setValue('imageUrl', result); // 미리보기용 url 입니다
     };
     reader.readAsDataURL(file);
   };
+
+  useEffect(() => {
+    if (imageUrl) {
+      setImageSrc(imageUrl);
+    }
+  }, [imageUrl]);
 
   return (
     <AvatarUploaderContainer>
