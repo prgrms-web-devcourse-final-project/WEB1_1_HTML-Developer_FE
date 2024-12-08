@@ -10,6 +10,7 @@ import ShortBio from './components/ShortBio';
 import AvatarUploader from 'components/avatarUploader/AvatarUploader';
 import BaseButton from 'components/buttons/BaseButton';
 import { endPoint } from 'constants/endPoint';
+import { useAuthStore } from 'stores/authStore';
 import { tokenAxios } from 'utils/axios';
 
 interface ArtistRequest {
@@ -28,10 +29,12 @@ interface SignUpFormData {
 const SignUp = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const token = urlParams.get('accessToken');
+  const { setToken, setIsLoggedIn } = useAuthStore();
 
-  const setToken = (token: string) => {
+  const setTokenStorage = (token: string) => {
     localStorage.setItem('accessToken', token);
     tokenAxios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    setToken(token);
   };
 
   const methods = useForm<SignUpFormData>({
@@ -69,7 +72,7 @@ const SignUp = () => {
 
   useEffect(() => {
     if (token) {
-      setToken(token);
+      setTokenStorage(token);
     }
   }, [token]);
 
@@ -97,6 +100,7 @@ const SignUp = () => {
       const response = await tokenAxios.post(endPoint.SIGNUP, formData);
 
       if (response.status === 200) {
+        setIsLoggedIn();
         window.location.href = '/auth-success';
       }
     } catch (e) {
