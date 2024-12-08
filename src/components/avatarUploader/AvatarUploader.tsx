@@ -9,7 +9,7 @@ interface AvatarUploaderProps {
 }
 const AvatarUploader = ({ imageUrl }: AvatarUploaderProps) => {
   const { setValue } = useFormContext();
-  const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const [imageSrc, setImageSrc] = useState<string | null>(imageUrl || null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -27,7 +27,8 @@ const AvatarUploader = ({ imageUrl }: AvatarUploaderProps) => {
     reader.onloadend = () => {
       const result = reader.result as string;
       setImageSrc(result);
-      setValue('imageUrl', result);
+      setValue('imageFile', file);
+      setValue('imageUrl', result); // 미리보기용 url 입니다
     };
     reader.readAsDataURL(file);
   };

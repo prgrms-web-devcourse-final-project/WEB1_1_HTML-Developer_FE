@@ -17,7 +17,7 @@ export const endPoint = {
   GET_APPLIED_SURVEY_LIST: '/surveys/member/apply/list',
   GET_SURVEY_LIST: '/surveys/list',
 
-  SIGNUP: '/oauth2/register',
+  SIGNUP: '/members/register',
   SIGNIN: '/oauth2/login',
 
   CREATE_REFUND_ACCOUNT: '/members/refund-account',

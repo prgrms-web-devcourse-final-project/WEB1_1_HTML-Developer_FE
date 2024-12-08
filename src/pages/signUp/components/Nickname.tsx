@@ -6,9 +6,12 @@ import InputField from 'components/inputField/InputField';
 import { BodyMediumText, BodyRegularText } from 'styles/Typography';
 
 const Nickname = () => {
-  const { watch } = useFormContext();
+  const { watch, setValue } = useFormContext();
+  const nickname = watch('nickname');
 
-  const handleNicknameChange = (value: string | number) => {};
+  const handleNicknameChange = (value: string | number) => {
+    setValue('nickname', value.toString());
+  };
 
   return (
     <Wrapper>
@@ -22,7 +25,7 @@ const Nickname = () => {
             name="nickname"
             onValueChange={handleNicknameChange}
             placeholder="닉네임을 입력해주세요"
-            value={watch('nickname')}
+            value={nickname}
           />
         </InputContainer>
         <BaseButton color="primary" isFullWidth={false} size="small" variant="outline">

@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import ArtistSelector from './components/ArtistSelector';
@@ -11,11 +12,29 @@ import BaseButton from 'components/buttons/BaseButton';
 import { endPoint } from 'constants/endPoint';
 import { tokenAxios } from 'utils/axios';
 
+interface ArtistRequest {
+  spotifyArtistId: string;
+  name: string;
+}
+
+interface SignUpFormData {
+  email: string;
+  nickname: string;
+  introduce: string;
+  imageUrl: string;
+  imageFile?: File;
+  memberArtistRequests?: ArtistRequest[];
+}
 const SignUp = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const token = urlParams.get('accessToken');
 
-  const methods = useForm({
+  const setToken = (token: string) => {
+    localStorage.setItem('accessToken', token);
+    tokenAxios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  };
+
+  const methods = useForm<SignUpFormData>({
     defaultValues: async () => {
       try {
         const { data } = await tokenAxios.get(endPoint.GET_PROFILE, {
@@ -23,11 +42,13 @@ const SignUp = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+
         return {
           email: data.result.email,
           nickname: '',
           introduce: '',
           imageUrl: data.result.profileImageUrl,
+          imageFile: undefined,
         };
       } catch (error) {
         console.error(error);
@@ -36,6 +57,7 @@ const SignUp = () => {
           nickname: '',
           introduce: '',
           imageUrl: '',
+          imageFile: undefined,
         };
       }
     },
@@ -44,6 +66,45 @@ const SignUp = () => {
   const { watch } = methods;
   const email = watch('email');
   const imageUrl = watch('imageUrl');
+
+  useEffect(() => {
+    if (token) {
+      setToken(token);
+    }
+  }, [token]);
+
+  const handleSubmit = methods.handleSubmit(async (data) => {
+    try {
+      const formData = new FormData();
+
+      const signUpData = {
+        nickname: data.nickname,
+        introduce: null,
+        memberArtistRequests: null,
+      };
+
+      formData.append(
+        'data',
+        new Blob([JSON.stringify(signUpData)], {
+          type: 'application/json',
+        })
+      );
+
+      if (data.imageFile) {
+        console.log(data.imageFile);
+        formData.append('file', data.imageFile);
+      }
+
+      const response = await tokenAxios.post(endPoint.SIGNUP, formData);
+
+      if (response.data.success) {
+        window.location.href = '/';
+      }
+    } catch (e) {
+      console.error(e);
+      alert('회원가입에 실패했습니다');
+    }
+  });
 
   return (
     <FormProvider {...methods}>
@@ -55,7 +116,13 @@ const SignUp = () => {
           <ShortBio />
           <ArtistSelector />
         </ContentWrapper>
-        <BaseButton color="primary" isFullWidth={true} size="medium" variant="fill">
+        <BaseButton
+          color="primary"
+          isFullWidth={true}
+          onClick={handleSubmit}
+          size="medium"
+          variant="fill"
+        >
           가입 완료
         </BaseButton>
       </SignUpContainer>
