@@ -57,7 +57,7 @@ export interface RentalDetail {
   upTimePrice: number;
   downTimePrice: number;
   recruitmentCount: number;
-  participants: number[];
+  currentRecruitmentCounts: number[];
   endDate: string;
   chatUrl: string;
   refundType: RefundType;

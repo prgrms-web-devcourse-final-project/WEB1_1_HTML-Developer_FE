@@ -10,7 +10,7 @@ import FAB from 'components/buttons/FAB';
 import FilterChip from 'components/chips/FilterChip';
 import { RENTAL_FILTER } from 'constants/filterTypes';
 import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
-import { useRentalList } from 'queries/rent/useRentList';
+import { useGetRentalList } from 'queries/rent';
 import { useModalStore } from 'stores';
 import { useRentalFilterStore } from 'stores/useRentalFilterStore';
 import { BodyRegularText } from 'styles/Typography';
@@ -59,7 +59,7 @@ const BusRental = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useRentalList();
+  } = useGetRentalList();
 
   const handleFilterChipClick = (type: RentalFilterType) => {
     openModal('bottomSheet', 'list', <RentalFilterSheet filterType={type} />);
