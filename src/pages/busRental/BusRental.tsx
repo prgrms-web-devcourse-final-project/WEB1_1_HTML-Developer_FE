@@ -1,10 +1,12 @@
 import styled from '@emotion/styled';
 import { BiSolidBus } from 'react-icons/bi';
+import { useNavigate } from 'react-router-dom';
 
 import RentalFilterSheet from './components/RentalFilterSheet';
 import RentalPostItem from './components/RentalPostItem';
 
 import rentalBanner from 'assets/images/bus-rental-banner.png';
+import FAB from 'components/buttons/FAB';
 import FilterChip from 'components/chips/FilterChip';
 import { RENTAL_FILTER } from 'constants/filterTypes';
 import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
@@ -47,6 +49,7 @@ const RentalList = styled.ul`
 `;
 
 const BusRental = () => {
+  const navigate = useNavigate();
   const { openModal } = useModalStore(['openModal']);
   const { filters } = useRentalFilterStore(['filters']);
   const {
@@ -60,6 +63,10 @@ const BusRental = () => {
 
   const handleFilterChipClick = (type: RentalFilterType) => {
     openModal('bottomSheet', 'list', <RentalFilterSheet filterType={type} />);
+  };
+
+  const handleFABClick = () => {
+    navigate('/bus-rental/create');
   };
 
   const renderFilterChips = () => {
@@ -104,6 +111,7 @@ const BusRental = () => {
         )}
         {hasNextPage && !isFetchingNextPage && <div ref={targetRef} />}
       </ContentContainer>
+      <FAB onFABClick={handleFABClick} />
     </>
   );
 };
