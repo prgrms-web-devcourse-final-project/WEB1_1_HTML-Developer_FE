@@ -10,7 +10,7 @@ import ParticipantsStatus from './components/ParticipantsStatus';
 import Badge from 'components/badge/Badge';
 import BaseButton from 'components/buttons/BaseButton';
 import SimpleChip from 'components/chips/SimpleChip';
-import { useRentalDetails } from 'hooks/useRentalDetails';
+import { useGetRentalDetails } from 'queries/rent';
 import { BodyRegularText, TitleText1, TitleText2 } from 'styles/Typography';
 import { formatDateWithDay, getDday } from 'utils';
 
@@ -88,7 +88,7 @@ const InfoSection = ({ title, children }: { title: string; children: React.React
 
 const BusRentalDetail = () => {
   const { id } = useParams();
-  const { data: details, error, isLoading } = useRentalDetails(id as string);
+  const { data: details, error, isLoading } = useGetRentalDetails(id as string);
 
   if (isLoading) return <div>로딩중</div>;
   if (error) return <div>Error 발생: {error.message}</div>;
@@ -103,7 +103,7 @@ const BusRentalDetail = () => {
     endDate,
     rentBoardingDates,
     recruitmentCount,
-    participants,
+    currentRecruitmentCounts,
     boardingArea,
     dropOffArea,
     busSize,
@@ -139,7 +139,7 @@ const BusRentalDetail = () => {
             <SimpleChip>{artistName}</SimpleChip>
           </ChipWrapper>
           <ParticipantsStatus
-            participants={participants}
+            participants={currentRecruitmentCounts}
             recruitmentCount={recruitmentCount}
             rentDates={rentDates}
           />
@@ -172,7 +172,10 @@ const BusRentalDetail = () => {
       <BottomButtonWrapper>
         <BaseButton
           color="primary"
-          isDisabled={every(participants, (participant) => participant === recruitmentCount)}
+          isDisabled={every(
+            currentRecruitmentCounts,
+            (participant) => participant === recruitmentCount
+          )}
           onClick={() => {}}
           size="medium"
           variant="fill"
