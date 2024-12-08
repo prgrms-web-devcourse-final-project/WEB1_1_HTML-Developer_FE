@@ -36,11 +36,12 @@ const InputFieldWrapper = styled.div<{ isError: boolean }>`
   border-radius: 4px;
   background: ${({ theme }) => theme.colors.dark[500]};
   color: ${({ theme }) => theme.colors.dark[100]};
-  outline: 1px solid ${({ isError, theme }) => (isError ? theme.colors.red : 'none')};
+  outline: 2px solid ${({ isError, theme }) => (isError ? theme.colors.red : 'none')};
+  outline-offset: -2px;
 
   &:focus-within {
-    outline: 1px solid
-      ${({ isError, theme }) => (isError ? theme.colors.red : theme.colors.primaryDark)};
+    outline: 2px solid
+      ${({ isError, theme }) => (isError ? theme.colors.red : theme.colors.primary)};
   }
 
   &[aria-disabled='true'] {
