@@ -1,53 +1,99 @@
-import BottomSheet from 'components/bottomSheet/BottomSheet';
-import BaseButton from 'components/buttons/BaseButton';
-import { useModalStore } from 'stores';
-import { TitleText2, BodyRegularText } from 'styles/Typography';
+import styled from '@emotion/styled';
+import { useQuery } from '@tanstack/react-query';
+import { TbChevronRight } from 'react-icons/tb';
+import { useNavigate } from 'react-router-dom';
 
-const BasicBottomSheet = () => {
-  return (
-    <BottomSheet name="basic">
-      <BottomSheet.Header>
-        <TitleText2>기본 바텀시트</TitleText2>
-      </BottomSheet.Header>
+import 'swiper/css';
+import 'swiper/css/pagination';
+import MainPoster from './components/MainPoster';
 
-      <BottomSheet.Content>
-        <BodyRegularText>기본적인 헤더와 내용이 포함된 바텀시트입니다.</BodyRegularText>
-      </BottomSheet.Content>
-    </BottomSheet>
-  );
-};
+import { endPoint } from 'constants/endPoint';
+import RentalPostItem from 'pages/busRental/components/RentalPostItem';
+import { ChipText, TitleText2 } from 'styles/Typography';
+import { publicAxios } from 'utils';
 
+interface RentalPostItem {
+  rentId: number;
+  endDate: string;
+  title: string;
+  boardingArea: string;
+  imageUrl: string;
+}
+
+interface Concert {
+  id: number;
+  poster: string;
+  title: string;
+  stdate: string;
+  eddate: string;
+}
 const Home = () => {
-  const { openModal } = useModalStore(['openModal']);
+  const navigate = useNavigate();
+  const getMainConcert = async () => {
+    const response = await publicAxios.get(endPoint.GET_CONCERT_LIST);
+
+    return response.data.result.concertThumbnails;
+  };
+
+  const getMainRental = async () => {
+    const response = await publicAxios.get(endPoint.GET_RENT_MAIN_LIST);
+
+    return response.data.result;
+  };
+
+  const { data: concerts } = useQuery<Concert[]>({
+    queryKey: ['mainConcerts'],
+    queryFn: () => getMainConcert(),
+  });
+
+  const { data: rentaltData } = useQuery<RentalPostItem[]>({
+    queryKey: ['mainRental'],
+    queryFn: () => getMainRental(),
+  });
+
+  if (!concerts) return null;
 
   return (
-    <>
-      <div>Home</div>
-      <BaseButton
-        color="primary"
-        onClick={() => openModal('bottomSheet', 'basic', <BasicBottomSheet />)}
-        size="medium"
-        variant="fill"
-      >
-        열기
-      </BaseButton>
-      <div style={{ color: 'white', padding: '4rem', margin: ' 2rem 0' }} />
-      <div style={{ color: 'white', padding: '4rem', margin: ' 2rem 0' }} />
-      <div style={{ color: 'white', padding: '4rem', margin: ' 2rem 0' }} />
-      <div style={{ color: 'white', padding: '4rem', margin: ' 2rem 0' }} />
-      <div style={{ color: 'white', padding: '4rem', margin: ' 2rem 0' }} />
-      <div style={{ color: 'white', padding: '4rem', margin: ' 2rem 0' }} />
-      <div style={{ color: 'white', padding: '4rem', margin: ' 2rem 0' }} />
-      <div style={{ color: 'white', padding: '4rem', margin: ' 2rem 0' }} />
-      <div style={{ color: 'white', padding: '4rem', margin: ' 2rem 0' }} />
-      <div style={{ color: 'white', padding: '4rem', margin: ' 2rem 0' }} />
-      <div style={{ color: 'white', padding: '4rem', margin: ' 2rem 0' }} />
-      <div style={{ color: 'white', padding: '4rem', margin: ' 2rem 0' }} />
-      <div style={{ color: 'white', padding: '4rem', margin: ' 2rem 0' }} />
-      <div style={{ color: 'white', padding: '4rem', margin: ' 2rem 0' }} />
-      <div style={{ color: 'white', padding: '4rem', margin: ' 2rem 0' }} />
-    </>
+    <HomeContainer>
+      <BustRental>
+        <MainPoster concerts={concerts} />
+        <RentalHead>
+          <TitleText2>공연 차량 대절</TitleText2>
+          <div onClick={() => navigate('/bus-rental')}>
+            <ChipText>더보기</ChipText>
+            <TbChevronRight size={20} />
+          </div>
+        </RentalHead>
+        {rentaltData?.map((list) => (
+          <RentalPostItem
+            boardingArea={list.boardingArea}
+            endDate={list.endDate}
+            imageUrl={list.imageUrl}
+            key={list.rentId}
+            rentId={list.rentId}
+            title={list.title}
+          />
+        ))}
+      </BustRental>
+    </HomeContainer>
   );
 };
+
+const HomeContainer = styled.div``;
+
+const BustRental = styled.div`
+  padding: 2.4rem 2.4rem;
+`;
+
+const RentalHead = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  div {
+    display: flex;
+    align-items: center;
+    color: ${({ theme }) => theme.colors.dark[200]};
+  }
+`;
 
 export default Home;
