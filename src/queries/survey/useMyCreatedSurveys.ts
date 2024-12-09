@@ -2,7 +2,7 @@ import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 import { getCreatedSurveyList } from 'api';
 
-export const useCreatedSurveys = () => {
+export const useMyCreatedSurveys = () => {
   const data = useQuery({
     queryKey: ['myCreatedSurveys'],
     queryFn: getCreatedSurveyList,

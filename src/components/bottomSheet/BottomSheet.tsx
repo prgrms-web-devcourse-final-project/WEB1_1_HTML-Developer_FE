@@ -76,7 +76,7 @@ const StyledMotionDiv = styled(motion.div)`
   left: 50%;
   transform-origin: bottom center;
   max-width: ${({ theme }) => theme.maxWidth};
-  max-height: 85vh;
+  max-height: 50vh;
   width: 100%;
   padding: 1.2rem 2.4rem 1.6rem;
   border-top-left-radius: 24px;
