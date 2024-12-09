@@ -50,7 +50,7 @@ export const router = createBrowserRouter([
         element: <TitleHeaderLayout />,
         children: [
           {
-            path: '/concert/:id',
+            path: '/concerts/:id',
             element: <ConcertDetail />,
             handle: {
               isSharePage: true,

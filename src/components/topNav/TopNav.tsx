@@ -20,7 +20,7 @@ const TopNav = () => {
     },
     concert: {
       name: '공연 정보',
-      path: '/concert',
+      path: '/concerts/list',
     },
     concertHall: {
       name: '공연장 정보',

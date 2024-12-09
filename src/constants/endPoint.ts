@@ -40,7 +40,7 @@ export const endPoint = {
 
   // Concert API
   GET_CONCERT_LIST: '/concerts/list',
-  GET_CONCERT_DETAIL: (concertId: string) => `/concerts/${concertId}`,
+  GET_CONCERT_DETAIL: (concertId: number) => `/concerts/${concertId}`,
 
   // Concert Hall API
   GET_CONCERT_HALL: (hallCode: string) => `/concert-halls/${hallCode}`,

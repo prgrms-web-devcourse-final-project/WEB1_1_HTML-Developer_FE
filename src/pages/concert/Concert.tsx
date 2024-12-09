@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { PiPencilSimpleLineBold } from 'react-icons/pi';
+import { useNavigate } from 'react-router-dom';
 
 import ConcertItem from './components/ConcertItem';
 import FilterChips from './components/FilterChips';
@@ -10,6 +11,7 @@ import type { FilterCategory, Result } from './type';
 
 import { getConcertList } from 'api/concerts';
 import IconButton from 'components/buttons/IconButton';
+import { endPoint } from 'constants/endPoint';
 import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
 import { useModalStore } from 'stores';
 import { BodyRegularText, HeaderText } from 'styles/Typography';
@@ -19,6 +21,7 @@ const Concert = () => {
   const { openModal } = useModalStore(['openModal']);
   const [selectedRegion, setSelectedRegion] = useState('전체');
   const [selectedDirection, setSelectedDirection] = useState('DATE');
+  const navigate = useNavigate();
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery<Result>({
     queryKey: ['concerts', selectedRegion, selectedDirection],
@@ -72,7 +75,11 @@ const Concert = () => {
       <ConcertList>
         {data?.pages.map((page) =>
           page.concertThumbnails.map((concert) => (
-            <ConcertItem concert={concert} key={concert.id} />
+            <ConcertItem
+              concert={concert}
+              key={concert.id}
+              onClick={() => navigate(endPoint.GET_CONCERT_DETAIL(concert.id))}
+            />
           ))
         )}
       </ConcertList>
