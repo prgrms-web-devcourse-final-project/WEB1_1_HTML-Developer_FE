@@ -11,7 +11,7 @@ const EditProfile = () => {
   return (
     <div css={container}>
       <div css={contentContainer}>
-        <AvatarUploader />
+        <AvatarUploader imageUrl="src/assets/Logo.svg" />
         <div css={inputsWrapper}>
           <div css={inputContainer}>
             <TitleText2>닉네임</TitleText2>

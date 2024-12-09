@@ -4,10 +4,10 @@ import { TbChevronDown } from 'react-icons/tb';
 
 import BaseButton from 'components/buttons/BaseButton';
 import { TitleText2 } from 'styles/Typography';
-import type { SurveyDetail } from 'types';
+import type { SurveyResponse } from 'types';
 
 interface SurveyItemProps {
-  survey: SurveyDetail;
+  survey: SurveyResponse;
 }
 
 const SurveyItem = ({ survey }: SurveyItemProps) => {
@@ -20,7 +20,7 @@ const SurveyItem = ({ survey }: SurveyItemProps) => {
     surveyEndDate,
     participationCount,
     maxPassenger,
-  } = survey.surveyResponse;
+  } = survey;
   const [isOpen, setIsOpen] = useState(false);
 
   return (

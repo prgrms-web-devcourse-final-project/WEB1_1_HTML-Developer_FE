@@ -21,7 +21,7 @@ interface SurveyDetail {
   isClosed: boolean;
 }
 
-interface SurveyResponse {
+export interface SurveyResponse {
   surveyId: number;
   title: string;
   boardingDate: string;

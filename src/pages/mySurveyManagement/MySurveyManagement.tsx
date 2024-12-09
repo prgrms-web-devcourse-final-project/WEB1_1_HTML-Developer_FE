@@ -3,10 +3,10 @@ import styled from '@emotion/styled';
 import EmptySurvey from './components/EmptySurvey';
 import SurveyItem from './components/SurveyItem';
 
-import { useCreatedSurveys } from 'queries/survey';
+import { useMyCreatedSurveys } from 'queries/survey';
 
 const MySurveyManagement = () => {
-  const { surveys } = useCreatedSurveys();
+  const { surveys } = useMyCreatedSurveys();
 
   return (
     <SurveyPageWrapper>
