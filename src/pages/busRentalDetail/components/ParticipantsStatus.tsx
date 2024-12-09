@@ -64,7 +64,7 @@ const ParticipantsStatus = ({
               </Badge>
               <RentDate isClosed={isClosed}>{date}</RentDate>
               <ParticipantNums isClosed={isClosed}>
-                {participants[idx]} / {recruitmentCount}
+                {participants[idx] || 0} / {recruitmentCount}
               </ParticipantNums>
             </StatusItem>
           );

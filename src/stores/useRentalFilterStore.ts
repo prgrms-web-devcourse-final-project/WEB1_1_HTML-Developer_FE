@@ -13,11 +13,11 @@ type Filters = {
   sort: { isActive: boolean; value: string };
 };
 
-type RentalFilterStore = {
+interface RentalFilterStore {
   filters: Filters;
   updateFilterActive: (filterKey: keyof Filters, value: RentalFilterValue) => void;
   getFilterQuery: () => string;
-};
+}
 
 const initFilters: Filters = {
   region: { value: '지역', isActive: false },

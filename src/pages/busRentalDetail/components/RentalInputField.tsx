@@ -1,24 +1,22 @@
 import styled from '@emotion/styled';
 import type { ControllerRenderProps, FieldValues } from 'react-hook-form';
-import { Controller, useFormContext } from 'react-hook-form';
-import { LuAlertCircle } from 'react-icons/lu';
-import { NumericFormat, PatternFormat } from 'react-number-format';
+import { Controller, useForm, useFormContext } from 'react-hook-form';
+import { PatternFormat } from 'react-number-format';
 
-import { BodyRegularText, CaptionText } from 'styles/Typography';
+import ValidationMessage from 'components/message/ValidationMessage';
+import { DEPOSIT_FORM_PLACEHOLDER } from 'constants/placeholder';
+import type { DepositFormValues } from 'stores';
+import { BodyRegularText } from 'styles/Typography';
 
 interface InputStyle {
   unit?: string;
 }
 
 interface InputFieldProps extends InputStyle {
-  name: string; // controller 고유 이름
-  placeholder?: string;
-  value: string | number;
-  unit?: string; // 단위 (e.g. 원/명/인승)
-  pattern?: string; // 입력 포맷
-  isNumber?: boolean; // 입력 값 숫자인지 여부
+  name: keyof DepositFormValues;
+  unit?: string;
+  pattern?: string;
   isDisabled?: boolean;
-  onValueChange: (value: string | number) => void;
 }
 
 const InputFieldContainer = styled.div`
@@ -65,62 +63,21 @@ const Input = styled.input<InputStyle>`
   }
 `;
 
-const ValidationMessage = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  color: ${({ theme }) => theme.colors.red};
-`;
-
-const InputField = ({
-  name,
-  placeholder = '입력해주세요',
-  value,
-  unit,
-  pattern,
-  isNumber = false,
-  isDisabled = false,
-  onValueChange,
-}: InputFieldProps) => {
+const RentalInputField = ({ name, unit, pattern, isDisabled = false }: InputFieldProps) => {
   const { control } = useFormContext();
+  const { register } = useForm();
 
-  const handleChange = (value: string | number) => {
-    onValueChange(value);
-  };
-
-  const renderNumericInput = (field: ControllerRenderProps<FieldValues, string>) => (
-    <NumericFormat
-      {...field}
-      allowNegative
-      customInput={Input}
-      decimalScale={0}
-      isAllowed={(values) => {
-        const { floatValue } = values;
-        if (!values.value) return true;
-        return floatValue !== undefined && floatValue >= 1 && floatValue < 1000000;
-      }}
-      onValueChange={(value) => {
-        const numericValue = value.floatValue || 0;
-        field.onChange(numericValue); // react hook form 업데이트
-        handleChange(numericValue);
-      }}
-      placeholder={placeholder}
-      thousandSeparator
-      unit={unit}
-      value={value}
-    />
-  );
+  const placeholder = DEPOSIT_FORM_PLACEHOLDER[name] || '입력해주세요';
 
   const renderPatternInput = (field: ControllerRenderProps<FieldValues, string>) =>
     pattern && (
       <PatternFormat
         {...field}
+        {...register(name)}
         customInput={Input}
         format={pattern}
         onValueChange={(values) => {
-          // format 적용 값으로 업데이트
           field.onChange(values.formattedValue);
-          handleChange(values.formattedValue);
         }}
         placeholder={placeholder}
       />
@@ -129,14 +86,13 @@ const InputField = ({
   const renderTextInput = (field: ControllerRenderProps<FieldValues, string>) => (
     <Input
       {...field}
+      {...register(name)}
       onChange={(e) => {
-        field.onChange(e.target.value);
-        handleChange(e.target.value);
+        field.onChange(e);
       }}
       placeholder={placeholder}
       type="text"
       unit={unit}
-      value={value}
     />
   );
 
@@ -147,18 +103,11 @@ const InputField = ({
       render={({ field, fieldState }) => (
         <InputFieldContainer>
           <InputFieldWrapper aria-disabled={isDisabled} isError={!!fieldState?.error}>
-            {isNumber
-              ? renderNumericInput(field)
-              : pattern
-                ? renderPatternInput(field)
-                : renderTextInput(field)}
+            {pattern ? renderPatternInput(field) : renderTextInput(field)}
             {unit && <BodyRegularText>{unit}</BodyRegularText>}
           </InputFieldWrapper>
-          {fieldState?.error && (
-            <ValidationMessage>
-              <LuAlertCircle size={18} />
-              <CaptionText>{fieldState.error.message}</CaptionText>
-            </ValidationMessage>
+          {fieldState?.error && fieldState.error.message && (
+            <ValidationMessage message={fieldState.error.message} />
           )}
         </InputFieldContainer>
       )}
@@ -166,4 +115,4 @@ const InputField = ({
   );
 };
 
-export default InputField;
+export default RentalInputField;

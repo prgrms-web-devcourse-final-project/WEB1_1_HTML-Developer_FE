@@ -3,7 +3,6 @@ import { PiMapPinFill } from 'react-icons/pi';
 import { Link } from 'react-router-dom';
 
 import Badge from 'components/badge/Badge';
-import { endPoint } from 'constants/endPoint';
 import { ChipText, SmallText } from 'styles/Typography';
 import { getDday } from 'utils';
 

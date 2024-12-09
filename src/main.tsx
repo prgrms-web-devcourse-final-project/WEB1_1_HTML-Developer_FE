@@ -9,13 +9,13 @@ import App from './App';
 import theme from 'styles/theme';
 
 const queryClient = new QueryClient();
-async function enableMocking() {
-  if (import.meta.env.MODE !== 'development') return;
+// async function enableMocking() {
+//   if (import.meta.env.MODE !== 'development') return;
 
-  const { worker } = await import('./mocks/browser');
+//   const { worker } = await import('./mocks/browser');
 
-  return worker.start();
-}
+//   return worker.start();
+// }
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

@@ -15,5 +15,5 @@ export const getDday = (endDate: string) => {
 export const formatDateWithDay = (dateString: string) => {
   const date = dayjs(dateString);
   const dayOfWeek = date.format('dd');
-  return `${date.format('YY.MM.DD')}(${dayOfWeek})`;
+  return `${date.format('YYYY.MM.DD')}(${dayOfWeek})`;
 };

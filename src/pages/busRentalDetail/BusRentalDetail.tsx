@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import BusTime from './components/BusTime';
 import DepositAccount from './components/DepositAccount';
+import DepositFormSheet from './components/DepositFormSheet';
 import DrivingInfo from './components/DrivingInfo';
 import ParticipantsStatus from './components/ParticipantsStatus';
 
@@ -11,6 +12,7 @@ import Badge from 'components/badge/Badge';
 import BaseButton from 'components/buttons/BaseButton';
 import SimpleChip from 'components/chips/SimpleChip';
 import { useGetRentalDetails } from 'queries/rent';
+import { useModalStore } from 'stores';
 import { BodyRegularText, TitleText1, TitleText2 } from 'styles/Typography';
 import { formatDateWithDay, getDday } from 'utils';
 
@@ -88,6 +90,7 @@ const InfoSection = ({ title, children }: { title: string; children: React.React
 
 const BusRentalDetail = () => {
   const { id } = useParams();
+  const { openModal } = useModalStore(['openModal']);
   const { data: details, error, isLoading } = useGetRentalDetails(id as string);
 
   if (isLoading) return <div>로딩중</div>;
@@ -116,11 +119,20 @@ const BusRentalDetail = () => {
     upTime,
     downTime,
     information,
+    refundType,
   } = details;
 
   const dDay = getDday(endDate);
   const rentDates = rentBoardingDates.map((date) => formatDateWithDay(date));
   const busPrices = [roundPrice, upTimePrice, downTimePrice];
+
+  const handleDepositFormClick = () => {
+    openModal(
+      'bottomSheet',
+      'list',
+      <DepositFormSheet boardingDates={rentDates} refundType={refundType} />
+    );
+  };
 
   return (
     <DetailContainer>
@@ -176,7 +188,7 @@ const BusRentalDetail = () => {
             currentRecruitmentCounts,
             (participant) => participant === recruitmentCount
           )}
-          onClick={() => {}}
+          onClick={handleDepositFormClick}
           size="medium"
           variant="fill"
         >
