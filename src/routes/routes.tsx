@@ -41,7 +41,7 @@ export const router = createBrowserRouter([
         element: <FullLayout />,
         children: [
           { path: '/auth-success', element: <Home /> },
-          { path: '/concert', element: <Concert /> },
+          { path: '/concerts', element: <Concert /> },
           { path: '/bus-rental', element: <BusRental /> },
           { path: '/surveys', element: <Surveys /> },
         ],
