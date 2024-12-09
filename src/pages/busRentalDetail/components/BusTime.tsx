@@ -38,7 +38,7 @@ const BusTime = ({ upTime, downTime, boardingArea, dropOffArea }: BusTimeProps) 
   return (
     <TimeContainer>
       {timeData.map(({ label, time, area }) => (
-        <TimeItem>
+        <TimeItem key={label}>
           <Label>{label}</Label>
           <Time>{time}</Time>
           <BodyRegularText>{area}</BodyRegularText>

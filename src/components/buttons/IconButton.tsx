@@ -23,6 +23,7 @@ const IconButtonContainer = styled.button<IconButtonStyle>`
   background-color: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.white};
 
+  &:hover,
   &:active {
     background-color: ${({ theme }) => theme.colors.primaryDark};
   }

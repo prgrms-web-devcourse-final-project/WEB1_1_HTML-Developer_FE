@@ -1,7 +1,22 @@
 import type { ApiResponse } from './api';
 
-import type { Region } from 'constants/filterTypes';
+import type { DATE_SORT_ARRAY, Region, REGIONS } from 'constants/filterTypes';
 
+// Rental List
+export interface RentalList {
+  rentId: number;
+  title: string;
+  boardingArea: string;
+  endDate: string;
+  imageUrl: string;
+}
+
+// Rental Filter
+export type RentalFilterType = 'region' | 'sort';
+export type RentalFilterOptions = typeof REGIONS | typeof DATE_SORT_ARRAY;
+export type RentalFilterValue = RentalFilterOptions[number];
+
+// Rental Details
 export const BUS_SIZE = {
   LARGE: '대형',
   MEDIUM: '중형',
@@ -42,7 +57,7 @@ export interface RentalDetail {
   upTimePrice: number;
   downTimePrice: number;
   recruitmentCount: number;
-  participants: number[];
+  currentRecruitmentCounts: number[];
   endDate: string;
   chatUrl: string;
   refundType: RefundType;
@@ -55,5 +70,6 @@ export interface RentalAccount {
 
 export interface AllRentalDetail extends RentalDetail, RentalAccount {}
 
+export type RentalListResponse = ApiResponse<RentalList[]>;
 export type RentalDetailResponse = ApiResponse<RentalDetail>;
 export type RentalAccountResponse = ApiResponse<RentalAccount>;
