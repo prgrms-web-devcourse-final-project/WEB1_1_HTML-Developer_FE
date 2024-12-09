@@ -1,6 +1,7 @@
 export const endPoint = {
   // Rent API
   GET_RENT_LIST: '/rents/list',
+  GET_RENT_MAIN_LIST: '/rents/main',
   GET_CREATED_RENT_LIST: '/rents/register/list',
   GET_APPLIED_RENT_LIST: '/rents/join/list',
   GET_RENT_DETAIL: (id: string) => `/rents/${id}`,
