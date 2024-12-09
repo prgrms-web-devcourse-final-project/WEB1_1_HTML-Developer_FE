@@ -1,4 +1,4 @@
-import type { DepositFormValues } from 'stores';
+import type { DepositFormValues } from 'types';
 
 type DepositFormPlaceholder = Partial<Record<keyof DepositFormValues, string>>;
 
