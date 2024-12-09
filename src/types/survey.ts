@@ -1,6 +1,27 @@
 import type { ApiResponse } from './api';
 
-interface BaseSurveyInfo {
+export interface SurveyListItem {
+  surveyId: number;
+  title: string;
+  region: string;
+  participationCount: number;
+  endDate: string;
+}
+
+interface BoardingDate {
+  date: string;
+  participationCount: number;
+}
+
+interface SurveyDetail {
+  surveyId: number;
+  title: string;
+  boardingDates: BoardingDate[];
+  information: string;
+  isClosed: boolean;
+}
+
+interface SurveyResponse {
   surveyId: number;
   title: string;
   boardingDate: string;
@@ -10,14 +31,25 @@ interface BaseSurveyInfo {
   participationCount: number;
   maxPassenger: number;
 }
-export interface SurveyMetrics {
+
+interface CreatedSurveyItem {
+  surveyResponse: SurveyResponse;
   upCount: number;
   downCount: number;
   roundCount: number;
 }
 
-export interface SurveyDetail extends SurveyMetrics {
-  surveyResponse: BaseSurveyInfo;
+type BoardingType = 'ROUND' | 'UP' | 'DOWN';
+
+interface AppliedSurveyItem {
+  surveyResponse: SurveyResponse;
+  surveyJoinId: number;
+  applyDate: string;
+  boardingType: BoardingType;
+  passengerNum: number;
 }
 
-export type SurveyListResponse = ApiResponse<SurveyDetail[]>;
+export type SurveyListResponse = ApiResponse<SurveyListItem[]>;
+export type SurveyDetailResponse = ApiResponse<SurveyDetail>;
+export type CreatedSurveyListResponse = ApiResponse<CreatedSurveyItem[]>;
+export type AppliedSurveyListResponse = ApiResponse<AppliedSurveyItem[]>;
