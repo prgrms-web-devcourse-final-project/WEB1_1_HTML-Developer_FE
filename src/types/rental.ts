@@ -35,9 +35,16 @@ export const REFUND_TYPE = {
   BOTH: '둘 다',
 } as const;
 
+export const BOARDING_TYPE = {
+  ROUND: '왕복',
+  UP: '상행',
+  DOWN: '하행',
+} as const;
+
 export type BusSize = keyof typeof BUS_SIZE;
 export type BusType = keyof typeof BUS_TYPE;
 export type RefundType = keyof typeof REFUND_TYPE;
+export type BoardingType = keyof typeof BOARDING_TYPE;
 
 export interface RentalDetail {
   concertName: string;
@@ -66,6 +73,18 @@ export interface RentalDetail {
 
 export interface RentalAccount {
   depositAccount: string | null;
+}
+
+export interface DepositFormValues {
+  rentId: number | null;
+  depositorName: string;
+  depositorTime: string;
+  phone: string;
+  passengerNum: number;
+  boardingDate: string;
+  boardingType: BoardingType | null;
+  refundType: RefundType | null;
+  refundAccount: string;
 }
 
 export interface AllRentalDetail extends RentalDetail, RentalAccount {}
