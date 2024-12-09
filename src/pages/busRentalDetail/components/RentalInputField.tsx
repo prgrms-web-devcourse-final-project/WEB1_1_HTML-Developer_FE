@@ -5,8 +5,8 @@ import { PatternFormat } from 'react-number-format';
 
 import ValidationMessage from 'components/message/ValidationMessage';
 import { DEPOSIT_FORM_PLACEHOLDER } from 'constants/placeholder';
-import type { DepositFormValues } from 'stores';
 import { BodyRegularText } from 'styles/Typography';
+import type { DepositFormValues } from 'types';
 
 interface InputStyle {
   unit?: string;

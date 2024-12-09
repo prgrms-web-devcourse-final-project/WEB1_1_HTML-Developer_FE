@@ -23,7 +23,7 @@ const RefundBottomSheet = ({ accountInfo }: RefundBottomSheetProps) => {
     resolver: zodResolver(refundAccountSchema),
     defaultValues: {
       bank: accountInfo?.bank || '',
-      accountNumber: accountInfo?.accountNumber || '',
+      accountNumber: accountInfo?.number || '',
     },
     mode: 'onChange',
   });
