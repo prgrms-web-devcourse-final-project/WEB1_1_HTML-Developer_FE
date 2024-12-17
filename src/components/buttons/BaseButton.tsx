@@ -70,6 +70,9 @@ const StyledButton = styled.button<BaseButtonStyle>`
   width: ${({ isFullWidth }) => (isFullWidth ? '100%' : 'fit-content')};
   height: ${({ size }) => (size === 'medium' ? '4.8rem' : '4rem')};
   border-radius: ${({ size }) => (size === 'medium' ? '8px' : '4px')};
+  transition:
+    background-color 0.4s,
+    color 0.4s;
 
   ${({ variant, color, theme }) =>
     variant === 'fill' ? FilledStyle({ color, theme }) : OutlineStyle({ color, theme })}
