@@ -81,6 +81,30 @@ export interface DepositFormValues {
   refundAccount: string;
 }
 
+export interface RentalFormValues {
+  concertId: number;
+  imageUrl: string;
+  title: string;
+  artistName: string;
+  region: Region;
+  depositAccount: string;
+  boardingArea: string;
+  upTime: string;
+  downTime: string;
+  rentBoardingDateRequests: string[];
+  busSize: BusSize;
+  busType: BusType;
+  maxPassenger: number;
+  roundPrice: number;
+  upTimePrice: number;
+  downTimePrice: number;
+  recruitmentCount: number;
+  endDate: string;
+  chatUrl: string;
+  refundType: RefundType;
+  information: string;
+}
+
 export interface AllRentalDetail extends RentalDetail, RentalAccount {}
 
 export type RentalListResponse = ApiResponse<RentalList[]>;
