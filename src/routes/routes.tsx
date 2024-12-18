@@ -41,7 +41,7 @@ export const router = createBrowserRouter([
       {
         element: <FullLayout />,
         children: [
-          { path: '/auth-success', element: <Home /> },
+          { path: '/', element: <Home /> },
           { path: '/concerts', element: <Concert /> },
           { path: '/bus-rental', element: <BusRental /> },
           { path: '/surveys', element: <Surveys /> },
@@ -97,7 +97,7 @@ export const router = createBrowserRouter([
         element: <TitleHeaderLayout />,
         children: [
           {
-            path: '/signup/auth-success',
+            path: '/signup',
             element: <SignUp />,
             handle: {
               title: '회원가입',
