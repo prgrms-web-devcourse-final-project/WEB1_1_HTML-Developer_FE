@@ -25,10 +25,10 @@ const Callback = () => {
   const params = new URL(document.URL).searchParams;
   const code = params.get('code');
   const navigate = useNavigate();
-  const { setToken } = useAuthStore();
+  const { setToken, setIsLoggedIn } = useAuthStore();
 
   const getUserKakaoInfo = async (): Promise<{ data: CallbackRequest; token: string | null }> => {
-    const { data, headers } = await tokenAxios.get<CallbackRequest>(endPoint.SIGNIN, {
+    const { data, headers } = await tokenAxios.get<CallbackRequest>(endPoint.AUTH_KAKAO, {
       params: {
         code: code,
       },
@@ -36,10 +36,6 @@ const Callback = () => {
 
     const authHeader = headers['authorization'] || headers['Authorization'];
     const token = authHeader?.replace('Bearer ', '');
-
-    console.log('전체 응답 데이터:', data);
-    console.log('헤더:', headers);
-    console.log('token:', token);
 
     return { data, token };
   };
@@ -49,14 +45,13 @@ const Callback = () => {
       localStorage.setItem('accessToken', token);
       tokenAxios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setToken(token);
+      setIsLoggedIn();
     }
   };
 
   const { mutate } = useMutation({
     mutationFn: getUserKakaoInfo,
-    onSuccess: ({ data, token }) => {
-      console.log('onSuccess:', data, token);
-
+    onSuccess: ({ data }) => {
       if (data?.result.isUser) {
         setTokenStorage(data.result.accessToken);
         navigate('/');

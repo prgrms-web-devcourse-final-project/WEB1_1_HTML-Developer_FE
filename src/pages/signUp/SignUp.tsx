@@ -10,6 +10,7 @@ import ShortBio from './components/ShortBio';
 import AvatarUploader from 'components/avatarUploader/AvatarUploader';
 import BaseButton from 'components/buttons/BaseButton';
 import { endPoint } from 'constants/endPoint';
+import { useAuthStore } from 'stores/authStore';
 import { tokenAxios } from 'utils/axios';
 
 interface ArtistRequest {
@@ -44,6 +45,7 @@ const SignUp = () => {
   const { watch } = methods;
   const email = watch('email');
   const imageUrl = watch('imageUrl');
+  const { setIsLoggedIn } = useAuthStore();
 
   const handleSubmit = methods.handleSubmit(async (data) => {
     try {
@@ -71,7 +73,8 @@ const SignUp = () => {
       const response = await tokenAxios.post(endPoint.SIGNUP, formData);
 
       if (response.status === 200) {
-        window.location.href = '/';
+        setIsLoggedIn();
+        window.location.href = endPoint.SIGNIN;
       }
     } catch (e) {
       console.error(e);
