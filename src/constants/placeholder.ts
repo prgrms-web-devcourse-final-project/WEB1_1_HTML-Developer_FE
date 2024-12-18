@@ -4,7 +4,7 @@ type DepositFormPlaceholder = Partial<Record<keyof DepositFormValues, string>>;
 type RentalFormPlaceholder = Partial<Record<keyof RentalFormValues | 'busInfo', string>>;
 
 export const DEPOSIT_FORM_PLACEHOLDER: DepositFormPlaceholder = {
-  depositorName: `성함을 입력해주세요.`,
+  depositorName: `성함을 입력해주세요`,
   depositorTime: `예시) 23:02`,
   phone: `010-1234-5678`,
   refundAccount: `예시) 하나은행 012345678910111`,
@@ -21,11 +21,15 @@ export const RENTAL_FORM_PLACEHOLDER: RentalFormPlaceholder = {
   roundPrice: `30,000`,
   upTimePrice: `30,000`,
   downTimePrice: `30,000`,
+  recruitmentCount: `20`,
+  endDate: `날짜를 선택해주세요`,
+  chatUrl: `https://open.kakao.com/o/abcDeF`,
+  information: `전달할 안내 사항이 있다면 입력해주세요`,
 };
 
 export const SEARCH_PLACEHOLDER = {
-  concert: `공연을 검색해주세요.`,
-  artist: `아티스트를 검색해주세요.`,
+  concert: `공연을 검색해주세요`,
+  artist: `아티스트를 검색해주세요`,
 };
 
 export type SearchPlaceholderKeys = keyof typeof SEARCH_PLACEHOLDER;

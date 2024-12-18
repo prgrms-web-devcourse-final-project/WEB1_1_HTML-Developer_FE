@@ -1,8 +1,8 @@
 import { Controller, useFormContext } from 'react-hook-form';
 
-import BoardingDateCheckbox from '../BoardingDateCheckBox';
 import CheckboxItem from '../items/CheckboxItem';
 import RentalInputField from '../items/RentalInputField';
+import BoardingDateCheckbox from '../lists/BoardingDateCheckBox';
 import RentalFormField from '../RentalFormField';
 import BusInfoSheet from '../sheets/BusInfoSheet';
 

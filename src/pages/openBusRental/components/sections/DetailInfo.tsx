@@ -1,13 +1,13 @@
 import { Controller, useFormContext } from 'react-hook-form';
 
-import RegionListSheet from './RegionListSheet';
-import RentalFormField from './RentalFormField';
-import RentalInputField from './RentalInputField';
-import RentalThumbField from './RentalThumbField';
-import RentalTitleField from './RentalTitleField';
-import SearchArtistSheet from './SearchArtistSheet';
-import SearchConcertSheet from './SearchConcertSheet';
-import SearchField from './SearchField';
+import RentalInputField from '../items/RentalInputField';
+import RentalThumbField from '../items/RentalThumbField';
+import RentalTitleField from '../items/RentalTitleField';
+import SearchField from '../items/SearchField';
+import RentalFormField from '../RentalFormField';
+import RegionListSheet from '../sheets/RegionListSheet';
+import SearchArtistSheet from '../sheets/SearchArtistSheet';
+import SearchConcertSheet from '../sheets/SearchConcertSheet';
 
 import Select from 'components/select/Select';
 import { RENTAL_FORM_PLACEHOLDER } from 'constants/placeholder';

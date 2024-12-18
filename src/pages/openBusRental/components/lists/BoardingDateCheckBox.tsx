@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import CheckboxItem from './items/CheckboxItem';
+import CheckboxItem from '../items/CheckboxItem';
 
 import ValidationMessage from 'components/message/ValidationMessage';
 
