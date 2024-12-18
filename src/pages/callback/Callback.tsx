@@ -25,7 +25,7 @@ const Callback = () => {
   const params = new URL(document.URL).searchParams;
   const code = params.get('code');
   const navigate = useNavigate();
-  const { setToken, setIsLoggedIn } = useAuthStore();
+  const { setToken, setIsLoggedIn } = useAuthStore(['setToken', 'setIsLoggedIn']);
 
   const getUserKakaoInfo = async (): Promise<{ data: CallbackRequest; token: string | null }> => {
     const { data, headers } = await tokenAxios.get<CallbackRequest>(endPoint.AUTH_KAKAO, {

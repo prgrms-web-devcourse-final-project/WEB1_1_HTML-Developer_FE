@@ -45,7 +45,7 @@ const SignUp = () => {
   const { watch } = methods;
   const email = watch('email');
   const imageUrl = watch('imageUrl');
-  const { setIsLoggedIn } = useAuthStore();
+  const { setIsLoggedIn } = useAuthStore(['setIsLoggedIn']);
 
   const handleSubmit = methods.handleSubmit(async (data) => {
     try {
