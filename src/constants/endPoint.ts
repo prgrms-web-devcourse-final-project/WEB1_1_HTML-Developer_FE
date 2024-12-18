@@ -29,7 +29,7 @@ export const endPoint = {
   APPLY_SURVEY_FORM: '/surveys/apply',
 
   // Auth API
-  SIGNIN: '/oauth2/login',
+  SIGNIN: '/auth/token/kakao',
   SIGNUP: '/members/register',
 
   // User API
