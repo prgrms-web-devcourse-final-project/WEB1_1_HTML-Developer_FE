@@ -1,7 +1,7 @@
 import type { DepositFormValues, RentalFormValues } from 'types';
 
 type DepositFormPlaceholder = Partial<Record<keyof DepositFormValues, string>>;
-type RentalFormPlaceholder = Partial<Record<keyof RentalFormValues, string>>;
+type RentalFormPlaceholder = Partial<Record<keyof RentalFormValues | 'busInfo', string>>;
 
 export const DEPOSIT_FORM_PLACEHOLDER: DepositFormPlaceholder = {
   depositorName: `성함을 입력해주세요.`,
@@ -14,6 +14,13 @@ export const RENTAL_FORM_PLACEHOLDER: RentalFormPlaceholder = {
   title: `제목을 입력해주세요.`,
   region: `지역을 선택해주세요`,
   depositAccount: `예시) 우리은행 012345678910111 홍길동`,
+  boardingArea: `상행 출발 장소를 입력해주세요`,
+  upTime: `11:00`,
+  downTime: `23:00`,
+  busInfo: `차량을 선택해주세요`,
+  roundPrice: `30,000`,
+  upTimePrice: `30,000`,
+  downTimePrice: `30,000`,
 };
 
 export const SEARCH_PLACEHOLDER = {

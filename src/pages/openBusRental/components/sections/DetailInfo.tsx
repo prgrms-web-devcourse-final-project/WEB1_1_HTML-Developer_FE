@@ -13,7 +13,7 @@ import Select from 'components/select/Select';
 import { RENTAL_FORM_PLACEHOLDER } from 'constants/placeholder';
 import { useModalStore } from 'stores';
 
-const RentalFormDetail = () => {
+const DetailInfo = () => {
   const { setValue, control } = useFormContext();
   const { openModal } = useModalStore(['openModal']);
 
@@ -37,19 +37,27 @@ const RentalFormDetail = () => {
 
   return (
     <>
-      <RentalFormField title="메인 이미지">
+      <RentalFormField>
+        <RentalFormField.Title title="메인 이미지" />
         <RentalThumbField />
       </RentalFormField>
-      <RentalFormField title="글 제목">
+      <RentalFormField>
+        <RentalFormField.Title title="글 제목" />
         <RentalTitleField name="title" />
       </RentalFormField>
-      <RentalFormField description="2달 이내 예정된 공연만 개설할 수 있습니다." title="공연명">
+      <RentalFormField>
+        <RentalFormField.Title
+          description="2달 이내 예정된 공연만 개설할 수 있습니다."
+          title="공연명"
+        />
         <SearchField name="concert" onClick={handleConcertClick} />
       </RentalFormField>
-      <RentalFormField title="아티스트명">
+      <RentalFormField>
+        <RentalFormField.Title title="아티스트명" />
         <SearchField name="artist" onClick={handleArtistClick} />
       </RentalFormField>
-      <RentalFormField title="지역">
+      <RentalFormField>
+        <RentalFormField.Title title="지역" />
         <Controller
           control={control}
           name="region"
@@ -60,11 +68,12 @@ const RentalFormDetail = () => {
           )}
         />
       </RentalFormField>
-      <RentalFormField title="입금 정보">
+      <RentalFormField>
+        <RentalFormField.Title title="입금 정보" />
         <RentalInputField name="depositAccount" />
       </RentalFormField>
     </>
   );
 };
 
-export default RentalFormDetail;
+export default DetailInfo;

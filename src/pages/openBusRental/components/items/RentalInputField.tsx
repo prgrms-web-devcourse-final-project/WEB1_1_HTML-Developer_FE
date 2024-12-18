@@ -17,10 +17,14 @@ interface InputFieldProps extends InputStyle {
   unit?: string;
   pattern?: string;
   isDisabled?: boolean;
+  isFullWidth?: boolean;
 }
 
-const InputFieldContainer = styled.div`
-  width: 100%;
+const InputFieldContainer = styled.div<{ isFullWidth?: boolean }>`
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: ${({ isFullWidth }) => (isFullWidth ? '100%' : '18rem')};
 `;
 
 const InputFieldWrapper = styled.div<{ isError: boolean }>`
@@ -29,7 +33,6 @@ const InputFieldWrapper = styled.div<{ isError: boolean }>`
   gap: 0.8rem;
   width: 100%;
   height: 4rem;
-  margin-bottom: 0.8rem;
   padding: 0 1.6rem;
   border-radius: 4px;
   background: ${({ theme }) => theme.colors.dark[500]};
@@ -63,7 +66,13 @@ const Input = styled.input<InputStyle>`
   }
 `;
 
-const RentalInputField = ({ name, unit, pattern, isDisabled = false }: InputFieldProps) => {
+const RentalInputField = ({
+  name,
+  unit,
+  pattern,
+  isDisabled = false,
+  isFullWidth = true,
+}: InputFieldProps) => {
   const { control } = useFormContext();
   const { register } = useForm();
 
@@ -101,7 +110,7 @@ const RentalInputField = ({ name, unit, pattern, isDisabled = false }: InputFiel
       control={control}
       name={name}
       render={({ field, fieldState }) => (
-        <InputFieldContainer>
+        <InputFieldContainer isFullWidth={isFullWidth}>
           <InputFieldWrapper aria-disabled={isDisabled} isError={!!fieldState?.error}>
             {pattern ? renderPatternInput(field) : renderTextInput(field)}
             {unit && <BodyRegularText>{unit}</BodyRegularText>}
