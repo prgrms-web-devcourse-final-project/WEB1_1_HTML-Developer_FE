@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import ArtistSelector from './components/ArtistSelector';
 import Email from './components/Email';
@@ -10,7 +10,6 @@ import ShortBio from './components/ShortBio';
 import AvatarUploader from 'components/avatarUploader/AvatarUploader';
 import BaseButton from 'components/buttons/BaseButton';
 import { endPoint } from 'constants/endPoint';
-import { useAuthStore } from 'stores/authStore';
 import { tokenAxios } from 'utils/axios';
 
 interface ArtistRequest {
@@ -30,6 +29,7 @@ interface SignUpFormData {
 const SignUp = () => {
   const location = useLocation();
   const userData = location.state;
+  const navigate = useNavigate();
 
   const methods = useForm<SignUpFormData>({
     defaultValues: {
@@ -45,7 +45,6 @@ const SignUp = () => {
   const { watch } = methods;
   const email = watch('email');
   const imageUrl = watch('imageUrl');
-  const { setIsLoggedIn } = useAuthStore(['setIsLoggedIn']);
 
   const handleSubmit = methods.handleSubmit(async (data) => {
     try {
@@ -73,8 +72,7 @@ const SignUp = () => {
       const response = await tokenAxios.post(endPoint.SIGNUP, formData);
 
       if (response.status === 200) {
-        setIsLoggedIn();
-        window.location.href = endPoint.SIGNIN;
+        navigate(endPoint.SIGNIN);
       }
     } catch (e) {
       console.error(e);
