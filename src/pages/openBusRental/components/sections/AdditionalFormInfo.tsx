@@ -10,7 +10,7 @@ import Select from 'components/select/Select';
 import { RENTAL_FORM_PLACEHOLDER } from 'constants/placeholder';
 import { useModalStore } from 'stores';
 
-const AdditionalInfo = () => {
+const AdditionalFormInfo = () => {
   const { control } = useFormContext();
   const { openModal } = useModalStore(['openModal']);
 
@@ -58,4 +58,4 @@ const AdditionalInfo = () => {
   );
 };
 
-export default AdditionalInfo;
+export default AdditionalFormInfo;

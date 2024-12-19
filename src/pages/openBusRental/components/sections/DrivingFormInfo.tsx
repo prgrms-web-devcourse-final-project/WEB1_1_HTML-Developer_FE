@@ -10,7 +10,7 @@ import Select from 'components/select/Select';
 import { RENTAL_FORM_PLACEHOLDER } from 'constants/placeholder';
 import { useModalStore } from 'stores';
 
-const DrivingInfo = () => {
+const DrivingFormInfo = () => {
   const { control } = useFormContext();
   const { openModal } = useModalStore(['openModal']);
 
@@ -74,4 +74,4 @@ const DrivingInfo = () => {
   );
 };
 
-export default DrivingInfo;
+export default DrivingFormInfo;
