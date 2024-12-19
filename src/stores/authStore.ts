@@ -1,23 +1,41 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { immer } from 'zustand/middleware/immer';
+import { createWithEqualityFn } from 'zustand/traditional';
+
+import type { StoreWithShallow } from './utils';
+import { useStoreWithShallow } from './utils';
 
 type AuthState = {
-  token: string;
+  token: string | null;
   isLoggedIn: boolean;
-  setToken: (token: string) => void;
+};
+
+type AuthActions = {
+  setToken: (token: string | null) => void;
   setIsLoggedIn: () => void;
 };
 
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set) => ({
-      token: '',
-      isLoggedIn: false,
-      setToken: (token) => set({ token }),
-      setIsLoggedIn: () => set({ isLoggedIn: true }),
-    }),
-    {
-      name: 'auth-storage',
-    }
-  )
+type AuthStore = AuthState & AuthActions;
+
+const initialState: AuthState = {
+  token: null,
+  isLoggedIn: false,
+};
+
+const authStore = createWithEqualityFn(
+  immer<AuthStore>((set) => ({
+    ...initialState,
+    setToken: (token) => {
+      set((state) => {
+        state.token = token;
+      });
+    },
+    setIsLoggedIn: () => {
+      set((state) => {
+        state.isLoggedIn = true;
+      });
+    },
+  }))
 );
+
+export const useAuthStore: StoreWithShallow<AuthStore> = (keys) =>
+  useStoreWithShallow(authStore, keys);

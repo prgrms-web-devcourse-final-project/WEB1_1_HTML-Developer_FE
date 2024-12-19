@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
-import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import ArtistSelector from './components/ArtistSelector';
 import Email from './components/Email';
@@ -10,7 +10,6 @@ import ShortBio from './components/ShortBio';
 import AvatarUploader from 'components/avatarUploader/AvatarUploader';
 import BaseButton from 'components/buttons/BaseButton';
 import { endPoint } from 'constants/endPoint';
-import { useAuthStore } from 'stores/authStore';
 import { tokenAxios } from 'utils/axios';
 
 interface ArtistRequest {
@@ -22,47 +21,24 @@ interface SignUpFormData {
   email: string;
   nickname: string;
   introduce: string;
+  loginProvider: string;
   imageUrl: string;
   imageFile?: File;
   memberArtistRequests?: ArtistRequest[];
 }
 const SignUp = () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get('accessToken');
-  const { setToken, setIsLoggedIn } = useAuthStore();
-
-  const setTokenStorage = (token: string) => {
-    localStorage.setItem('accessToken', token);
-    tokenAxios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    setToken(token);
-  };
+  const location = useLocation();
+  const userData = location.state;
+  const navigate = useNavigate();
 
   const methods = useForm<SignUpFormData>({
-    defaultValues: async () => {
-      try {
-        const { data } = await tokenAxios.get(endPoint.GET_PROFILE, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        return {
-          email: data.result.email,
-          nickname: '',
-          introduce: '',
-          imageUrl: data.result.profileImageUrl,
-          imageFile: undefined,
-        };
-      } catch (error) {
-        console.error(error);
-        return {
-          email: '',
-          nickname: '',
-          introduce: '',
-          imageUrl: '',
-          imageFile: undefined,
-        };
-      }
+    defaultValues: {
+      email: userData.email,
+      nickname: '',
+      introduce: '',
+      loginProvider: 'KAKAO',
+      imageUrl: userData.profileImageUrl,
+      imageFile: undefined,
     },
   });
 
@@ -70,19 +46,15 @@ const SignUp = () => {
   const email = watch('email');
   const imageUrl = watch('imageUrl');
 
-  useEffect(() => {
-    if (token) {
-      setTokenStorage(token);
-    }
-  }, [token]);
-
   const handleSubmit = methods.handleSubmit(async (data) => {
     try {
       const formData = new FormData();
 
-      const memberInfoRequest = {
+      const memberRegisterRequest = {
+        email: data.email,
         nickname: data.nickname,
         introduce: null,
+        loginProvider: 'KAKAO' as const,
         memberArtistRequests: [
           {
             spotifyArtistId: 'string',
@@ -91,7 +63,7 @@ const SignUp = () => {
         ],
       };
 
-      formData.append('memberInfoRequest', JSON.stringify(memberInfoRequest));
+      formData.append('memberRegisterRequest', JSON.stringify(memberRegisterRequest));
 
       if (data.imageFile) {
         formData.append('image', data.imageFile);
@@ -100,8 +72,7 @@ const SignUp = () => {
       const response = await tokenAxios.post(endPoint.SIGNUP, formData);
 
       if (response.status === 200) {
-        setIsLoggedIn();
-        window.location.href = '/auth-success';
+        navigate(endPoint.SIGNIN);
       }
     } catch (e) {
       console.error(e);
