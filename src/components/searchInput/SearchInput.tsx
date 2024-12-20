@@ -9,19 +9,27 @@ interface SearchInputProps {
   text: string;
   isActive: boolean;
   onSearch: (query: string) => void;
+  onValueChange?: () => void;
+  onClear?: () => void;
 }
 
-const SearchInput = ({ text, isActive, onSearch }: SearchInputProps) => {
+const SearchInput = ({ text, isActive, onSearch, onValueChange, onClear }: SearchInputProps) => {
   const [searchValue, setSearchValue] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
+    onValueChange?.();
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && searchValue.trim()) {
       onSearch(searchValue);
     }
+  };
+
+  const handleClearValue = () => {
+    setSearchValue('');
+    onClear?.();
   };
 
   return (
@@ -35,7 +43,7 @@ const SearchInput = ({ text, isActive, onSearch }: SearchInputProps) => {
         type="search"
         value={isActive ? searchValue : ''}
       />
-      {searchValue && <ClearButton onClick={() => setSearchValue('')} size={20} />}
+      {searchValue && <ClearButton onClick={handleClearValue} size={20} />}
     </SearchInputContainer>
   );
 };

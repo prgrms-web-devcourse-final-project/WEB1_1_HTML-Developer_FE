@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import AdditionalFormInfo from './components/sections/AdditionalFormInfo';
@@ -43,24 +43,34 @@ const OpenBusRental = () => {
       title: '',
       region: '',
       depositAccount: '',
+      concertId: 0,
     },
     mode: 'onSubmit',
   });
 
-  const { handleSubmit } = methods;
+  const {
+    handleSubmit,
+    formState: { isValid },
+    watch,
+  } = methods;
+
+  const formData = watch();
+
+  // 추후 삭제
+  useEffect(() => {
+    console.log('formData changed:', formData);
+  }, [formData]);
 
   const handleFormSubmit = handleSubmit((formData) => {
     if (activeTab < tabMap.rentalTab.length - 1) {
       setActiveTab(activeTab + 1);
     } else {
-      console.log('submit', formData);
+      console.log('submit', formData); // 추후 삭제
     }
   });
 
   const handlePrevClick = () => {
-    if (activeTab > 0) {
-      setActiveTab(activeTab - 1);
-    }
+    if (activeTab > 0) setActiveTab(activeTab - 1);
   };
 
   return (
@@ -85,7 +95,13 @@ const OpenBusRental = () => {
                 이전
               </BaseButton>
             )}
-            <BaseButton color="primary" size="medium" type="submit" variant="fill">
+            <BaseButton
+              color="primary"
+              isDisabled={!isValid}
+              size="medium"
+              type="submit"
+              variant="fill"
+            >
               다음
             </BaseButton>
           </ButtonWrapper>

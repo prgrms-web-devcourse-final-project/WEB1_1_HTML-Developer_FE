@@ -17,3 +17,13 @@ export const formatDateWithDay = (dateString: string) => {
   const dayOfWeek = date.format('dd');
   return `${date.format('YYYY.MM.DD')}(${dayOfWeek})`;
 };
+
+// ISO Date -> YYYY.MM.DD - YYYY.MM.DD 형식으로 변환
+export const formatDateRange = (startDate: string, endDate: string) => {
+  const stDate = dayjs(startDate);
+  const edDate = dayjs(endDate);
+
+  if (startDate === endDate) return `${stDate.format('YYYY.MM.DD')}`;
+
+  return `${stDate.format('YYYY.MM.DD')} - ${edDate.format('YYYY.MM.DD')}`;
+};

@@ -3,6 +3,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 import RentalInputField from '../items/RentalInputField';
 import RentalThumbField from '../items/RentalThumbField';
 import RentalTitleField from '../items/RentalTitleField';
+import SearchConcertItem from '../items/SearchConcertItem';
 import SearchField from '../items/SearchField';
 import RentalFormField from '../RentalFormField';
 import RegionListSheet from '../sheets/RegionListSheet';
@@ -12,13 +13,28 @@ import SearchConcertSheet from '../sheets/SearchConcertSheet';
 import Select from 'components/select/Select';
 import { RENTAL_FORM_PLACEHOLDER } from 'constants/placeholder';
 import { useModalStore } from 'stores';
+import { useRentalFormStore } from 'stores/useRentalFormStore';
+import type { ConcertData } from 'types';
 
 const DetailFormInfo = () => {
   const { setValue, control } = useFormContext();
   const { openModal } = useModalStore(['openModal']);
+  const { concertData, updateConcertData } = useRentalFormStore([
+    'concertData',
+    'updateConcertData',
+  ]);
+
+  const handleConcertSelect = (concertData: ConcertData) => {
+    updateConcertData(concertData);
+    setValue('concertId', concertData.id, { shouldValidate: true });
+  };
 
   const handleConcertClick = () => {
-    openModal('bottomSheet', 'list', <SearchConcertSheet onClick={() => {}} />);
+    openModal(
+      'bottomSheet',
+      'list',
+      <SearchConcertSheet onConcertSelect={(data) => handleConcertSelect(data)} />
+    );
   };
 
   const handleArtistClick = () => {
@@ -51,6 +67,7 @@ const DetailFormInfo = () => {
           title="공연명"
         />
         <SearchField name="concert" onClick={handleConcertClick} />
+        {concertData && <SearchConcertItem concertData={concertData} isInactive />}
       </RentalFormField>
       <RentalFormField>
         <RentalFormField.Title title="아티스트명" />
