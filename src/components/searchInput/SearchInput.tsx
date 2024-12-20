@@ -10,6 +10,7 @@ interface SearchInputProps {
   isActive: boolean;
   onSearch: (query: string) => void;
 }
+
 const SearchInput = ({ text, isActive, onSearch }: SearchInputProps) => {
   const [searchValue, setSearchValue] = useState('');
 
@@ -25,7 +26,7 @@ const SearchInput = ({ text, isActive, onSearch }: SearchInputProps) => {
 
   return (
     <SearchInputContainer isActive={isActive}>
-      <IoSearch size={24} />
+      <IoSearch size={20} />
       <Input
         hasValue={!!searchValue}
         onChange={handleChange}
@@ -34,7 +35,7 @@ const SearchInput = ({ text, isActive, onSearch }: SearchInputProps) => {
         type="search"
         value={isActive ? searchValue : ''}
       />
-      {searchValue && <ClearButton onClick={() => setSearchValue('')} size={24} />}
+      {searchValue && <ClearButton onClick={() => setSearchValue('')} size={20} />}
     </SearchInputContainer>
   );
 };
@@ -73,6 +74,10 @@ const Input = styled.input<{ hasValue: boolean }>`
   &::-webkit-search-results-button,
   &::-webkit-search-results-decoration {
     -webkit-appearance: none;
+  }
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.dark[300]};
   }
 `;
 
