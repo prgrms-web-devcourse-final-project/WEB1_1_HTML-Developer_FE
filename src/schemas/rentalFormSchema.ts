@@ -14,6 +14,7 @@ export const rentalFormSchema = z.object({
   region: requiredString(),
   depositAccount: requiredString(),
   concertId: requiredNumber(),
+  artistName: requiredString(),
 });
 
 export type RentalFormSchemaType = z.infer<typeof rentalFormSchema>;

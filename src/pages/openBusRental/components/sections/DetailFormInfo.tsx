@@ -10,6 +10,7 @@ import RegionListSheet from '../sheets/RegionListSheet';
 import SearchArtistSheet from '../sheets/SearchArtistSheet';
 import SearchConcertSheet from '../sheets/SearchConcertSheet';
 
+import SimpleChip from 'components/chips/SimpleChip';
 import Select from 'components/select/Select';
 import { RENTAL_FORM_PLACEHOLDER } from 'constants/placeholder';
 import { useModalStore } from 'stores';
@@ -19,9 +20,11 @@ import type { ConcertData } from 'types';
 const DetailFormInfo = () => {
   const { setValue, control } = useFormContext();
   const { openModal } = useModalStore(['openModal']);
-  const { concertData, updateConcertData } = useRentalFormStore([
+  const { formData, concertData, updateConcertData, updateFormData } = useRentalFormStore([
+    'formData',
     'concertData',
     'updateConcertData',
+    'updateFormData',
   ]);
 
   const handleConcertSelect = (concertData: ConcertData) => {
@@ -37,8 +40,22 @@ const DetailFormInfo = () => {
     );
   };
 
+  const handleArtistSelect = (artist: string) => {
+    updateFormData('artistName', artist);
+    setValue('artistName', artist, { shouldValidate: true });
+  };
+
   const handleArtistClick = () => {
-    openModal('bottomSheet', 'list', <SearchArtistSheet onClick={() => {}} />);
+    openModal(
+      'bottomSheet',
+      'list',
+      <SearchArtistSheet onArtistSelect={(artist) => handleArtistSelect(artist)} />
+    );
+  };
+
+  const handleArtistDelete = () => {
+    updateFormData('artistName', '');
+    setValue('artistName', '', { shouldValidate: true });
   };
 
   const handleSelectClick = () => {
@@ -72,6 +89,11 @@ const DetailFormInfo = () => {
       <RentalFormField>
         <RentalFormField.Title title="아티스트명" />
         <SearchField name="artist" onClick={handleArtistClick} />
+        {formData.artistName && (
+          <SimpleChip hasDeleteIcon onDeleteClick={handleArtistDelete}>
+            {formData.artistName}
+          </SimpleChip>
+        )}
       </RentalFormField>
       <RentalFormField>
         <RentalFormField.Title title="지역" />

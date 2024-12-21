@@ -16,7 +16,7 @@ export const useGetSearchConcert = (
   };
 
   return useQuery<ConcertData[], Error>({
-    queryKey: ['searchConcert', searches],
+    queryKey: ['formSearchConcert', searches],
     queryFn: fetchConcert,
     enabled: !!searches?.trim(),
     retry: false, // 검색 결과가 없을 경우 재시도 X

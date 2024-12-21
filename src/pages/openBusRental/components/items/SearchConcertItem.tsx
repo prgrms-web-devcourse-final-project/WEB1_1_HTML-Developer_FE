@@ -93,13 +93,13 @@ const SearchConcertItem = ({ concertData, isInactive, onClick }: SearchConcertIt
   const { poster, title, concertHallName, stDate, edDate } = concertData;
 
   const handleConcertClick = () => {
-    if (onClick) onClick(concertData);
+    onClick?.(concertData);
   };
 
   return (
     <ConcertItemContainer isInactive={isInactive} onClick={handleConcertClick}>
       <ConcertPoster>
-        <PosterImg alt="Rental Thumbnail" src={poster} />
+        <PosterImg alt="Concert Poster" src={poster} />
       </ConcertPoster>
       <ConcertContent>
         <ConcertTitle>{title}</ConcertTitle>

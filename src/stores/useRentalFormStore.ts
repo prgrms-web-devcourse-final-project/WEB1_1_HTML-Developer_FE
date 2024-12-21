@@ -12,6 +12,7 @@ interface FormData {
   region: string;
   depositAccount: string;
   concertId: number;
+  artistName: string;
 }
 
 interface RentalFormStore {
@@ -27,6 +28,7 @@ const initFormData: FormData = {
   region: '',
   depositAccount: '',
   concertId: 0,
+  artistName: '',
 };
 
 const rentalFormStore = createWithEqualityFn(

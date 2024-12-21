@@ -44,6 +44,7 @@ const OpenBusRental = () => {
       region: '',
       depositAccount: '',
       concertId: 0,
+      artistName: '',
     },
     mode: 'onSubmit',
   });
