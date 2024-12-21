@@ -33,19 +33,24 @@ const ButtonWrapper = styled.div`
   gap: 1.6rem;
 `;
 
+const defaultValues = [
+  {
+    imageUrl: null,
+    title: '',
+    concertId: 0,
+    artistName: '',
+    region: '',
+    depositAccount: '',
+  },
+];
+
 const OpenBusRental = () => {
   const [activeTab, setActiveTab] = useState(0);
+  const schema = rentalFormSchema[activeTab];
 
   const methods = useForm<RentalFormSchemaType>({
-    resolver: zodResolver(rentalFormSchema),
-    defaultValues: {
-      imageUrl: null,
-      title: '',
-      region: '',
-      depositAccount: '',
-      concertId: 0,
-      artistName: '',
-    },
+    resolver: zodResolver(schema),
+    defaultValues: defaultValues[activeTab] || {},
     mode: 'onSubmit',
   });
 

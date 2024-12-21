@@ -8,13 +8,15 @@ const requiredImage = () =>
     .nullable()
     .refine((value) => value !== null && value.length > 0, '파일을 업로드해야 합니다.');
 
-export const rentalFormSchema = z.object({
-  imageUrl: requiredImage(),
-  title: requiredString(),
-  region: requiredString(),
-  depositAccount: requiredString(),
-  concertId: requiredNumber(),
-  artistName: requiredString(),
-});
+export const rentalFormSchema = [
+  z.object({
+    imageUrl: requiredImage(),
+    title: requiredString(),
+    concertId: requiredNumber(),
+    artistName: requiredString(),
+    region: requiredString(),
+    depositAccount: requiredString(),
+  }),
+];
 
-export type RentalFormSchemaType = z.infer<typeof rentalFormSchema>;
+export type RentalFormSchemaType = z.infer<(typeof rentalFormSchema)[number]>;
