@@ -73,6 +73,7 @@ const SearchArtistSheet = ({ onArtistSelect }: SearchArtistSheetProps) => {
             ) : (
               artists?.map((artist) => (
                 <SearchArtistItem
+                  artistImg={artist.images[2].url}
                   artistName={artist.name}
                   key={artist.id}
                   onClick={(artist) => handleArtistSelect(artist)}
