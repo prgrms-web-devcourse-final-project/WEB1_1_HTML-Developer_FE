@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
-import type React from 'react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import SearchField from './components/SearchField';
@@ -14,6 +13,10 @@ import { BodyRegularText, ChipText } from 'styles/Typography';
 const OpenSurvey = () => {
   const [title, setTitle] = useState('');
   const [etcInfo, setEtcInfo] = useState('');
+  const [concertIsActive, setConcertIsActive] = useState(false);
+  const [artistIsActive, setArtistIsActive] = useState(false);
+  const concertInputRef = useRef<HTMLDivElement>(null);
+  const artistInputRef = useRef<HTMLDivElement>(null);
 
   const methods = useForm({
     defaultValues: {
@@ -35,6 +38,32 @@ const OpenSurvey = () => {
 
   const handleSubmit = () => {};
 
+  const handleConcertClick = () => {
+    setConcertIsActive(true);
+  };
+
+  const handleArtistClick = () => {
+    setArtistIsActive(true);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (concertInputRef.current && !concertInputRef.current.contains(e.target as Node)) {
+        setConcertIsActive(false);
+      }
+
+      if (artistInputRef.current && !artistInputRef.current.contains(e.target as Node)) {
+        setArtistIsActive(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <FormProvider {...methods}>
       <OpenSurveyContainer>
@@ -50,11 +79,21 @@ const OpenSurvey = () => {
             value={title}
           />
         </SurveyTitle>
-        <SearchField label="공연명" onSearch={getConcert} placeholder="공연을 검색해주세요" />
         <SearchField
+          handleClick={handleConcertClick}
+          isActive={concertIsActive}
+          label="공연명"
+          onSearch={getConcert}
+          placeholder="공연을 검색해주세요"
+          ref={concertInputRef}
+        />
+        <SearchField
+          handleClick={handleArtistClick}
+          isActive={artistIsActive}
           label="아티스트명"
           onSearch={getArtist}
           placeholder="아티스트를 검색해주세요"
+          ref={artistInputRef}
         />
         <BoardingArea>
           <BodyRegularText>
