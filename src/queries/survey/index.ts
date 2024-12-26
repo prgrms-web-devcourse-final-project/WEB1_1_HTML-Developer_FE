@@ -1,2 +1,2 @@
-export * from './useSurveyList';
+export * from './useGetSurveyList';
 export * from './useMyCreatedSurveys';
