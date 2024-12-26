@@ -1,12 +1,54 @@
 import styled from '@emotion/styled';
+import { TbClipboardText } from 'react-icons/tb';
 
 import SurveyItem from './components/SurveyItem';
 
-import { useSurveyList } from 'queries/survey';
+import FilterBottomSheet from 'components/bottomSheet/FilterBottomSheet';
+import FilterChip from 'components/chips/FilterChip';
+import { FILTER_TYPE } from 'constants/filterTypes';
+import { useIntersectionObserver } from 'hooks';
+import { useGetSurveyList } from 'queries/survey';
+import { useModalStore } from 'stores';
+import { useFilterStore } from 'stores/filterStore';
 import { BodyRegularText, HeaderText } from 'styles/Typography';
+import type { FilterType } from 'types';
 
 const Surveys = () => {
-  const { isLoading, surveyList } = useSurveyList();
+  const { surveyFilters } = useFilterStore(['surveyFilters']);
+
+  const {
+    data: surveyList,
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useGetSurveyList();
+
+  const { openModal } = useModalStore(['openModal']);
+
+  const handleFilterChipClick = (type: FilterType) => {
+    openModal('bottomSheet', 'list', <FilterBottomSheet filterType={type} target="survey" />);
+  };
+
+  const renderFilterChips = () => {
+    return FILTER_TYPE.map((type) => (
+      <FilterChip
+        isActive={surveyFilters[type].isActive}
+        key={type}
+        onClick={() => handleFilterChipClick(type)}
+      >
+        {surveyFilters[type].value}
+      </FilterChip>
+    ));
+  };
+
+  const targetRef = useIntersectionObserver(() => {
+    if (hasNextPage && !isFetchingNextPage) void fetchNextPage();
+  });
+
+  if (isLoading) return <div>로딩중...</div>;
+  if (isError) return <div>ERROR</div>;
 
   return (
     <>
@@ -15,20 +57,20 @@ const Surveys = () => {
         <BodyRegularText>ALLREVA에서 차량 대절 수요 조사를 신청하세요!</BodyRegularText>
       </BannerContainer>
 
-      <SurveyContainer>
-        {surveyList?.result.map(({ surveyId, title, region, participationCount, endDate }) => {
-          return (
-            <SurveyItem
-              endDate={endDate}
-              key={surveyId}
-              participationCount={participationCount}
-              region={region}
-              surveyId={surveyId}
-              title={title}
-            />
-          );
-        })}
-      </SurveyContainer>
+      <ContentContainer>
+        <FilterWrapper>{renderFilterChips()}</FilterWrapper>
+        {surveyList?.pages[0].length === 0 ? (
+          <EmptySurveyList>
+            <TbClipboardText size={80} />
+            <BodyRegularText>아직 등록된 수요 조사가 없어요.</BodyRegularText>
+          </EmptySurveyList>
+        ) : (
+          surveyList?.pages.map((page) =>
+            page.map((item) => <SurveyItem key={item.surveyId} {...item} />)
+          )
+        )}
+        <div ref={targetRef} />
+      </ContentContainer>
     </>
   );
 };
@@ -49,10 +91,23 @@ const BannerContainer = styled.div`
   }
 `;
 
-const SurveyContainer = styled.div`
+const FilterWrapper = styled.div`
+  display: flex;
+  gap: 1.2rem;
+  margin-bottom: 1.6rem;
+`;
+const EmptySurveyList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
+  justify-content: center;
+  align-items: center;
+  gap: 2.4rem;
+  padding: 12rem 0;
+`;
+
+const ContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
   padding: 2rem;
 `;
 

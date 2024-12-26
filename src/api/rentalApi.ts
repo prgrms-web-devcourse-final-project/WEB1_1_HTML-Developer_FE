@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { endPoint } from 'constants/endPoint';
 import { API_URL } from 'constants/url';
-import type { PageParam } from 'queries/rent/useGetRentList';
+import type { PageParam } from 'types';
 import type { RentalAccountResponse, RentalDetailResponse, RentalListResponse } from 'types';
 import { publicAxios } from 'utils';
 
@@ -28,8 +28,8 @@ export const createRentalQuery = (filterQuery: string, pageParam: PageParam) => 
 };
 
 export const requestGetRentalList = async (query: string) => {
-  return (await publicAxios.get<RentalListResponse>(`${endPoint.GET_RENT_LIST}?${query}`)).data
-    .result;
+  const { data } = await publicAxios.get<RentalListResponse>(`${endPoint.GET_RENT_LIST}?${query}`);
+  return data.result;
 };
 
 export const requestGetRentalDetails = (id: string) => {

@@ -2,19 +2,19 @@ import styled from '@emotion/styled';
 import { BiSolidBus } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 
-import RentalFilterSheet from './components/RentalFilterSheet';
 import RentalPostItem from './components/RentalPostItem';
 
 import rentalBanner from 'assets/images/bus-rental-banner.png';
+import FilterBottomSheet from 'components/bottomSheet/FilterBottomSheet';
 import FAB from 'components/buttons/FAB';
 import FilterChip from 'components/chips/FilterChip';
-import { RENTAL_FILTER } from 'constants/filterTypes';
+import { FILTER_TYPE } from 'constants/filterTypes';
 import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
 import { useGetRentalList } from 'queries/rent';
 import { useModalStore } from 'stores';
-import { useRentalFilterStore } from 'stores/useRentalFilterStore';
+import { useFilterStore } from 'stores/filterStore';
 import { BodyRegularText } from 'styles/Typography';
-import type { RentalFilterType } from 'types';
+import type { FilterType } from 'types';
 
 const BannerContainer = styled.div`
   width: 100%;
@@ -51,7 +51,8 @@ const RentalList = styled.ul`
 const BusRental = () => {
   const navigate = useNavigate();
   const { openModal } = useModalStore(['openModal']);
-  const { filters } = useRentalFilterStore(['filters']);
+  const { rentalFilters } = useFilterStore(['rentalFilters']);
+
   const {
     data: rentalList,
     isLoading,
@@ -61,8 +62,8 @@ const BusRental = () => {
     isFetchingNextPage,
   } = useGetRentalList();
 
-  const handleFilterChipClick = (type: RentalFilterType) => {
-    openModal('bottomSheet', 'list', <RentalFilterSheet filterType={type} />);
+  const handleFilterChipClick = (type: FilterType) => {
+    openModal('bottomSheet', 'list', <FilterBottomSheet filterType={type} target="rental" />);
   };
 
   const handleFABClick = () => {
@@ -70,13 +71,13 @@ const BusRental = () => {
   };
 
   const renderFilterChips = () => {
-    return RENTAL_FILTER.map((type) => (
+    return FILTER_TYPE.map((type) => (
       <FilterChip
-        isActive={filters[type].isActive}
+        isActive={rentalFilters[type].isActive}
         key={type}
         onClick={() => handleFilterChipClick(type)}
       >
-        {filters[type].value}
+        {rentalFilters[type].value}
       </FilterChip>
     ));
   };
@@ -109,7 +110,7 @@ const BusRental = () => {
             </RentalList>
           ))
         )}
-        {hasNextPage && !isFetchingNextPage && <div ref={targetRef} />}
+        <div ref={targetRef} />
       </ContentContainer>
       <FAB onFABClick={handleFABClick} />
     </>
