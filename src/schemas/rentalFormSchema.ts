@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 const requiredString = () => z.string().min(1, '필수 입력 항목입니다.');
+const requiredStringArray = () => z.string().array().min(1, '필수 입력 항목입니다.');
 const requiredNumber = () => z.number().positive('필수 입력 항목입니다.');
 const requiredImage = () =>
   z
@@ -17,6 +18,23 @@ export const rentalFormSchema = [
     region: requiredString(),
     depositAccount: requiredString(),
   }),
+  z.object({
+    boardingArea: requiredString(),
+    upTime: requiredString(),
+    downTime: requiredString(),
+    rentBoardingDates: requiredStringArray(),
+    busInfo: requiredString(),
+    roundPrice: requiredNumber(),
+    upTimePrice: requiredNumber(),
+    downTimePrice: requiredNumber(),
+  }),
 ];
 
+export const busInfoSchema = z.object({
+  busSize: requiredString(),
+  busType: requiredString(),
+  maxPassenger: requiredString(),
+});
+
 export type RentalFormSchemaType = z.infer<(typeof rentalFormSchema)[number]>;
+export type BusInfoSchemaType = z.infer<typeof busInfoSchema>;

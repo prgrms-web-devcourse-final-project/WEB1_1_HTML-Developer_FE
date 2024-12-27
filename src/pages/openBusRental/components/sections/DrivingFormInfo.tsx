@@ -1,21 +1,28 @@
-import { Controller, useFormContext } from 'react-hook-form';
-
 import CheckboxItem from '../items/CheckboxItem';
+import RentalFormSelect from '../items/RentalFormSelect';
 import RentalInputField from '../items/RentalInputField';
 import BoardingDateCheckbox from '../lists/BoardingDateCheckBox';
 import RentalFormField from '../RentalFormField';
 import BusInfoSheet from '../sheets/BusInfoSheet';
 
-import Select from 'components/select/Select';
 import { RENTAL_FORM_PLACEHOLDER } from 'constants/placeholder';
 import { useModalStore } from 'stores';
+import { useRentalFormStore } from 'stores/rentalFormStore';
+import { BUS_SIZE, BUS_TYPE } from 'types';
 
 const DrivingFormInfo = () => {
-  const { control } = useFormContext();
   const { openModal } = useModalStore(['openModal']);
+  const { formData } = useRentalFormStore(['formData']);
+
+  const { busSize, busType, maxPassenger } = formData;
+
+  const isBusInfoValid =
+    busSize && busType && maxPassenger
+      ? `${BUS_SIZE[busSize]} ${BUS_TYPE[busType]} ${maxPassenger}인승`
+      : '';
 
   const handleSelectClick = () => {
-    openModal('bottomSheet', 'list', <BusInfoSheet onChange={() => {}} />);
+    openModal('bottomSheet', 'list', <BusInfoSheet />);
   };
 
   return (
@@ -37,14 +44,11 @@ const DrivingFormInfo = () => {
       </RentalFormField>
       <RentalFormField>
         <RentalFormField.Title title="차량 정보" />
-        <Controller
-          control={control}
+        <RentalFormSelect
           name="busInfo"
-          render={({ field }) => (
-            <Select {...field} onClick={handleSelectClick}>
-              {RENTAL_FORM_PLACEHOLDER.busInfo}
-            </Select>
-          )}
+          onClick={handleSelectClick}
+          placeholder={RENTAL_FORM_PLACEHOLDER.busInfo}
+          value={isBusInfoValid}
         />
       </RentalFormField>
       <RentalFormField>
