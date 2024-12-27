@@ -5,13 +5,10 @@ import { LuCamera } from 'react-icons/lu';
 import { TbX } from 'react-icons/tb';
 
 import ValidationMessage from 'components/message/ValidationMessage';
-import type { RentalFormSchemaType } from 'schemas/rentalFormSchema';
+import type { RentalFormSchemaType } from 'schemas';
+import { useRentalFormStore } from 'stores';
 import { ChipText } from 'styles/Typography';
 import { hexToRgba } from 'utils';
-
-interface RentalThumbFieldProps {
-  initialImage?: string;
-}
 
 const ImageFieldWrapper = styled.div`
   display: flex;
@@ -78,13 +75,14 @@ const DeleteButton = styled.button`
 
 const FIELD_NAME = 'imageUrl';
 
-const RentalThumbField = ({ initialImage }: RentalThumbFieldProps) => {
+const RentalThumbField = () => {
   const {
     control,
     setValue,
     watch,
     formState: { errors },
   } = useFormContext<RentalFormSchemaType>();
+  const { formData, updateFormData } = useRentalFormStore(['formData', 'updateFormData']);
 
   const previewImage = watch(FIELD_NAME);
 
@@ -95,17 +93,44 @@ const RentalThumbField = ({ initialImage }: RentalThumbFieldProps) => {
     const reader = new FileReader();
     reader.onload = () => {
       setValue(FIELD_NAME, reader.result as string, { shouldValidate: true });
+      updateFormData(FIELD_NAME, reader.result as string);
     };
     reader.readAsDataURL(file);
   };
 
   const handleImageDelete = () => {
     setValue(FIELD_NAME, null, { shouldValidate: true });
+    updateFormData(FIELD_NAME, '');
   };
 
   useEffect(() => {
-    if (initialImage) setValue(FIELD_NAME, initialImage, { shouldValidate: true });
-  }, [initialImage, setValue]);
+    if (formData.imageUrl) {
+      setValue(FIELD_NAME, formData.imageUrl, { shouldValidate: true });
+      updateFormData(FIELD_NAME, formData.imageUrl);
+    }
+  }, [formData.imageUrl, setValue, updateFormData]);
+
+  const renderImage = () => {
+    if (previewImage) {
+      return (
+        <ImagePreviewWrapper>
+          <ImagePreview $url={previewImage}>
+            <DeleteButton onClick={handleImageDelete}>
+              <TbX size={24} />
+            </DeleteButton>
+          </ImagePreview>
+        </ImagePreviewWrapper>
+      );
+    }
+
+    return (
+      <ImageAddButton>
+        <input accept="image/*" hidden onChange={handleImageUpload} type="file" />
+        <LuCamera size={24} />
+        <ImageCount>0 / 1</ImageCount>
+      </ImageAddButton>
+    );
+  };
 
   return (
     <Controller
@@ -113,24 +138,8 @@ const RentalThumbField = ({ initialImage }: RentalThumbFieldProps) => {
       name={FIELD_NAME}
       render={() => (
         <>
-          <ImageFieldWrapper>
-            {!previewImage ? (
-              <ImageAddButton>
-                <input accept="image/*" hidden onChange={handleImageUpload} type="file" />
-                <LuCamera size={24} />
-                <ImageCount>0 / 1</ImageCount>
-              </ImageAddButton>
-            ) : (
-              <ImagePreviewWrapper>
-                <ImagePreview $url={previewImage}>
-                  <DeleteButton onClick={handleImageDelete}>
-                    <TbX size={24} />
-                  </DeleteButton>
-                </ImagePreview>
-              </ImagePreviewWrapper>
-            )}
-          </ImageFieldWrapper>
-          {errors[FIELD_NAME] && errors[FIELD_NAME].message && (
+          <ImageFieldWrapper>{renderImage()}</ImageFieldWrapper>
+          {FIELD_NAME in errors && errors[FIELD_NAME] && errors[FIELD_NAME].message && (
             <ValidationMessage message={errors[FIELD_NAME].message} />
           )}
         </>

@@ -3,11 +3,12 @@ import { Controller, useFormContext } from 'react-hook-form';
 
 import ValidationMessage from 'components/message/ValidationMessage';
 import { RENTAL_FORM_PLACEHOLDER } from 'constants/placeholder';
+import { useRentalFormStore } from 'stores';
 import { CaptionText } from 'styles/Typography';
-import type { RentalFormValues } from 'types';
+import type { RentalFormData } from 'types';
 
 interface RentalTitleFieldProps {
-  name: keyof RentalFormValues;
+  name: keyof RentalFormData;
   unit?: string;
   pattern?: string;
   isDisabled?: boolean;
@@ -44,36 +45,46 @@ const CharCount = styled(CaptionText)<{ isError: boolean }>`
 const MAX_LENGTH = 45;
 
 const RentalTitleField = ({ name }: RentalTitleFieldProps) => {
-  const { control, watch } = useFormContext();
-
-  const placeholder = RENTAL_FORM_PLACEHOLDER[name] || '입력해주세요';
+  const { control } = useFormContext();
+  const { formData, updateFormData } = useRentalFormStore(['formData', 'updateFormData']);
 
   return (
     <Controller
       control={control}
       name={name}
-      render={({ field, fieldState }) => (
-        <>
-          <InputFieldContainer>
-            <TitleInput
-              {...field}
-              isError={!!fieldState?.error}
-              maxLength={MAX_LENGTH - 1}
-              onChange={(e) => {
-                field.onChange(e);
-              }}
-              placeholder={placeholder}
-              type="text"
-            />
-            <CharCount isError={!!fieldState?.error}>
-              {watch(`${name}`).length} / {MAX_LENGTH}자
-            </CharCount>
-          </InputFieldContainer>
-          {fieldState?.error && fieldState.error.message && (
-            <ValidationMessage message={fieldState.error.message} />
-          )}
-        </>
-      )}
+      render={({ field, fieldState }) => {
+        const { value, onChange } = field;
+        const { error } = fieldState;
+        const isError = !!error;
+        const placeholder = RENTAL_FORM_PLACEHOLDER[name] || '입력해주세요';
+        const charCount = value.length;
+
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+          const newValue = e.target.value;
+          onChange(newValue);
+          updateFormData(name, newValue);
+        };
+
+        return (
+          <>
+            <InputFieldContainer>
+              <TitleInput
+                {...field}
+                isError={isError}
+                maxLength={MAX_LENGTH}
+                onChange={handleChange}
+                placeholder={placeholder}
+                type="text"
+                value={formData[name] || value}
+              />
+              <CharCount isError={isError}>
+                {charCount} / {MAX_LENGTH}자
+              </CharCount>
+            </InputFieldContainer>
+            {isError && error.message && <ValidationMessage message={error.message} />}
+          </>
+        );
+      }}
     />
   );
 };

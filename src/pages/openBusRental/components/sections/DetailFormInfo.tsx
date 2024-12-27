@@ -1,5 +1,6 @@
-import { Controller, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
+import RentalFormSelect from '../items/RentalFormSelect';
 import RentalInputField from '../items/RentalInputField';
 import RentalThumbField from '../items/RentalThumbField';
 import RentalTitleField from '../items/RentalTitleField';
@@ -11,14 +12,17 @@ import SearchArtistSheet from '../sheets/SearchArtistSheet';
 import SearchConcertSheet from '../sheets/SearchConcertSheet';
 
 import SimpleChip from 'components/chips/SimpleChip';
-import Select from 'components/select/Select';
+import ValidationMessage from 'components/message/ValidationMessage';
+import type { Region } from 'constants/filterTypes';
 import { RENTAL_FORM_PLACEHOLDER } from 'constants/placeholder';
-import { useModalStore } from 'stores';
-import { useRentalFormStore } from 'stores/useRentalFormStore';
+import { useModalStore, useRentalFormStore } from 'stores';
 import type { ConcertData } from 'types';
 
 const DetailFormInfo = () => {
-  const { setValue, control } = useFormContext();
+  const {
+    setValue,
+    formState: { errors },
+  } = useFormContext();
   const { openModal } = useModalStore(['openModal']);
   const { formData, concertData, updateConcertData, updateFormData } = useRentalFormStore([
     'formData',
@@ -27,17 +31,14 @@ const DetailFormInfo = () => {
     'updateFormData',
   ]);
 
-  const handleConcertSelect = (concertData: ConcertData) => {
-    updateConcertData(concertData);
-    setValue('concertId', concertData.id, { shouldValidate: true });
+  const openSheetModal = (sheet: React.ReactNode) => {
+    openModal('bottomSheet', 'list', sheet);
   };
 
-  const handleConcertClick = () => {
-    openModal(
-      'bottomSheet',
-      'list',
-      <SearchConcertSheet onConcertSelect={(data) => handleConcertSelect(data)} />
-    );
+  const handleConcertSelect = (concertData: ConcertData) => {
+    updateConcertData(concertData);
+    updateFormData('concertId', concertData.id);
+    setValue('concertId', concertData.id, { shouldValidate: true });
   };
 
   const handleArtistSelect = (artist: string) => {
@@ -45,27 +46,14 @@ const DetailFormInfo = () => {
     setValue('artistName', artist, { shouldValidate: true });
   };
 
-  const handleArtistClick = () => {
-    openModal(
-      'bottomSheet',
-      'list',
-      <SearchArtistSheet onArtistSelect={(artist) => handleArtistSelect(artist)} />
-    );
-  };
-
   const handleArtistDelete = () => {
     updateFormData('artistName', '');
     setValue('artistName', '', { shouldValidate: true });
   };
 
-  const handleSelectClick = () => {
-    openModal(
-      'bottomSheet',
-      'list',
-      <RegionListSheet
-        onChange={(region) => setValue('region', region, { shouldValidate: true })}
-      />
-    );
+  const handleRegionChange = (region: Region) => {
+    setValue('region', region, { shouldValidate: true });
+    updateFormData('region', region);
   };
 
   return (
@@ -83,28 +71,38 @@ const DetailFormInfo = () => {
           description="2달 이내 예정된 공연만 개설할 수 있습니다."
           title="공연명"
         />
-        <SearchField name="concert" onClick={handleConcertClick} />
+        <SearchField
+          name="concert"
+          onClick={() =>
+            openSheetModal(<SearchConcertSheet onConcertSelect={handleConcertSelect} />)
+          }
+        />
         {concertData && <SearchConcertItem concertData={concertData} isInactive />}
+        {errors.concertId?.message && (
+          <ValidationMessage message={errors.concertId.message as string} />
+        )}
       </RentalFormField>
       <RentalFormField>
         <RentalFormField.Title title="아티스트명" />
-        <SearchField name="artist" onClick={handleArtistClick} />
+        <SearchField
+          name="artist"
+          onClick={() => openSheetModal(<SearchArtistSheet onArtistSelect={handleArtistSelect} />)}
+        />
         {formData.artistName && (
           <SimpleChip hasDeleteIcon onDeleteClick={handleArtistDelete}>
             {formData.artistName}
           </SimpleChip>
         )}
+        {errors.artistName?.message && (
+          <ValidationMessage message={errors.artistName.message as string} />
+        )}
       </RentalFormField>
       <RentalFormField>
         <RentalFormField.Title title="지역" />
-        <Controller
-          control={control}
+        <RentalFormSelect
           name="region"
-          render={({ field }) => (
-            <Select {...field} onClick={handleSelectClick}>
-              {RENTAL_FORM_PLACEHOLDER.region}
-            </Select>
-          )}
+          onClick={() => openSheetModal(<RegionListSheet onChange={handleRegionChange} />)}
+          placeholder={RENTAL_FORM_PLACEHOLDER.region}
         />
       </RentalFormField>
       <RentalFormField>
