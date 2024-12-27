@@ -12,7 +12,7 @@ import TabBar from 'components/tabBar/TabBar';
 import { tabMap } from 'components/tabBar/tabData';
 import type { RentalFormSchemaType } from 'schemas';
 import { rentalFormSchema } from 'schemas';
-import { useRentalFormStore } from 'stores';
+import { rentalFormStore, useRentalFormStore } from 'stores';
 import { getDefaultValues, validateForm } from 'utils';
 
 const RentalForm = styled.form`
@@ -39,7 +39,7 @@ const OpenBusRental = () => {
   const [activeTab, setActiveTab] = useState(0);
 
   const schema = rentalFormSchema[activeTab];
-  const { formData } = useRentalFormStore(['formData']);
+  const { formData, resetFormData } = useRentalFormStore(['formData', 'resetFormData']);
 
   const defaultValues = useMemo(() => getDefaultValues(formData, activeTab), [formData, activeTab]);
   const isFormValid = useMemo(() => validateForm(formData, activeTab), [formData, activeTab]);
@@ -50,6 +50,13 @@ const OpenBusRental = () => {
   });
 
   const { handleSubmit, watch } = methods;
+
+  useEffect(() => {
+    return () => {
+      resetFormData();
+      rentalFormStore.persist.clearStorage();
+    };
+  }, [resetFormData]);
 
   // 추후 삭제
   useEffect(() => {

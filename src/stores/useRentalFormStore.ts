@@ -1,4 +1,4 @@
-import { persist } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import { createWithEqualityFn } from 'zustand/traditional';
 
@@ -18,6 +18,7 @@ interface RentalFormStore {
   formData: RentalFormData;
   updateConcertData: (value: ConcertData) => void;
   updateFormData: <K extends keyof RentalFormData>(key: K, value: RentalFormData[K]) => void;
+  resetFormData: () => void;
 }
 
 export const initDetailInfo: FormDetailInfo = {
@@ -56,7 +57,7 @@ const initFormData: RentalFormData = {
   ...initAdditionalInfo,
 };
 
-const rentalFormStore = createWithEqualityFn(
+export const rentalFormStore = createWithEqualityFn(
   persist(
     immer<RentalFormStore>((set) => ({
       concertData: null,
@@ -71,6 +72,12 @@ const rentalFormStore = createWithEqualityFn(
           state.formData[key] = value;
         });
       },
+      resetFormData: () => {
+        set({
+          concertData: null,
+          formData: initFormData,
+        });
+      },
     })),
     {
       name: 'rental-form',
@@ -78,6 +85,7 @@ const rentalFormStore = createWithEqualityFn(
         concertData: state.concertData,
         formData: state.formData,
       }),
+      storage: createJSONStorage(() => sessionStorage),
     }
   )
 );
