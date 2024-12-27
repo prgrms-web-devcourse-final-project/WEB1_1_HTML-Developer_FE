@@ -18,6 +18,7 @@ export const tokenAxios = axios.create({
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
+    'Access-Control-Allow-Credentials': 'true',
   },
 });
 

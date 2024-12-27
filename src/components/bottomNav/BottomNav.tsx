@@ -65,6 +65,7 @@ const BottomNavContainer = styled.div`
   height: 5.8rem;
   padding: 0.8rem 1.6rem;
   background-color: ${({ theme }) => theme.colors.dark[700]};
+  z-index: 200;
 `;
 
 const IconWrapper = styled.div<{ isSelected: boolean }>`

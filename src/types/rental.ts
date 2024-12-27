@@ -1,6 +1,5 @@
 import type { ApiResponse } from './api';
-
-import type { DATE_SORT_ARRAY, Region, REGIONS } from 'constants/filterTypes';
+import type { Region } from './filter';
 
 // Rental List
 export interface RentalList {
@@ -10,11 +9,6 @@ export interface RentalList {
   endDate: string;
   imageUrl: string;
 }
-
-// Rental Filter
-export type RentalFilterType = 'region' | 'sort';
-export type RentalFilterOptions = typeof REGIONS | typeof DATE_SORT_ARRAY;
-export type RentalFilterValue = RentalFilterOptions[number];
 
 // Rental Details
 export const BUS_SIZE = {

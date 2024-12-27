@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Dialog from './Dialog';
 
 import BaseButton from 'components/buttons/BaseButton';
-import { useModalStore } from 'stores/useModalStore';
+import { useModalStore } from 'stores/modalStore';
 import { TitleText2 } from 'styles/Typography';
 
 const meta: Meta<typeof Dialog> = {
