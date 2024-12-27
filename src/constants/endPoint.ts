@@ -30,6 +30,8 @@ export const endPoint = {
 
   // Auth API
   AUTH_KAKAO: '/auth/token/kakao',
+  LOGIN_CHECK: '/auth/login/check',
+  REISSUE_TOKEN: '/auth/token/reissue',
   SIGNIN: '/signin',
   SIGNUP: '/members/register',
 

@@ -11,8 +11,6 @@ interface CallbackResultResponse {
   email: string;
   nickname: string;
   profileImageUrl: string;
-  accessToken: null | string;
-  refreshToken: null | string;
 }
 
 interface CallbackRequest {
@@ -25,7 +23,11 @@ const Callback = () => {
   const params = new URL(document.URL).searchParams;
   const code = params.get('code');
   const navigate = useNavigate();
-  const { setToken, setIsLoggedIn } = useAuthStore(['setToken', 'setIsLoggedIn']);
+  const { setUserProfile, setIsLoggedIn, setToken } = useAuthStore([
+    'setUserProfile',
+    'setIsLoggedIn',
+    'setToken',
+  ]);
 
   const getUserKakaoInfo = async (): Promise<{ data: CallbackRequest; token: string | null }> => {
     const { data, headers } = await tokenAxios.get<CallbackRequest>(endPoint.AUTH_KAKAO, {
@@ -40,20 +42,20 @@ const Callback = () => {
     return { data, token };
   };
 
-  const setTokenStorage = (token: string | null) => {
+  const setTokenStorage = (data: CallbackResultResponse, token: string | null) => {
     if (token) {
-      localStorage.setItem('accessToken', token);
       tokenAxios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      setToken(token);
       setIsLoggedIn();
+      setUserProfile(data);
+      setToken(token);
     }
   };
 
   const { mutate } = useMutation({
     mutationFn: getUserKakaoInfo,
-    onSuccess: ({ data }) => {
+    onSuccess: ({ data, token }) => {
       if (data?.result.isUser) {
-        setTokenStorage(data.result.accessToken);
+        setTokenStorage(data.result, token);
         navigate('/');
       } else {
         navigate('/signup', {
