@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import AdditionalFormInfo from './components/sections/AdditionalFormInfo';
@@ -10,8 +10,10 @@ import DrivingFormInfo from './components/sections/DrivingFormInfo';
 import BaseButton from 'components/buttons/BaseButton';
 import TabBar from 'components/tabBar/TabBar';
 import { tabMap } from 'components/tabBar/tabData';
-import type { RentalFormSchemaType } from 'schemas/rentalFormSchema';
-import { rentalFormSchema } from 'schemas/rentalFormSchema';
+import type { RentalFormSchemaType } from 'schemas';
+import { rentalFormSchema } from 'schemas';
+import { useRentalFormStore } from 'stores';
+import { getDefaultValues, validateForm } from 'utils';
 
 const RentalForm = styled.form`
   display: flex;
@@ -33,50 +35,37 @@ const ButtonWrapper = styled.div`
   gap: 1.6rem;
 `;
 
-const defaultValues = [
-  {
-    imageUrl: null,
-    title: '',
-    concertId: 0,
-    artistName: '',
-    region: '',
-    depositAccount: '',
-  },
-];
-
 const OpenBusRental = () => {
   const [activeTab, setActiveTab] = useState(0);
+
   const schema = rentalFormSchema[activeTab];
+  const { formData } = useRentalFormStore(['formData']);
+
+  const defaultValues = useMemo(() => getDefaultValues(formData, activeTab), [formData, activeTab]);
+  const isFormValid = useMemo(() => validateForm(formData, activeTab), [formData, activeTab]);
 
   const methods = useForm<RentalFormSchemaType>({
     resolver: zodResolver(schema),
-    defaultValues: defaultValues[activeTab] || {},
-    mode: 'onSubmit',
+    defaultValues,
   });
 
-  const {
-    handleSubmit,
-    formState: { isValid },
-    watch,
-  } = methods;
-
-  const formData = watch();
+  const { handleSubmit, watch } = methods;
 
   // 추후 삭제
   useEffect(() => {
-    console.log('formData changed:', formData);
-  }, [formData]);
+    console.log('formData changed:', watch());
+  }, [watch]);
 
   const handleFormSubmit = handleSubmit((formData) => {
     if (activeTab < tabMap.rentalTab.length - 1) {
-      setActiveTab(activeTab + 1);
+      setActiveTab((prevTab) => prevTab + 1);
     } else {
-      console.log('submit', formData); // 추후 삭제
+      console.log('submit', formData); // 실제 제출 처리
     }
   });
 
   const handlePrevClick = () => {
-    if (activeTab > 0) setActiveTab(activeTab - 1);
+    if (activeTab > 0) setActiveTab((prevTab) => prevTab - 1);
   };
 
   return (
@@ -103,12 +92,12 @@ const OpenBusRental = () => {
             )}
             <BaseButton
               color="primary"
-              isDisabled={!isValid}
+              isDisabled={!isFormValid}
               size="medium"
               type="submit"
               variant="fill"
             >
-              다음
+              {activeTab === tabMap.rentalTab.length - 1 ? '제출' : '다음'}
             </BaseButton>
           </ButtonWrapper>
         </RentalForm>

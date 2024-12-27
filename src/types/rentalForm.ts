@@ -22,34 +22,61 @@ export interface SearchConcert {
   searchAfter: SearchAfter[] | null;
 }
 
+interface SearchArtistImages {
+  url: string;
+  width: number;
+  height: number;
+}
+
 export interface SearchArtist {
   id: string;
   name: string;
+  images: SearchArtistImages[];
 }
 
-export interface RentalFormValues {
-  concertId: number;
+export interface FormDetailInfo {
   imageUrl: string;
   title: string;
-  artistName: string;
-  region: Region;
+  region: Region | null;
   depositAccount: string;
+  concertId: number;
+  artistName: string;
+}
+
+export interface BusInfo {
+  busSize: BusSize | null;
+  busType: BusType | null;
+  maxPassenger: number;
+}
+
+export interface FormDrivingData {
   boardingArea: string;
   upTime: string;
   downTime: string;
   rentBoardingDateRequests: string[];
-  busSize: BusSize;
-  busType: BusType;
-  maxPassenger: number;
   roundPrice: number;
   upTimePrice: number;
   downTimePrice: number;
+}
+
+// data 전송 시 필요한 운행 정보 데이터
+export interface FormDrivingInfo extends FormDrivingData, BusInfo {}
+
+// 유효성 검사 시 필요한 운행 정보 데이터
+export interface FormDrivingFields extends FormDrivingData {
+  busInfo: string;
+}
+
+export interface FormAdditionalInfo {
   recruitmentCount: number;
   endDate: string;
   chatUrl: string;
-  refundType: RefundType;
+  refundType: RefundType | null;
   information: string;
 }
+
+export interface RentalFormData extends FormDetailInfo, FormDrivingInfo, FormAdditionalInfo {}
+export interface RentalFormFields extends FormDetailInfo, FormDrivingFields, FormAdditionalInfo {}
 
 export type SearchConcertResponse = ApiResponse<SearchConcert>;
 export type SearchArtistResponse = ApiResponse<SearchArtist[]>;

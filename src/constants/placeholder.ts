@@ -1,7 +1,7 @@
-import type { DepositFormValues, RentalFormValues } from 'types';
+import type { BusInfo, DepositFormValues, RentalFormFields } from 'types';
 
 type DepositFormPlaceholder = Partial<Record<keyof DepositFormValues, string>>;
-type RentalFormPlaceholder = Partial<Record<keyof RentalFormValues | 'busInfo', string>>;
+type RentalFormPlaceholder = Partial<Record<keyof RentalFormFields | keyof BusInfo, string>>;
 
 export const DEPOSIT_FORM_PLACEHOLDER: DepositFormPlaceholder = {
   depositorName: `성함을 입력해주세요`,
@@ -18,6 +18,7 @@ export const RENTAL_FORM_PLACEHOLDER: RentalFormPlaceholder = {
   upTime: `11:00`,
   downTime: `23:00`,
   busInfo: `차량을 선택해주세요`,
+  maxPassenger: `25`,
   roundPrice: `30,000`,
   upTimePrice: `30,000`,
   downTimePrice: `30,000`,
