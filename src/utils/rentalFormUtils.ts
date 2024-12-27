@@ -1,4 +1,4 @@
-import { initDetailInfo, initDrivingInfo } from 'stores/useRentalFormStore';
+import { initDetailInfo, initDrivingInfo } from 'stores';
 import type { FormDetailInfo, FormDrivingInfo, RentalFormData } from 'types';
 
 const keysMap = [

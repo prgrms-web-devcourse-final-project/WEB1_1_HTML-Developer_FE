@@ -7,7 +7,7 @@ export const useGetRentalDetails = (id: string) => {
   // 로그인 여부 (추후 수정)
   const isLoggedIn = false;
 
-  const fetchDetails = async (): Promise<AllRentalDetail> => {
+  const fetchDetails = async () => {
     const detailPromise = await requestGetRentalDetails(id);
     const accountPromise = isLoggedIn ? requestGetDepositAccount(id) : Promise.resolve(null);
 
