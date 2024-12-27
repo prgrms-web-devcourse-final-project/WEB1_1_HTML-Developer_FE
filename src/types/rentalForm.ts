@@ -8,8 +8,8 @@ export interface ConcertData {
   poster: string;
   title: string;
   concertHallName: string;
-  stDate: string;
-  edDate: string;
+  stdate: string;
+  eddate: string;
 }
 
 interface SearchAfter {

@@ -90,7 +90,7 @@ const Date = styled.div`
 `;
 
 const SearchConcertItem = ({ concertData, isInactive, onClick }: SearchConcertItemProps) => {
-  const { poster, title, concertHallName, stDate, edDate } = concertData;
+  const { poster, title, concertHallName, stdate, eddate } = concertData;
 
   const handleConcertClick = () => {
     onClick?.(concertData);
@@ -109,7 +109,7 @@ const SearchConcertItem = ({ concertData, isInactive, onClick }: SearchConcertIt
         </ConcertHall>
         <Date>
           <LuCalendar size={16} />
-          <CaptionText>{formatDateRange(stDate, edDate)}</CaptionText>
+          <CaptionText>{formatDateRange(stdate, eddate)}</CaptionText>
         </Date>
       </ConcertContent>
     </ConcertItemContainer>
