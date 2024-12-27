@@ -31,7 +31,7 @@ const initialState: AuthState = {
   token: null,
 };
 
-const authStore = createWithEqualityFn(
+export const authStore = createWithEqualityFn(
   devtools(
     immer<AuthStore>((set) => ({
       ...initialState,
