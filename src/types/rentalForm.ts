@@ -53,7 +53,7 @@ export interface FormDrivingData {
   boardingArea: string;
   upTime: string;
   downTime: string;
-  rentBoardingDateRequests: string[];
+  boardingDates: string[];
   roundPrice: number;
   upTimePrice: number;
   downTimePrice: number;

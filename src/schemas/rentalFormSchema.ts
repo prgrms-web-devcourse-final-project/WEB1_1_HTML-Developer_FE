@@ -22,7 +22,7 @@ export const rentalFormSchema = [
     boardingArea: requiredString(),
     upTime: requiredString(),
     downTime: requiredString(),
-    rentBoardingDates: requiredStringArray(),
+    boardingDates: requiredStringArray(),
     busInfo: requiredString(),
     roundPrice: requiredNumber(),
     upTimePrice: requiredNumber(),

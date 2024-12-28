@@ -1,7 +1,7 @@
 import CheckboxItem from '../items/CheckboxItem';
 import RentalFormSelect from '../items/RentalFormSelect';
 import RentalInputField from '../items/RentalInputField';
-import BoardingDateCheckbox from '../lists/BoardingDateCheckBox';
+import BoardingDateCheckList from '../lists/BoardingDateCheckList';
 import RentalFormField from '../RentalFormField';
 import BusInfoSheet from '../sheets/BusInfoSheet';
 
@@ -35,10 +35,10 @@ const DrivingFormInfo = () => {
         <RentalFormField.Title title="출발 시각" />
         <RentalFormField.Fields isHorizontal>
           <RentalFormField.SubField subLabel="상행">
-            <RentalInputField name="upTime" />
+            <RentalInputField name="upTime" pattern="##:##" />
           </RentalFormField.SubField>
           <RentalFormField.SubField subLabel="하행">
-            <RentalInputField name="downTime" />
+            <RentalInputField name="downTime" pattern="##:##" />
           </RentalFormField.SubField>
         </RentalFormField.Fields>
       </RentalFormField>
@@ -56,7 +56,7 @@ const DrivingFormInfo = () => {
           description="차량 대절을 진행할 날짜를 모두 선택해주세요."
           title="운행 일자"
         />
-        <BoardingDateCheckbox />
+        <BoardingDateCheckList />
       </RentalFormField>
       <RentalFormField>
         <RentalFormField.Title title="이용 요금">

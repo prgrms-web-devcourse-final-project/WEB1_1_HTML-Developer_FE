@@ -34,7 +34,7 @@ export const initDrivingInfo: FormDrivingInfo = {
   boardingArea: '',
   upTime: '',
   downTime: '',
-  rentBoardingDateRequests: [],
+  boardingDates: [],
   busSize: null,
   busType: null,
   maxPassenger: 0,
