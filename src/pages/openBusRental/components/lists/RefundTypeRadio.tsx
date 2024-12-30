@@ -3,6 +3,9 @@ import { Controller, useFormContext } from 'react-hook-form';
 
 import ValidationMessage from 'components/message/ValidationMessage';
 import RadioItem from 'pages/busRentalDetail/components/RadioItem';
+import { useRentalFormStore } from 'stores';
+import type { RefundType } from 'types';
+import { REFUND_TYPE } from 'types';
 
 const BoardingTypeRadioContainer = styled.div`
   display: flex;
@@ -15,10 +18,11 @@ const RadioList = styled.div`
   gap: 1.2rem;
 `;
 
-const refundType = ['추가 입금', '환불', '둘 다'];
-
 const RefundTypeRadio = () => {
   const { control } = useFormContext();
+  const { updateFormData } = useRentalFormStore(['updateFormData']);
+
+  const refundTypeList = Object.keys(REFUND_TYPE) as RefundType[];
 
   return (
     <Controller
@@ -27,15 +31,20 @@ const RefundTypeRadio = () => {
       render={({ field, fieldState }) => (
         <BoardingTypeRadioContainer>
           <RadioList>
-            {refundType.map((type) => (
-              <RadioItem
-                isChecked={field.value === type}
-                key={type}
-                name="refundType"
-                onValueChange={field.onChange}
-                value={type}
-              />
-            ))}
+            {refundTypeList.map((type) => {
+              return (
+                <RadioItem
+                  isChecked={field.value === type}
+                  key={type}
+                  name="refundType"
+                  onValueChange={() => {
+                    field.onChange(type);
+                    updateFormData('refundType', type);
+                  }}
+                  value={REFUND_TYPE[type]}
+                />
+              );
+            })}
           </RadioList>
           {fieldState?.error && fieldState.error.message && (
             <ValidationMessage message={fieldState.error.message} />
