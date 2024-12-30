@@ -57,7 +57,7 @@ const RentalTitleField = ({ name }: RentalTitleFieldProps) => {
         const { error } = fieldState;
         const isError = !!error;
         const placeholder = RENTAL_FORM_PLACEHOLDER[name] || '입력해주세요';
-        const charCount = value.length;
+        const charCount = value?.length || formData['title'].length;
 
         const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           const newValue = e.target.value;

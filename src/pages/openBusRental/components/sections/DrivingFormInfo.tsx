@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import CheckboxItem from '../items/CheckboxItem';
 import RentalFormSelect from '../items/RentalFormSelect';
 import RentalInputField from '../items/RentalInputField';
@@ -12,9 +14,12 @@ import { BUS_SIZE, BUS_TYPE } from 'types';
 
 const DrivingFormInfo = () => {
   const { openModal } = useModalStore(['openModal']);
-  const { formData } = useRentalFormStore(['formData']);
+  const { formData, updateFormData } = useRentalFormStore(['formData', 'updateFormData']);
+  const { busSize, busType, maxPassenger, roundPrice, upTimePrice, downTimePrice } = formData;
 
-  const { busSize, busType, maxPassenger } = formData;
+  const [isSamePrice, setIsSamePrice] = useState(
+    roundPrice === upTimePrice && upTimePrice === downTimePrice
+  );
 
   const isBusInfoValid =
     busSize && busType && maxPassenger
@@ -23,6 +28,24 @@ const DrivingFormInfo = () => {
 
   const handleSelectClick = () => {
     openModal('bottomSheet', 'list', <BusInfoSheet />);
+  };
+
+  const handlePriceCheck = () => {
+    const price = formData['roundPrice'];
+
+    if (!isSamePrice && price) {
+      updateFormData('upTimePrice', price);
+      updateFormData('downTimePrice', price);
+    }
+
+    setIsSamePrice((prevState) => !prevState);
+  };
+
+  const handlePriceBlur = (value: string) => {
+    const convertedValue = Number(value.replace(',', ''));
+    updateFormData('roundPrice', convertedValue);
+    updateFormData('upTimePrice', convertedValue);
+    updateFormData('downTimePrice', convertedValue);
   };
 
   return (
@@ -60,17 +83,40 @@ const DrivingFormInfo = () => {
       </RentalFormField>
       <RentalFormField>
         <RentalFormField.Title title="이용 요금">
-          <CheckboxItem isChecked={false} name="price" onClick={() => {}} value="왕복/편도 동일" />
+          <CheckboxItem
+            isChecked={isSamePrice}
+            name="price"
+            onClick={handlePriceCheck}
+            value="왕복/편도 동일"
+          />
         </RentalFormField.Title>
         <RentalFormField.Fields>
           <RentalFormField.SubField isHorizontal subLabel="왕복">
-            <RentalInputField isFullWidth={false} name="roundPrice" unit="원" />
+            <RentalInputField
+              isFullWidth={false}
+              isNumeric
+              name="roundPrice"
+              onBlur={(value) => (isSamePrice ? handlePriceBlur(value) : undefined)}
+              unit="원"
+            />
           </RentalFormField.SubField>
           <RentalFormField.SubField isHorizontal subLabel="상행">
-            <RentalInputField isFullWidth={false} name="upTimePrice" unit="원" />
+            <RentalInputField
+              isDisabled={isSamePrice}
+              isFullWidth={false}
+              isNumeric
+              name="upTimePrice"
+              unit="원"
+            />
           </RentalFormField.SubField>
           <RentalFormField.SubField isHorizontal subLabel="하행">
-            <RentalInputField isFullWidth={false} name="downTimePrice" unit="원" />
+            <RentalInputField
+              isDisabled={isSamePrice}
+              isFullWidth={false}
+              isNumeric
+              name="downTimePrice"
+              unit="원"
+            />
           </RentalFormField.SubField>
         </RentalFormField.Fields>
       </RentalFormField>
