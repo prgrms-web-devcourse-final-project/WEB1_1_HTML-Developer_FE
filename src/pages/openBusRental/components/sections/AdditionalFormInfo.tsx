@@ -1,39 +1,32 @@
-import { Controller, useFormContext } from 'react-hook-form';
-
+import RentalFormSelect from '../items/RentalFormSelect';
 import RentalInputField from '../items/RentalInputField';
 import TextArea from '../items/TextArea';
 import RefundTypeRadio from '../lists/RefundTypeRadio';
 import RentalFormField from '../RentalFormField';
 import EndDateSheet from '../sheets/EndDateSheet';
 
-import Select from 'components/select/Select';
 import { RENTAL_FORM_PLACEHOLDER } from 'constants/placeholder';
 import { useModalStore } from 'stores';
 
 const AdditionalFormInfo = () => {
-  const { control } = useFormContext();
   const { openModal } = useModalStore(['openModal']);
 
   const handleSelectClick = () => {
-    openModal('bottomSheet', 'list', <EndDateSheet onChange={() => {}} />);
+    openModal('bottomSheet', 'list', <EndDateSheet />);
   };
 
   return (
     <>
       <RentalFormField isHorizontal>
         <RentalFormField.Title title="모집 인원" />
-        <RentalInputField isFullWidth={false} name="recruitmentCount" unit="명" />
+        <RentalInputField isFullWidth={false} isNumeric name="recruitmentCount" unit="명" />
       </RentalFormField>
       <RentalFormField>
         <RentalFormField.Title title="모집 마감 날짜" />
-        <Controller
-          control={control}
+        <RentalFormSelect
           name="endDate"
-          render={({ field }) => (
-            <Select {...field} onClick={handleSelectClick}>
-              {RENTAL_FORM_PLACEHOLDER.endDate}
-            </Select>
-          )}
+          onClick={handleSelectClick}
+          placeholder={RENTAL_FORM_PLACEHOLDER.endDate}
         />
       </RentalFormField>
       <RentalFormField>

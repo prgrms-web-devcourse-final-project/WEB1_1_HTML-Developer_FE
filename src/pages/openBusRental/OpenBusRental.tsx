@@ -67,23 +67,21 @@ const OpenBusRental = () => {
     console.log('formData changed:', watch());
   }, [watch]);
 
-  const handleFormSubmit = handleSubmit((formData) => {
-    console.log('submit', formData); // 실제 제출 처리
-  });
-
   const handlePrevClick = () => {
     if (activeTab > 0) setActiveTab((prevTab) => prevTab - 1);
   };
 
-  const handleNextClick = () => {
-    setActiveTab((prevTab) => prevTab + 1);
+  const handleNextClick = async () => {
+    if (activeTab === tabMap.rentalTab.length - 1) {
+      await handleSubmit(() => console.log('submit', formData))(); // 실제 제출 처리
+    } else setActiveTab((prevTab) => prevTab + 1);
   };
 
   return (
     <>
       <TabBar isInactive selectedTab={tabMap.rentalTab[activeTab]} tabList={tabMap.rentalTab} />
       <FormProvider {...methods}>
-        <RentalForm onSubmit={handleFormSubmit}>
+        <RentalForm>
           <FormContent>
             {activeTab === 0 && <DetailFormInfo />}
             {activeTab === 1 && <DrivingFormInfo />}
@@ -106,7 +104,7 @@ const OpenBusRental = () => {
               isDisabled={!isFormValid}
               onClick={handleNextClick}
               size="medium"
-              type={activeTab === tabMap.rentalTab.length - 1 ? 'submit' : 'button'}
+              type="button"
               variant="fill"
             >
               {activeTab === tabMap.rentalTab.length - 1 ? '제출' : '다음'}
