@@ -1,12 +1,13 @@
 import styled from '@emotion/styled';
-import { Controller, useForm, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 
 import ValidationMessage from 'components/message/ValidationMessage';
 import { RENTAL_FORM_PLACEHOLDER } from 'constants/placeholder';
-import type { RentalFormValues } from 'types';
+import { useRentalFormStore } from 'stores';
+import type { RentalFormData } from 'types';
 
 interface TextAreaProps {
-  name: keyof RentalFormValues;
+  name: keyof RentalFormData;
 }
 
 const TextAreaContainer = styled.div`
@@ -39,9 +40,17 @@ const TextAreaField = styled.textarea`
 
 const TextArea = ({ name }: TextAreaProps) => {
   const { control } = useFormContext();
-  const { register } = useForm();
+  const { updateFormData } = useRentalFormStore(['updateFormData']);
 
   const placeholder = RENTAL_FORM_PLACEHOLDER[name] || '입력해주세요';
+
+  const handleInputChange = (
+    onChange: (value: string | number) => void,
+    value: string | number
+  ) => {
+    onChange(value);
+    updateFormData(name, value);
+  };
 
   return (
     <Controller
@@ -51,10 +60,9 @@ const TextArea = ({ name }: TextAreaProps) => {
         <TextAreaContainer>
           <TextAreaField
             {...field}
-            {...register(name)}
-            onChange={(e) => {
-              field.onChange(e);
-            }}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+              handleInputChange(field.onChange, e.target.value)
+            }
             placeholder={placeholder}
           />
           {fieldState?.error && fieldState.error.message && (
