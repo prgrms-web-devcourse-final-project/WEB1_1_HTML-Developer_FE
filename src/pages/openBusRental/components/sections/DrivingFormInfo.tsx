@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
+import RentalFormField from './RentalFormField';
 import CheckboxItem from '../items/CheckboxItem';
 import RentalFormSelect from '../items/RentalFormSelect';
 import RentalInputField from '../items/RentalInputField';
 import BoardingDateCheckList from '../lists/BoardingDateCheckList';
-import RentalFormField from '../RentalFormField';
 import BusInfoSheet from '../sheets/BusInfoSheet';
 
 import { RENTAL_FORM_PLACEHOLDER } from 'constants/placeholder';

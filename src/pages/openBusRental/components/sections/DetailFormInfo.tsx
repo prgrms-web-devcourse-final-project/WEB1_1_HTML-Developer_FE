@@ -1,19 +1,19 @@
 import { useFormContext } from 'react-hook-form';
 
+import RentalFormField from './RentalFormField';
 import RentalFormSelect from '../items/RentalFormSelect';
 import RentalInputField from '../items/RentalInputField';
 import RentalThumbField from '../items/RentalThumbField';
 import RentalTitleField from '../items/RentalTitleField';
 import SearchConcertItem from '../items/SearchConcertItem';
 import SearchField from '../items/SearchField';
-import RentalFormField from '../RentalFormField';
 import RegionListSheet from '../sheets/RegionListSheet';
 import SearchArtistSheet from '../sheets/SearchArtistSheet';
 import SearchConcertSheet from '../sheets/SearchConcertSheet';
 
 import SimpleChip from 'components/chips/SimpleChip';
 import ValidationMessage from 'components/message/ValidationMessage';
-import type { Region } from 'constants/filterTypes';
+import type { REGIONS } from 'constants/filterTypes';
 import { RENTAL_FORM_PLACEHOLDER } from 'constants/placeholder';
 import { useModalStore, useRentalFormStore } from 'stores';
 import type { ConcertData } from 'types';
@@ -51,7 +51,7 @@ const DetailFormInfo = () => {
     setValue('artistName', '', { shouldValidate: true });
   };
 
-  const handleRegionChange = (region: Region) => {
+  const handleRegionChange = (region: (typeof REGIONS)[number]) => {
     setValue('region', region, { shouldValidate: true });
     updateFormData('region', region);
   };

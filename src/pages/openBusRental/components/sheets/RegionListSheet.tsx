@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
 
 import BottomSheet from 'components/bottomSheet/BottomSheet';
-import type { Region } from 'constants/filterTypes';
 import { REGIONS } from 'constants/filterTypes';
 import { useModalStore } from 'stores';
 import { BodyRegularText, TitleText2 } from 'styles/Typography';
+import type { Region } from 'types';
 
 interface RegionListSheetProps {
   onChange: (region: Region) => void;

@@ -1,8 +1,8 @@
+import RentalFormField from './RentalFormField';
 import RentalFormSelect from '../items/RentalFormSelect';
 import RentalInputField from '../items/RentalInputField';
 import TextArea from '../items/TextArea';
 import RefundTypeRadio from '../lists/RefundTypeRadio';
-import RentalFormField from '../RentalFormField';
 import EndDateSheet from '../sheets/EndDateSheet';
 
 import { RENTAL_FORM_PLACEHOLDER } from 'constants/placeholder';

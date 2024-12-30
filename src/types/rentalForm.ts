@@ -1,7 +1,6 @@
 import type { ApiResponse } from './api';
+import type { Region } from './filter';
 import type { BusSize, BusType, RefundType } from './rental';
-
-import type { Region } from 'constants/filterTypes';
 
 export interface ConcertData {
   id: number;
