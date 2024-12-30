@@ -11,6 +11,7 @@ import { busInfoSchema } from 'schemas';
 import { useModalStore } from 'stores';
 import { useRentalFormStore } from 'stores';
 import { BodyMediumText, BodyRegularText, TitleText2 } from 'styles/Typography';
+import type { BusSize, BusType } from 'types';
 import { BUS_SIZE, BUS_TYPE } from 'types';
 
 const BusInfoForm = styled.form``;
@@ -70,13 +71,13 @@ const BusInfoSheet = () => {
   };
 
   const handleFormSubmit = handleSubmit((busInfoData) => {
-    const busSizeValue = findkey(BUS_SIZE, busInfoData.busSize);
-    const busTypeValue = findkey(BUS_TYPE, busInfoData.busType);
+    const busSizeValue = findkey(BUS_SIZE, busInfoData.busSize as BusSize);
+    const busTypeValue = findkey(BUS_TYPE, busInfoData.busType as BusType);
 
     if (busSizeValue && busTypeValue && busInfoData.maxPassenger) {
       updateFormData('busSize', busSizeValue);
       updateFormData('busType', busTypeValue);
-      updateFormData('maxPassenger', parseInt(busInfoData.maxPassenger));
+      updateFormData('maxPassenger', Number(busInfoData.maxPassenger));
     }
 
     closeModal('bottomSheet', 'list');

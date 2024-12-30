@@ -23,7 +23,7 @@ const DrivingFormInfo = () => {
 
   const isBusInfoValid =
     busSize && busType && maxPassenger
-      ? `${BUS_SIZE[busSize]} ${BUS_TYPE[busType]} ${maxPassenger}인승`
+      ? `${maxPassenger}인승 ${BUS_SIZE[busSize]} ${BUS_TYPE[busType]}버스`
       : '';
 
   const handleSelectClick = () => {
