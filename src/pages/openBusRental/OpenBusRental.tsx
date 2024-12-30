@@ -49,7 +49,11 @@ const OpenBusRental = () => {
     defaultValues,
   });
 
-  const { handleSubmit, watch } = methods;
+  const { handleSubmit, reset, watch } = methods;
+
+  useEffect(() => {
+    if (schema && defaultValues) reset(defaultValues);
+  }, [schema, defaultValues, reset]);
 
   useEffect(() => {
     return () => {
@@ -64,15 +68,15 @@ const OpenBusRental = () => {
   }, [watch]);
 
   const handleFormSubmit = handleSubmit((formData) => {
-    if (activeTab < tabMap.rentalTab.length - 1) {
-      setActiveTab((prevTab) => prevTab + 1);
-    } else {
-      console.log('submit', formData); // 실제 제출 처리
-    }
+    console.log('submit', formData); // 실제 제출 처리
   });
 
   const handlePrevClick = () => {
     if (activeTab > 0) setActiveTab((prevTab) => prevTab - 1);
+  };
+
+  const handleNextClick = () => {
+    setActiveTab((prevTab) => prevTab + 1);
   };
 
   return (
@@ -100,8 +104,9 @@ const OpenBusRental = () => {
             <BaseButton
               color="primary"
               isDisabled={!isFormValid}
+              onClick={handleNextClick}
               size="medium"
-              type="submit"
+              type={activeTab === tabMap.rentalTab.length - 1 ? 'submit' : 'button'}
               variant="fill"
             >
               {activeTab === tabMap.rentalTab.length - 1 ? '제출' : '다음'}

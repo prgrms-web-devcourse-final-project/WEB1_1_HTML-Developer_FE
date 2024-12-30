@@ -28,6 +28,13 @@ export const rentalFormSchema = [
     upTimePrice: requiredNumber(),
     downTimePrice: requiredNumber(),
   }),
+  z.object({
+    recruitmentCount: requiredNumber(),
+    endDate: requiredString(),
+    chatUrl: requiredString(),
+    refundType: requiredString(),
+    information: requiredString(),
+  }),
 ];
 
 export const busInfoSchema = z.object({

@@ -1,9 +1,10 @@
-import { initDetailInfo, initDrivingInfo } from 'stores';
-import type { FormDetailInfo, FormDrivingInfo, RentalFormData } from 'types';
+import { initDetailInfo, initDrivingInfo, initAdditionalInfo } from 'stores';
+import type { FormAdditionalInfo, FormDetailInfo, FormDrivingInfo, RentalFormData } from 'types';
 
 const keysMap = [
   Object.keys(initDetailInfo) as (keyof FormDetailInfo)[],
   Object.keys(initDrivingInfo) as (keyof FormDrivingInfo)[],
+  Object.keys(initAdditionalInfo) as (keyof FormAdditionalInfo)[],
 ];
 
 export const getDefaultValues = (formData: RentalFormData, activeTab: number) => {
