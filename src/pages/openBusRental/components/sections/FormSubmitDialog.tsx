@@ -1,13 +1,27 @@
+import { useNavigate } from 'react-router-dom';
+
 import BaseButton from 'components/buttons/BaseButton';
 import Dialog from 'components/dialog/Dialog';
-import { useModalStore } from 'stores';
+import { usePostRentalForm } from 'queries/rentForm/usePostRentalForm';
+import { rentalFormStore, useModalStore, useRentalFormStore } from 'stores';
 import { TitleText2 } from 'styles/Typography';
 
 const FormSubmitDialog = () => {
   const { closeModal } = useModalStore(['closeModal']);
+  const { mutate } = usePostRentalForm();
+  const { formData, resetFormData } = useRentalFormStore(['formData', 'resetFormData']);
+  const navigate = useNavigate();
+
+  const handleSubmitSuccess = () => {
+    resetFormData();
+    rentalFormStore.persist.clearStorage();
+    navigate('/bus-rental');
+  };
 
   const handleSubmitClick = () => {
-    console.log('등록!'); // 추루 실제 제출 로직 추가
+    mutate(formData, {
+      onSuccess: handleSubmitSuccess,
+    });
     closeModal('dialog', 'confirm');
   };
 

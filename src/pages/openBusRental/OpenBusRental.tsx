@@ -13,7 +13,7 @@ import TabBar from 'components/tabBar/TabBar';
 import { tabMap } from 'components/tabBar/tabData';
 import type { RentalFormSchemaType } from 'schemas';
 import { rentalFormSchema } from 'schemas';
-import { rentalFormStore, useModalStore, useRentalFormStore } from 'stores';
+import { useModalStore, useRentalFormStore } from 'stores';
 import { getDefaultValues, validateForm } from 'utils';
 
 const RentalForm = styled.form`
@@ -37,14 +37,13 @@ const ButtonWrapper = styled.div`
 `;
 
 const OpenBusRental = () => {
-  const [activeTab, setActiveTab] = useState(0);
-
-  const schema = rentalFormSchema[activeTab];
-  const { formData, resetFormData } = useRentalFormStore(['formData', 'resetFormData']);
+  const { formData } = useRentalFormStore(['formData']);
   const { openModal } = useModalStore(['openModal']);
+  const [activeTab, setActiveTab] = useState(0);
 
   const defaultValues = useMemo(() => getDefaultValues(formData, activeTab), [formData, activeTab]);
   const isFormValid = useMemo(() => validateForm(formData, activeTab), [formData, activeTab]);
+  const schema = rentalFormSchema[activeTab];
 
   const methods = useForm<RentalFormSchemaType>({
     resolver: zodResolver(schema),
@@ -56,13 +55,6 @@ const OpenBusRental = () => {
   useEffect(() => {
     if (schema && defaultValues) reset(defaultValues);
   }, [schema, defaultValues, reset]);
-
-  useEffect(() => {
-    return () => {
-      resetFormData();
-      rentalFormStore.persist.clearStorage();
-    };
-  }, [resetFormData]);
 
   const handlePrevClick = () => {
     if (activeTab > 0) setActiveTab((prevTab) => prevTab - 1);
