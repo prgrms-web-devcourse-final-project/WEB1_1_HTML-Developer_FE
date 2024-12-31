@@ -1,14 +1,27 @@
 import styled from '@emotion/styled';
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import SearchField from './components/SearchField';
+import SelectedConcertItem from './components/SelectedConcertItem';
 
 import BaseButton from 'components/buttons/BaseButton';
 import InputField from 'components/inputField/InputField';
 import TitleInputField from 'components/inputField/TitleInputField';
 import Select from 'components/select/Select';
+import { endPoint } from 'constants/endPoint';
+import ConcertItem from 'pages/concert/components/ConcertItem';
+import type { Concert } from 'pages/concert/type';
 import { BodyRegularText, ChipText } from 'styles/Typography';
+import { publicAxios } from 'utils';
+
+interface ConcertResponse {
+  timeStamp: Date;
+  code: string;
+  message: string;
+  result: Concert[];
+}
 
 const OpenSurvey = () => {
   const [title, setTitle] = useState('');
@@ -17,6 +30,8 @@ const OpenSurvey = () => {
   const [artistIsActive, setArtistIsActive] = useState(false);
   const concertInputRef = useRef<HTMLDivElement>(null);
   const artistInputRef = useRef<HTMLDivElement>(null);
+  const [searchResults, setSearchResults] = useState<Concert[]>([]);
+  const [selectedConcert, setSelectedConcert] = useState<Concert | null>(null);
 
   const methods = useForm({
     defaultValues: {
@@ -28,7 +43,20 @@ const OpenSurvey = () => {
     setTitle(value);
   };
 
-  const getConcert = (keyword: string) => {};
+  const getConcert = async (concertKeyword: string) => {
+    const {
+      data: { result },
+    } = await publicAxios.get<ConcertResponse>(
+      `${endPoint.GET_CONCERT_SEARCH}/?query=${encodeURIComponent(concertKeyword)}`
+    );
+    console.log('OpenSurvey', result);
+    return result;
+  };
+
+  const handleConcertSearch = async (keyword: string) => {
+    const result = await getConcert(keyword);
+    setSearchResults(result);
+  };
 
   const getArtist = (keyword: string) => {};
 
@@ -40,6 +68,11 @@ const OpenSurvey = () => {
 
   const handleConcertClick = () => {
     setConcertIsActive(true);
+  };
+
+  const handleConcertSelect = (concert: Concert) => {
+    setSelectedConcert(concert);
+    setSearchResults([]);
   };
 
   const handleArtistClick = () => {
@@ -83,10 +116,18 @@ const OpenSurvey = () => {
           handleClick={handleConcertClick}
           isActive={concertIsActive}
           label="공연명"
-          onSearch={getConcert}
+          onSearch={handleConcertSearch}
           placeholder="공연을 검색해주세요"
           ref={concertInputRef}
         />
+        {!selectedConcert &&
+          searchResults &&
+          searchResults.map((item) => (
+            <SelectedConcertItem concert={item} key={item.id} onSelect={handleConcertSelect} />
+          ))}
+        {selectedConcert && !searchResults.length && (
+          <SelectedConcertItem concert={selectedConcert} />
+        )}
         <SearchField
           handleClick={handleArtistClick}
           isActive={artistIsActive}
