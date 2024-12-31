@@ -1,14 +1,18 @@
 import styled from '@emotion/styled';
+import { FaUser } from 'react-icons/fa6';
 import { IoSearch } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 
 import logoTitle from 'assets/logoTitle.svg';
-import { TitleText2 } from 'styles/Typography';
+import { useAuthStore } from 'stores';
+import { TitleText2, CaptionText } from 'styles/Typography';
 
 /**
  * @TODO path 경로 수정
  */
 const Header = () => {
+  const { isLoggedIn, userProfile } = useAuthStore(['isLoggedIn', 'userProfile']);
+
   return (
     <HeaderContainer>
       <StyledLink to="/">
@@ -18,9 +22,24 @@ const Header = () => {
         <StyledLink to="/search">
           <IoSearch size={24} />
         </StyledLink>
-        <StyledLink to="/signin">
-          <TitleText2>로그인</TitleText2>
-        </StyledLink>
+        {isLoggedIn && userProfile ? (
+          <UserProfileWrapper>
+            <ProfileLink to="/mypage">
+              {userProfile.profileImageUrl ? (
+                <ProfileImage alt="프로필 이미지" src={userProfile.profileImageUrl} />
+              ) : (
+                <DefaultProfileIcon>
+                  <FaUser size={16} />
+                </DefaultProfileIcon>
+              )}
+              <CaptionText>{userProfile.nickname}</CaptionText>
+            </ProfileLink>
+          </UserProfileWrapper>
+        ) : (
+          <StyledLink to="/signin">
+            <TitleText2>로그인</TitleText2>
+          </StyledLink>
+        )}
       </Wrapper>
     </HeaderContainer>
   );
@@ -53,6 +72,35 @@ const StyledLink = styled(Link)`
   align-items: center;
   text-decoration: none;
   color: inherit;
+`;
+
+const UserProfileWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const ProfileLink = styled(StyledLink)`
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+`;
+
+const ProfileImage = styled.img`
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 50%;
+  object-fit: cover;
+`;
+
+const DefaultProfileIcon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 50%;
+  background-color: ${({ theme }) => theme.colors.dark[200]};
+  color: ${({ theme }) => theme.colors.white};
 `;
 
 export default Header;

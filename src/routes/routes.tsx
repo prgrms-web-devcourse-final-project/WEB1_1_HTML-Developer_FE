@@ -3,7 +3,8 @@ import { createBrowserRouter, Outlet } from 'react-router-dom';
 
 import ModalRenderer from 'components/modalRenderer/ModalRenderer';
 import ToastRenderer from 'components/toast/ToastRenderer';
-import { FullLayout, HeaderLayout, TitleHeaderLayout } from 'layout';
+import { FullLayout, TitleHeaderLayout } from 'layout';
+import { AuthHeaderLayout, AuthTitleHeaderLayout, PublicOnlyLayout } from 'layout/ProtectedRoutes';
 import Callback from 'pages/callback/Callback';
 
 const Home = lazy(() => import('pages/home/Home'));
@@ -79,23 +80,16 @@ export const router = createBrowserRouter([
 
       // TODO: protected routes 추가
       {
-        element: <HeaderLayout />,
+        element: <AuthHeaderLayout />,
         children: [{ path: '/mypage', element: <MyPage /> }],
       },
 
       // TODO: protected routes 추가
       {
-        element: <Outlet />,
+        element: <PublicOnlyLayout />,
         children: [
           { path: '/signin', element: <SignIn /> },
           { path: '/signup/callback', element: <Callback /> },
-        ],
-      },
-
-      // TODO: protected routes 추가
-      {
-        element: <TitleHeaderLayout />,
-        children: [
           {
             path: '/signup',
             element: <SignUp />,
@@ -103,6 +97,13 @@ export const router = createBrowserRouter([
               title: '회원가입',
             },
           },
+        ],
+      },
+
+      // TODO: protected routes 추가
+      {
+        element: <AuthTitleHeaderLayout />,
+        children: [
           {
             path: '/bus-rental/create',
             element: <OpenBusRental />,
