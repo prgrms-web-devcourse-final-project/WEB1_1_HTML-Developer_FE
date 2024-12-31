@@ -12,8 +12,9 @@ import InputField from 'components/inputField/InputField';
 import TitleInputField from 'components/inputField/TitleInputField';
 import Select from 'components/select/Select';
 import { endPoint } from 'constants/endPoint';
-import ConcertItem from 'pages/concert/components/ConcertItem';
+import ListItem from 'pages/concert/components/ListItem';
 import type { Concert } from 'pages/concert/type';
+import { useModalStore } from 'stores';
 import { BodyRegularText, ChipText } from 'styles/Typography';
 import { publicAxios } from 'utils';
 
@@ -48,11 +49,14 @@ const OpenSurvey = () => {
   const [artistIsActive, setArtistIsActive] = useState(false);
   const concertInputRef = useRef<HTMLDivElement>(null);
   const artistInputRef = useRef<HTMLDivElement>(null);
+  const { openModal } = useModalStore(['openModal']);
 
   const [searchResults, setSearchResults] = useState<Concert[]>([]);
   const [selectedConcert, setSelectedConcert] = useState<Concert | null>(null);
 
   const [artistSearchResult, setArtistSearchResult] = useState<Artist[]>([]);
+
+  const [selectedRegion, setSelectedRegion] = useState('');
 
   const methods = useForm({
     defaultValues: {
@@ -115,6 +119,14 @@ const OpenSurvey = () => {
 
   const handleArtistDelete = () => {
     setArtistSearchResult([]);
+  };
+
+  const handleModalOpen = () => {
+    openModal('bottomSheet', 'list', <ListItem onSelect={handleRegionSelect} title="지역" />);
+  };
+
+  const handleRegionSelect = (value: string) => {
+    setSelectedRegion(value);
   };
 
   useEffect(() => {
@@ -183,7 +195,9 @@ const OpenSurvey = () => {
           <BodyRegularText>
             탑승 지역<Mark>*</Mark>
           </BodyRegularText>
-          <Select>지역을 선택해주세요</Select>
+          <Select onClick={handleModalOpen} value={selectedRegion}>
+            지역을 선택해주세요
+          </Select>
         </BoardingArea>
         <RecruitmentCount>
           <BodyRegularText>
