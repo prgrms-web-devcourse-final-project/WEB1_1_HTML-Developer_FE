@@ -98,7 +98,7 @@ const DetailFormInfo = () => {
         )}
       </RentalFormField>
       <RentalFormField>
-        <RentalFormField.Title title="지역" />
+        <RentalFormField.Title title="차대절 지역" />
         <RentalFormSelect
           name="region"
           onClick={() => openSheetModal(<RegionListSheet onChange={handleRegionChange} />)}

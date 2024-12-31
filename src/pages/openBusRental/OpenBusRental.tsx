@@ -6,13 +6,14 @@ import { FormProvider, useForm } from 'react-hook-form';
 import AdditionalFormInfo from './components/sections/AdditionalFormInfo';
 import DetailFormInfo from './components/sections/DetailFormInfo';
 import DrivingFormInfo from './components/sections/DrivingFormInfo';
+import FormSubmitDialog from './components/sections/FormSubmitDialog';
 
 import BaseButton from 'components/buttons/BaseButton';
 import TabBar from 'components/tabBar/TabBar';
 import { tabMap } from 'components/tabBar/tabData';
 import type { RentalFormSchemaType } from 'schemas';
 import { rentalFormSchema } from 'schemas';
-import { rentalFormStore, useRentalFormStore } from 'stores';
+import { rentalFormStore, useModalStore, useRentalFormStore } from 'stores';
 import { getDefaultValues, validateForm } from 'utils';
 
 const RentalForm = styled.form`
@@ -40,6 +41,7 @@ const OpenBusRental = () => {
 
   const schema = rentalFormSchema[activeTab];
   const { formData, resetFormData } = useRentalFormStore(['formData', 'resetFormData']);
+  const { openModal } = useModalStore(['openModal']);
 
   const defaultValues = useMemo(() => getDefaultValues(formData, activeTab), [formData, activeTab]);
   const isFormValid = useMemo(() => validateForm(formData, activeTab), [formData, activeTab]);
@@ -49,7 +51,7 @@ const OpenBusRental = () => {
     defaultValues,
   });
 
-  const { handleSubmit, reset, watch } = methods;
+  const { reset } = methods;
 
   useEffect(() => {
     if (schema && defaultValues) reset(defaultValues);
@@ -62,18 +64,13 @@ const OpenBusRental = () => {
     };
   }, [resetFormData]);
 
-  // 추후 삭제
-  useEffect(() => {
-    console.log('formData changed:', watch());
-  }, [watch]);
-
   const handlePrevClick = () => {
     if (activeTab > 0) setActiveTab((prevTab) => prevTab - 1);
   };
 
-  const handleNextClick = async () => {
+  const handleNextClick = () => {
     if (activeTab === tabMap.rentalTab.length - 1) {
-      await handleSubmit(() => console.log('submit', formData))(); // 실제 제출 처리
+      openModal('dialog', 'confirm', <FormSubmitDialog />);
     } else setActiveTab((prevTab) => prevTab + 1);
   };
 
