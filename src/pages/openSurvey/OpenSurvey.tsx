@@ -7,6 +7,7 @@ import SearchField from './components/SearchField';
 import SelectedConcertItem from './components/SelectedConcertItem';
 
 import BaseButton from 'components/buttons/BaseButton';
+import SimpleChip from 'components/chips/SimpleChip';
 import InputField from 'components/inputField/InputField';
 import TitleInputField from 'components/inputField/TitleInputField';
 import Select from 'components/select/Select';
@@ -23,6 +24,23 @@ interface ConcertResponse {
   result: Concert[];
 }
 
+interface ArtistResponse {
+  timeStamp: Date;
+  code: string;
+  message: string;
+  result: Artist[];
+}
+
+interface Artist {
+  id: string;
+  name: string;
+  images: Image[];
+}
+
+interface Image {
+  url: string;
+}
+
 const OpenSurvey = () => {
   const [title, setTitle] = useState('');
   const [etcInfo, setEtcInfo] = useState('');
@@ -30,8 +48,11 @@ const OpenSurvey = () => {
   const [artistIsActive, setArtistIsActive] = useState(false);
   const concertInputRef = useRef<HTMLDivElement>(null);
   const artistInputRef = useRef<HTMLDivElement>(null);
+
   const [searchResults, setSearchResults] = useState<Concert[]>([]);
   const [selectedConcert, setSelectedConcert] = useState<Concert | null>(null);
+
+  const [artistSearchResult, setArtistSearchResult] = useState<Artist[]>([]);
 
   const methods = useForm({
     defaultValues: {
@@ -49,7 +70,17 @@ const OpenSurvey = () => {
     } = await publicAxios.get<ConcertResponse>(
       `${endPoint.GET_CONCERT_SEARCH}/?query=${encodeURIComponent(concertKeyword)}`
     );
-    console.log('OpenSurvey', result);
+
+    return result;
+  };
+
+  const getArtist = async (artistKeyword: string) => {
+    const {
+      data: { result },
+    } = await publicAxios.get<ArtistResponse>(
+      `${endPoint.SEARCH_ARTISTS}?query=${encodeURIComponent(artistKeyword)}`
+    );
+
     return result;
   };
 
@@ -58,7 +89,10 @@ const OpenSurvey = () => {
     setSearchResults(result);
   };
 
-  const getArtist = (keyword: string) => {};
+  const handleArtistSearch = async (keyword: string) => {
+    const result = await getArtist(keyword);
+    setArtistSearchResult(result);
+  };
 
   const handleEtcInfoChange = (value: string | number) => {
     setEtcInfo(value.toString());
@@ -77,6 +111,10 @@ const OpenSurvey = () => {
 
   const handleArtistClick = () => {
     setArtistIsActive(true);
+  };
+
+  const handleArtistDelete = () => {
+    setArtistSearchResult([]);
   };
 
   useEffect(() => {
@@ -132,10 +170,15 @@ const OpenSurvey = () => {
           handleClick={handleArtistClick}
           isActive={artistIsActive}
           label="아티스트명"
-          onSearch={getArtist}
+          onSearch={handleArtistSearch}
           placeholder="아티스트를 검색해주세요"
           ref={artistInputRef}
         />
+        {artistSearchResult.length > 0 && (
+          <SimpleChip hasDeleteIcon={true} onDeleteClick={handleArtistDelete}>
+            {artistSearchResult[0].name}
+          </SimpleChip>
+        )}
         <BoardingArea>
           <BodyRegularText>
             탑승 지역<Mark>*</Mark>
