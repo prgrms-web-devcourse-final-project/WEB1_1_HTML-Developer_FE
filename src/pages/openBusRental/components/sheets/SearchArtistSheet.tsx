@@ -7,7 +7,7 @@ import Magnifier from 'assets/images/magnifier-icon.svg?react';
 import BottomSheet from 'components/bottomSheet/BottomSheet';
 import SearchInput from 'components/searchInput/SearchInput';
 import { SEARCH_PLACEHOLDER } from 'constants/placeholder';
-import { useGetSearchArtist } from 'queries/rentForm/useGetSearchArtist';
+import { useGetSearchArtist } from 'queries/search/useGetSearchArtist';
 import { useModalStore } from 'stores';
 import { BodyRegularText } from 'styles/Typography';
 

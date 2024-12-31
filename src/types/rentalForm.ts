@@ -1,37 +1,5 @@
-import type { ApiResponse } from './api';
 import type { Region } from './filter';
 import type { BusSize, BusType, RefundType } from './rental';
-
-export interface ConcertData {
-  id: number;
-  poster: string;
-  title: string;
-  concertHallName: string;
-  stdate: string;
-  eddate: string;
-}
-
-interface SearchAfter {
-  searchAfter1: string;
-  searchAfter2: string;
-}
-
-export interface SearchConcert {
-  concertThumbnails: ConcertData[];
-  searchAfter: SearchAfter[] | null;
-}
-
-interface SearchArtistImages {
-  url: string;
-  width: number;
-  height: number;
-}
-
-export interface SearchArtist {
-  id: string;
-  name: string;
-  images: SearchArtistImages[];
-}
 
 export interface FormDetailInfo {
   imageUrl: string;
@@ -76,6 +44,3 @@ export interface FormAdditionalInfo {
 
 export interface RentalFormData extends FormDetailInfo, FormDrivingInfo, FormAdditionalInfo {}
 export interface RentalFormFields extends FormDetailInfo, FormDrivingFields, FormAdditionalInfo {}
-
-export type SearchConcertResponse = ApiResponse<SearchConcert>;
-export type SearchArtistResponse = ApiResponse<SearchArtist[]>;

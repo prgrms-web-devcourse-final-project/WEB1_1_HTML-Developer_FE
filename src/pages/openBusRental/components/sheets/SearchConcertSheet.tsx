@@ -7,7 +7,7 @@ import Magnifier from 'assets/images/magnifier-icon.svg?react';
 import BottomSheet from 'components/bottomSheet/BottomSheet';
 import SearchInput from 'components/searchInput/SearchInput';
 import { SEARCH_PLACEHOLDER } from 'constants/placeholder';
-import { useGetSearchConcert } from 'queries/rentForm/useGetSearchConcert';
+import { useGetSearchConcert } from 'queries/search/useGetSearchConcert';
 import { useModalStore } from 'stores';
 import { BodyRegularText } from 'styles/Typography';
 import type { ConcertData } from 'types';
