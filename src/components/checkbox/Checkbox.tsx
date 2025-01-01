@@ -1,16 +1,24 @@
 import styled from '@emotion/styled';
+import type React from 'react';
 import { TbCheck } from 'react-icons/tb';
 
 import { BodyRegularText } from 'styles/Typography';
 
 interface CheckboxProps {
   text: string;
+  onCheck?: (text: string, checked: boolean) => void;
 }
-const Checkbox = ({ text }: CheckboxProps) => {
+
+const Checkbox = ({ text, onCheck }: CheckboxProps) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement;
+    onCheck?.(text, target.checked);
+  };
+
   return (
     <CheckboxContainer>
       <InputWrapper>
-        <StyledInput id={text} name={text} type="checkbox" />
+        <StyledInput id={text} name={text} onChange={handleChange} type="checkbox" />
         <TbCheck size={18} />
       </InputWrapper>
       <BodyRegularText>{text}</BodyRegularText>

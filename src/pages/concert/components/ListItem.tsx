@@ -27,6 +27,8 @@ const region = [
   '전남',
 ];
 
+const personnel = [15, 20, 25, 30, 35, 40, 45, 50];
+
 export const sortValue = {
   DATE: '최근 공연순',
   VIEWS: '인기순',
@@ -34,7 +36,7 @@ export const sortValue = {
 
 interface ListItemProps {
   title: string;
-  onSelect: (region: string) => void;
+  onSelect: (keyword: string) => void;
 }
 
 const ListItem = ({ title, onSelect }: ListItemProps) => {
@@ -50,6 +52,11 @@ const ListItem = ({ title, onSelect }: ListItemProps) => {
     closeModal('bottomSheet', 'list');
   };
 
+  const handlePersonnelSelect = (personnel: string) => {
+    onSelect(personnel);
+    closeModal('bottomSheet', 'list');
+  };
+
   const renderItems = () => {
     if (title === '지역') {
       return region.map((regionName) => (
@@ -62,6 +69,14 @@ const ListItem = ({ title, onSelect }: ListItemProps) => {
     if (title === '정렬') {
       return Object.entries(sortValue).map(([key, value]) => (
         <Item key={key} onClick={() => handleDirectionSelect(key)}>
+          <BodyRegularText>{value}</BodyRegularText>
+        </Item>
+      ));
+    }
+
+    if (title === '인원수') {
+      return Object.entries(personnel).map(([key, value]) => (
+        <Item key={key} onClick={() => handlePersonnelSelect(value.toString())}>
           <BodyRegularText>{value}</BodyRegularText>
         </Item>
       ));

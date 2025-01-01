@@ -8,7 +8,11 @@ import type { DateButtonProps } from './types';
 
 import { BodyRegularText, ChipText } from 'styles/Typography';
 
-const Calendar = () => {
+interface CalendarProps {
+  onSelect?: (date: string) => void;
+}
+
+const Calendar = ({ onSelect }: CalendarProps) => {
   const [currentMonth, setCurrentMonth] = useState(dayjs());
   const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
 
@@ -55,6 +59,12 @@ const Calendar = () => {
 
   const weekDays = ['일', '월', '화', '수', '목', '금', '토'];
 
+  const handleDateSelect = (date: Dayjs) => {
+    const formattedDate = date.format('YYYY-MM-DD');
+    setSelectedDate(formattedDate);
+    onSelect?.(formattedDate);
+  };
+
   return (
     <CalendarWrapper>
       <CalendarHeader>
@@ -82,7 +92,7 @@ const Calendar = () => {
             isSelected={isSelected(date)}
             isToday={isToday(date)}
             key={index}
-            onClick={() => setSelectedDate(date.format('YYYY-MM-DD'))}
+            onClick={() => handleDateSelect(date)}
           >
             <ChipText>{date.format('D')}</ChipText>
           </DateButton>
