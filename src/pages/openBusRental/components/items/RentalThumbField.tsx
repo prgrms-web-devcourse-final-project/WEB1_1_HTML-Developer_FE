@@ -92,7 +92,7 @@ const RentalThumbField = () => {
 
     const reader = new FileReader();
     reader.onload = () => {
-      setValue(FIELD_NAME, reader.result as string, { shouldValidate: true });
+      setValue(FIELD_NAME, reader.result as string);
       updateFormData(FIELD_NAME, reader.result as string);
     };
     reader.readAsDataURL(file);
@@ -105,7 +105,7 @@ const RentalThumbField = () => {
 
   useEffect(() => {
     if (formData.imageUrl) {
-      setValue(FIELD_NAME, formData.imageUrl, { shouldValidate: true });
+      setValue(FIELD_NAME, formData.imageUrl);
       updateFormData(FIELD_NAME, formData.imageUrl);
     }
   }, [formData.imageUrl, setValue, updateFormData]);

@@ -4,27 +4,22 @@ import { requestPostRentalForm } from 'api';
 import { useFilterStore } from 'stores';
 import type { RentalFormData } from 'types';
 
-// 추후 formData 형식으로 변경
 const postFormData = async (rentalFormData: RentalFormData) => {
-  //const formData = new FormData();
+  const formData = new FormData();
+  const { imageUrl, ...rentRegisterRequest } = rentalFormData;
 
-  // Object.keys(rentalFormData).forEach((key) => {
-  //   const value = rentalFormData[key as keyof RentalFormData];
+  // Base64 -> Blob
+  const byteCharacters = atob(imageUrl.split(',')[1]);
+  const byteNumbers = Array.from(byteCharacters).map((char) => char.charCodeAt(0));
+  const byteArray = new Uint8Array(byteNumbers);
+  const blob = new Blob([byteArray], {
+    type: imageUrl.match(/data:(.*?);base64/)?.[1] || 'application/octet-stream',
+  });
 
-  //   if (value === null || value === undefined) return;
+  formData.append('image', blob, 'uploaded_image.png');
+  formData.append('rentRegisterRequest', JSON.stringify(rentRegisterRequest));
 
-  //   if (Array.isArray(value)) {
-  //     formData.append(key, JSON.stringify(value));
-  //   } else {
-  //     formData.append(key, value.toString());
-  //   }
-  // });
-
-  const newData = { ...rentalFormData };
-  newData.imageUrl = 'https://ticketimage.interpark.com/Play/image/large/24/24015427_p.gif';
-
-  // return await requestPostRentalForm(formData);
-  return await requestPostRentalForm(JSON.stringify(newData));
+  return await requestPostRentalForm(formData);
 };
 
 export const usePostRentalForm = () => {

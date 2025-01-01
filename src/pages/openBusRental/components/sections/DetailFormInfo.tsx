@@ -20,7 +20,6 @@ import type { ConcertData } from 'types';
 
 const DetailFormInfo = () => {
   const {
-    setValue,
     formState: { errors },
   } = useFormContext();
   const { openModal } = useModalStore(['openModal']);
@@ -38,21 +37,17 @@ const DetailFormInfo = () => {
   const handleConcertSelect = (concertData: ConcertData) => {
     updateConcertData(concertData);
     updateFormData('concertId', concertData.id);
-    setValue('concertId', concertData.id, { shouldValidate: true });
   };
 
   const handleArtistSelect = (artist: string) => {
     updateFormData('artistName', artist);
-    setValue('artistName', artist, { shouldValidate: true });
   };
 
   const handleArtistDelete = () => {
     updateFormData('artistName', '');
-    setValue('artistName', '', { shouldValidate: true });
   };
 
   const handleRegionChange = (region: (typeof REGIONS)[number]) => {
-    setValue('region', region, { shouldValidate: true });
     updateFormData('region', region);
   };
 
