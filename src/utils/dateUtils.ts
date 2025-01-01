@@ -17,3 +17,17 @@ export const formatDateWithDay = (dateString: string) => {
   const dayOfWeek = date.format('dd');
   return `${date.format('YYYY.MM.DD')}(${dayOfWeek})`;
 };
+
+// 시작일, 종료일 사이 날짜를 배열로 반환
+export const getDateRange = (startDate: string, endDate: string) => {
+  const dates = [];
+  let currentDate = dayjs(startDate);
+  const lastDate = dayjs(endDate);
+
+  while (currentDate.isSame(lastDate) || currentDate.isBefore(lastDate)) {
+    dates.push(currentDate.format('YYYY-MM-DD'));
+    currentDate = currentDate.add(1, 'day');
+  }
+
+  return dates;
+};

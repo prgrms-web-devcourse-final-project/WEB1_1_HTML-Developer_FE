@@ -1,12 +1,14 @@
 import styled from '@emotion/styled';
 import { useEffect, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 import CalendarBottomSheet from './components/CalendarBottomSheet';
 import SearchField from './components/SearchField';
 import SelectedConcertItem from './components/SelectedConcertItem';
 
 import BaseButton from 'components/buttons/BaseButton';
+import Checkbox from 'components/checkbox/Checkbox';
 import SimpleChip from 'components/chips/SimpleChip';
 import InputField from 'components/inputField/InputField';
 import TitleInputField from 'components/inputField/TitleInputField';
@@ -16,7 +18,18 @@ import ListItem from 'pages/concert/components/ListItem';
 import type { Concert } from 'pages/concert/type';
 import { useModalStore } from 'stores';
 import { BodyRegularText, ChipText } from 'styles/Typography';
-import { publicAxios } from 'utils';
+import { getDateRange, publicAxios, tokenAxios } from 'utils';
+
+interface SurveyFormData {
+  title: string;
+  concertId: number | null;
+  boardingDates: string[];
+  artistName: string;
+  region: string;
+  maxPassenger: string;
+  endDate: string;
+  information: string;
+}
 
 interface ConcertResponse {
   timeStamp: Date;
@@ -56,26 +69,34 @@ const OpenSurvey = () => {
 
   const [artistSearchResult, setArtistSearchResult] = useState<Artist[]>([]);
 
-  const [selectedRegion, setSelectedRegion] = useState('');
-  const [selectedPersonnel, setSelectedPersonnel] = useState('');
-  const [dueDate, setDueDate] = useState<string>('');
+  const [concertDateRange, setConcertDateRange] = useState<string[]>([]);
+  const [boardingDates, setBoardingDates] = useState<string[]>([]);
 
-  const methods = useForm({
+  const navigate = useNavigate();
+
+  const methods = useForm<SurveyFormData>({
     defaultValues: {
-      title,
-      concertId: selectedConcert?.id,
+      title: '',
+      concertId: null,
       boardingDates: [],
-      artistName: artistSearchResult[0]?.name,
-      region: selectedRegion,
-      endDate: dueDate,
-      maxPassenger: selectedPersonnel,
+      artistName: '',
+      region: '',
+      endDate: '',
+      maxPassenger: '',
       information: '',
     },
   });
 
   const handleTitleChange = (value: string) => {
     setTitle(value);
+    setValue('title', value);
   };
+
+  const { watch, setValue, handleSubmit } = methods;
+
+  const region = watch('region');
+  const maxPassenger = watch('maxPassenger');
+  const endDate = watch('endDate');
 
   const getConcert = async (concertKeyword: string) => {
     const {
@@ -105,21 +126,19 @@ const OpenSurvey = () => {
   const handleArtistSearch = async (keyword: string) => {
     const result = await getArtist(keyword);
     setArtistSearchResult(result);
+
+    if (result.length > 0) {
+      setValue('artistName', result[0].name);
+    }
   };
 
   const handleEtcInfoChange = (value: string | number) => {
     setEtcInfo(value.toString());
+    setValue('information', value.toString());
   };
-
-  const handleSubmit = () => {};
 
   const handleConcertClick = () => {
     setConcertIsActive(true);
-  };
-
-  const handleConcertSelect = (concert: Concert) => {
-    setSelectedConcert(concert);
-    setSearchResults([]);
   };
 
   const handleArtistClick = () => {
@@ -143,16 +162,65 @@ const OpenSurvey = () => {
   };
 
   const handleRegionSelect = (value: string) => {
-    setSelectedRegion(value);
+    setValue('region', value);
   };
 
   const handleDateSelect = (date: string) => {
-    setDueDate(date);
+    setValue('endDate', date);
   };
 
   const handlePersonnelSelect = (value: string) => {
-    setSelectedPersonnel(value);
+    setValue('maxPassenger', value);
   };
+
+  const handleConcertSelect = (concert: Concert) => {
+    setSelectedConcert(concert);
+    setValue('concertId', concert.id);
+    setSearchResults([]);
+  };
+
+  const handleCheck = (date: string, check: boolean) => {
+    let newDates;
+
+    if (check) {
+      newDates = [...boardingDates, date];
+    } else {
+      newDates = boardingDates.filter((day) => day !== date);
+    }
+
+    setBoardingDates(newDates);
+    setValue('boardingDates', newDates);
+  };
+
+  const onSubmit = async (data: SurveyFormData) => {
+    try {
+      const response = await tokenAxios.post(endPoint.CREATE_SURVEY_FORM, {
+        title: data.title,
+        concertId: selectedConcert?.id || 0,
+        boardingDates: data.boardingDates,
+        artistName: artistSearchResult[0]?.name || '',
+        region: data.region,
+        maxPassenger: Number(data.maxPassenger),
+        endDate: data.endDate,
+        information: data.information,
+      });
+
+      if (response.data) {
+        navigate('/surveys');
+      }
+
+      return response.data;
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedConcert) {
+      const dateRange = getDateRange(selectedConcert.stdate, selectedConcert.eddate);
+      setConcertDateRange(dateRange);
+    }
+  }, [selectedConcert]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -174,92 +242,98 @@ const OpenSurvey = () => {
 
   return (
     <FormProvider {...methods}>
-      <OpenSurveyContainer>
-        <SurveyTitle>
-          <BodyRegularText>
-            수요 조사 제목<Mark>*</Mark>
-          </BodyRegularText>
-          <TitleInputField
-            maxCount={45}
-            name="surveyTitle"
-            onValueChange={handleTitleChange}
-            placeholder="제목을 입력해주세요"
-            value={title}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <OpenSurveyContainer>
+          <SurveyTitle>
+            <BodyRegularText>
+              수요 조사 제목<Mark>*</Mark>
+            </BodyRegularText>
+            <TitleInputField
+              maxCount={45}
+              name="title"
+              onValueChange={handleTitleChange}
+              placeholder="제목을 입력해주세요"
+              value={title}
+            />
+          </SurveyTitle>
+          <SearchField
+            handleClick={handleConcertClick}
+            isActive={concertIsActive}
+            label="공연명"
+            onSearch={handleConcertSearch}
+            placeholder="공연을 검색해주세요"
+            ref={concertInputRef}
           />
-        </SurveyTitle>
-        <SearchField
-          handleClick={handleConcertClick}
-          isActive={concertIsActive}
-          label="공연명"
-          onSearch={handleConcertSearch}
-          placeholder="공연을 검색해주세요"
-          ref={concertInputRef}
-        />
-        {!selectedConcert &&
-          searchResults &&
-          searchResults.map((item) => (
-            <SelectedConcertItem concert={item} key={item.id} onSelect={handleConcertSelect} />
-          ))}
-        {selectedConcert && !searchResults.length && (
-          <SelectedConcertItem concert={selectedConcert} />
-        )}
-        <SearchField
-          handleClick={handleArtistClick}
-          isActive={artistIsActive}
-          label="아티스트명"
-          onSearch={handleArtistSearch}
-          placeholder="아티스트를 검색해주세요"
-          ref={artistInputRef}
-        />
-        {artistSearchResult.length > 0 && (
-          <SimpleChip hasDeleteIcon={true} onDeleteClick={handleArtistDelete}>
-            {artistSearchResult[0].name}
-          </SimpleChip>
-        )}
-        <BoardingArea>
-          <BodyRegularText>
-            탑승 지역<Mark>*</Mark>
-          </BodyRegularText>
-          <Select onClick={handleRegionModalOpen} value={selectedRegion}>
-            지역을 선택해주세요
-          </Select>
-        </BoardingArea>
-        <RecruitmentDeadline>
-          <BodyRegularText>
-            마감 기준<Mark>*</Mark>
-          </BodyRegularText>
-          <ParticipantCount>
-            <ChipText>참여 인원 수</ChipText>
-            <Select onClick={handlePersonnelModalOpen} value={selectedPersonnel}>
-              인원수를 선택해주세요
-            </Select>
-          </ParticipantCount>
-          <DueDate>
-            <ChipText>마감 날짜</ChipText>
-            <Select onClick={handleCalendarModalOpen} value={dueDate?.toString()}>
-              날짜를 선택해주세요
-            </Select>
-          </DueDate>
-        </RecruitmentDeadline>
-        <EtcInfo>
-          <BodyRegularText>기타 안내 사항</BodyRegularText>
-          <InputField
-            name="EtcInfo"
-            onValueChange={handleEtcInfoChange}
-            placeholder="내용을 작성해주세요"
-            value={etcInfo}
+          {!selectedConcert &&
+            searchResults &&
+            searchResults.map((item) => (
+              <SelectedConcertItem concert={item} key={item.id} onSelect={handleConcertSelect} />
+            ))}
+          {selectedConcert && !searchResults.length && (
+            <SelectedConcertItem concert={selectedConcert} />
+          )}
+          <SearchField
+            handleClick={handleArtistClick}
+            isActive={artistIsActive}
+            label="아티스트명"
+            onSearch={handleArtistSearch}
+            placeholder="아티스트를 검색해주세요"
+            ref={artistInputRef}
           />
-        </EtcInfo>
-        <BaseButton
-          color="primary"
-          isFullWidth={true}
-          onClick={handleSubmit}
-          size="medium"
-          variant="fill"
-        >
-          작성하기
-        </BaseButton>
-      </OpenSurveyContainer>
+          {artistSearchResult.length > 0 && (
+            <SimpleChip hasDeleteIcon={true} onDeleteClick={handleArtistDelete}>
+              {artistSearchResult[0].name}
+            </SimpleChip>
+          )}
+          {selectedConcert && (
+            <OperationDate>
+              <BodyRegularText>
+                운행 일자<Mark>*</Mark>
+              </BodyRegularText>
+              {concertDateRange.map((date) => (
+                <Checkbox key={date} onCheck={handleCheck} text={date.toString()} />
+              ))}
+            </OperationDate>
+          )}
+          <BoardingArea>
+            <BodyRegularText>
+              탑승 지역<Mark>*</Mark>
+            </BodyRegularText>
+            <Select onClick={handleRegionModalOpen} value={region}>
+              지역을 선택해주세요
+            </Select>
+          </BoardingArea>
+          <RecruitmentDeadline>
+            <BodyRegularText>
+              마감 기준<Mark>*</Mark>
+            </BodyRegularText>
+            <ParticipantCount>
+              <ChipText>참여 인원 수</ChipText>
+              <Select onClick={handlePersonnelModalOpen} value={maxPassenger}>
+                인원수를 선택해주세요
+              </Select>
+            </ParticipantCount>
+            <DueDate>
+              <ChipText>마감 날짜</ChipText>
+              <Select onClick={handleCalendarModalOpen} value={endDate}>
+                날짜를 선택해주세요
+              </Select>
+            </DueDate>
+          </RecruitmentDeadline>
+          <EtcInfo>
+            <BodyRegularText>기타 안내 사항</BodyRegularText>
+            <InputField
+              name="EtcInfo"
+              onValueChange={handleEtcInfoChange}
+              placeholder="내용을 작성해주세요"
+              value={etcInfo}
+            />
+          </EtcInfo>
+          <BaseButton color="primary" isFullWidth={true} size="medium" type="submit" variant="fill">
+            작성하기
+          </BaseButton>
+        </OpenSurveyContainer>
+      </form>
     </FormProvider>
   );
 };
@@ -272,6 +346,8 @@ const OpenSurveyContainer = styled.div`
 `;
 
 const SurveyTitle = styled.div``;
+
+const OperationDate = styled.div``;
 
 const BoardingArea = styled.div``;
 
