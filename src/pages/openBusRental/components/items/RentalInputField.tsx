@@ -115,6 +115,7 @@ const RentalInputField = forwardRef<HTMLInputElement, InputFieldProps>(function 
       placeholder,
       'aria-disabled': isDisabled,
       ref,
+      value: formData[name] || field.value || '',
     };
 
     if (isNumeric) {
@@ -134,7 +135,6 @@ const RentalInputField = forwardRef<HTMLInputElement, InputFieldProps>(function 
           onValueChange={(value) => handleInputChange(field.onChange, String(value.floatValue))}
           thousandSeparator
           unit={unit}
-          value={formData[name] || field.value}
         />
       );
     }
@@ -148,7 +148,6 @@ const RentalInputField = forwardRef<HTMLInputElement, InputFieldProps>(function 
           onBlur={(e) => onBlur?.(e.target.value)}
           onFocus={(e) => handleFocusIn(e)}
           onValueChange={({ formattedValue }) => handleInputChange(field.onChange, formattedValue)}
-          value={formData[name] || field.value}
         />
       );
     }
@@ -163,7 +162,6 @@ const RentalInputField = forwardRef<HTMLInputElement, InputFieldProps>(function 
         onFocus={(e) => handleFocusIn(e)}
         type="text"
         unit={unit}
-        value={formData[name] || field.value}
       />
     );
   };
