@@ -1,13 +1,13 @@
-import type { BusInfo, DepositFormValues, RentalFormFields } from 'types';
+import type { BusInfo, DepositFormData, RentalFormFields } from 'types';
 
-type DepositFormPlaceholder = Partial<Record<keyof DepositFormValues, string>>;
+type DepositFormPlaceholder = Partial<Record<keyof DepositFormData, string>>;
 type RentalFormPlaceholder = Partial<Record<keyof RentalFormFields | keyof BusInfo, string>>;
 
 export const DEPOSIT_FORM_PLACEHOLDER: DepositFormPlaceholder = {
   depositorName: `성함을 입력해주세요`,
   depositorTime: `예시) 23:02`,
   phone: `010-1234-5678`,
-  refundAccount: `예시) 하나은행 012345678910111`,
+  refundAccount: `예시) 우리은행 012345678910111`,
 };
 
 export const RENTAL_FORM_PLACEHOLDER: RentalFormPlaceholder = {

@@ -67,15 +67,15 @@ export interface RentalDetail {
   chatUrl: string;
   refundType: RefundType;
   information: string;
-  isClosed: boolean;
+  closed: boolean;
 }
 
 export interface RentalAccount {
   depositAccount: string | null;
 }
 
-export interface DepositFormValues {
-  rentId: number | null;
+export interface DepositFormData {
+  rentId: number;
   depositorName: string;
   depositorTime: string;
   phone: string;

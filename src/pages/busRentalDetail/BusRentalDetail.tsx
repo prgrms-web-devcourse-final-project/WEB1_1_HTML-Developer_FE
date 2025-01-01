@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
 import { useParams } from 'react-router-dom';
 
-import BusTime from './components/BusTime';
-import DepositAccount from './components/DepositAccount';
 import DepositFormSheet from './components/DepositFormSheet';
-import DrivingInfo from './components/DrivingInfo';
-import ParticipantsStatus from './components/ParticipantsStatus';
+import BusTime from './components/sections/BusTime';
+import DepositAccount from './components/sections/DepositAccount';
+import DrivingInfo from './components/sections/DrivingInfo';
+import ParticipantsStatus from './components/sections/ParticipantsStatus';
 
 import Badge from 'components/badge/Badge';
 import BaseButton from 'components/buttons/BaseButton';
@@ -117,7 +117,7 @@ const BusRentalDetail = () => {
     downTime,
     information,
     refundType,
-    isClosed,
+    closed,
   } = details;
 
   const dDay = getDday(endDate);
@@ -128,7 +128,7 @@ const BusRentalDetail = () => {
     openModal(
       'bottomSheet',
       'list',
-      <DepositFormSheet boardingDates={rentDates} refundType={refundType} />
+      <DepositFormSheet boardingDates={rentDates} refundOption={refundType} />
     );
   };
 
@@ -178,12 +178,12 @@ const BusRentalDetail = () => {
       <BottomButtonWrapper>
         <BaseButton
           color="primary"
-          isDisabled={isClosed || !isLoggedIn}
+          isDisabled={closed || !isLoggedIn}
           onClick={handleDepositFormClick}
           size="medium"
           variant="fill"
         >
-          {isClosed ? '신청 마감' : !isLoggedIn ? '로그인 후 신청 가능' : '폼 작성하기'}
+          {closed ? '신청 마감' : !isLoggedIn ? '로그인 후 신청 가능' : '폼 작성하기'}
         </BaseButton>
       </BottomButtonWrapper>
     </DetailContainer>

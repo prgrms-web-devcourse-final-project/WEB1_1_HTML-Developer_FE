@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import ValidationMessage from 'components/message/ValidationMessage';
-import RadioItem from 'pages/busRentalDetail/components/RadioItem';
+import RadioItem from 'pages/busRentalDetail/components/items/RadioItem';
 import { useRentalFormStore } from 'stores';
 import type { RefundType } from 'types';
 import { REFUND_TYPE } from 'types';

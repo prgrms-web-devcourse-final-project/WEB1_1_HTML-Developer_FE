@@ -1,6 +1,7 @@
 import type { Theme } from '@emotion/react';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import { forwardRef } from 'react';
 import { TbMinus, TbPlus } from 'react-icons/tb';
 
 import { BodyMediumText } from 'styles/Typography';
@@ -52,7 +53,10 @@ const IncreaseButton = styled.button`
   border-radius: 0 4px 4px 0;
 `;
 
-const Counter = ({ value = 1, onChange, minCount = 0, maxCount = 99 }: CounterProps) => {
+const Counter = forwardRef<HTMLInputElement, CounterProps>(function Counter(
+  { value = 1, onChange, minCount = 0, maxCount = 99 }: CounterProps,
+  ref
+) {
   const handleDecrement = () => {
     const newValue = Math.max(minCount, value - 1);
     onChange(newValue);
@@ -64,7 +68,7 @@ const Counter = ({ value = 1, onChange, minCount = 0, maxCount = 99 }: CounterPr
   };
 
   return (
-    <CounterContainer>
+    <CounterContainer ref={ref}>
       <DecreaseButton onClick={handleDecrement} type="button">
         <TbMinus size={20} />
       </DecreaseButton>
@@ -76,6 +80,6 @@ const Counter = ({ value = 1, onChange, minCount = 0, maxCount = 99 }: CounterPr
       </IncreaseButton>
     </CounterContainer>
   );
-};
+});
 
 export default Counter;

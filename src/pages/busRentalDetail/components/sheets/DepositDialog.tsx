@@ -8,7 +8,6 @@ import { TitleText2 } from 'styles/Typography';
 
 interface DepositDialogProps {
   formData: DepositFormSchemaType;
-  onConfirm: (formData: DepositFormSchemaType) => void;
 }
 
 const DepositDialogContainer = styled.div`
@@ -16,12 +15,11 @@ const DepositDialogContainer = styled.div`
   z-index: 1004;
 `;
 
-const DepositDialog = ({ formData, onConfirm }: DepositDialogProps) => {
+const DepositDialog = ({ formData }: DepositDialogProps) => {
   const { closeModal } = useModalStore(['closeModal']);
 
   const handleApplyClick = () => {
     console.log('폼 제출', formData);
-    onConfirm(formData);
     closeModal('dialog', 'confirm');
   };
 

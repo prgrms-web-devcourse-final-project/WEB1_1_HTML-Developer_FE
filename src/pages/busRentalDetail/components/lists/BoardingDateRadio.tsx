@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import RadioItem from './RadioItem';
+import RadioItem from '../items/RadioItem';
 
 import ValidationMessage from 'components/message/ValidationMessage';
 

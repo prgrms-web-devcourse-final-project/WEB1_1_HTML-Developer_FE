@@ -3,23 +3,25 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { LuAlertCircle } from 'react-icons/lu';
 
-import BoardingDateRadio from './BoardingDateRadio';
-import BoardingTypeRadio from './BoardingTypeRadio';
-import DepositDialog from './DepositDialog';
-import RefundTypeRadio from './RefundTypeRadio';
-import RentalInputField from './RentalInputField';
+import DepositInputField from './items/DepositInputField';
+import BoardingDateRadio from './lists/BoardingDateRadio';
+import BoardingTypeRadio from './lists/BoardingTypeRadio';
+import RefundTypeRadio from './lists/RefundTypeRadio';
+import DepositDialog from './sheets/DepositDialog';
 
 import BottomSheet from 'components/bottomSheet/BottomSheet';
 import BaseButton from 'components/buttons/BaseButton';
 import Counter from 'components/counter/Counter';
-import { depositFormSchema, type DepositFormSchemaType } from 'schemas';
+import RentalFormField from 'pages/openBusRental/components/sections/RentalFormField';
+import type { DepositFormSchemaType } from 'schemas';
+import { depositFormSchema } from 'schemas';
 import { useModalStore } from 'stores';
-import { BodyMediumText, BodyRegularText } from 'styles/Typography';
+import { BodyRegularText } from 'styles/Typography';
 import type { RefundType } from 'types';
 
 interface DepositFormSheetProps {
   boardingDates: string[];
-  refundType: RefundType;
+  refundOption: RefundType;
 }
 
 const AlertMessage = styled.div`
@@ -38,24 +40,8 @@ const DepositForm = styled.form`
   padding-bottom: 6.4rem;
 `;
 
-const InputContainer = styled.div<{ isHorizontal?: boolean }>`
-  display: flex;
-  flex-direction: ${({ isHorizontal = false }) => (isHorizontal ? 'row' : 'column')};
-  justify-content: ${({ isHorizontal = false }) => (isHorizontal ? 'space-between' : 'auto')};
-  align-items: ${({ isHorizontal = false }) => (isHorizontal ? 'center' : 'auto')};
-  gap: 1.2rem;
-`;
-
-const InputLabel = styled(BodyMediumText)`
-  color: ${({ theme }) => theme.colors.white};
-`;
-
 const InputDescription = styled(BodyRegularText)`
   color: ${({ theme }) => theme.colors.dark[300]};
-`;
-
-const Asterisk = styled.span`
-  color: ${({ theme }) => theme.colors.red};
 `;
 
 const BottomButtonWrapper = styled.div`
@@ -67,57 +53,32 @@ const BottomButtonWrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.dark[700]};
 `;
 
-const depositFormInitValues = {
+const initialValues: DepositFormSchemaType = {
   depositorName: '',
   depositorTime: '',
   phone: '',
   passengerNum: 1,
   boardingDate: '',
-  boardingType: undefined,
-  refundType: undefined,
+  refundType: null,
+  boardingType: null,
   refundAccount: '',
 };
 
-const DepositFormSheet = ({ boardingDates, refundType }: DepositFormSheetProps) => {
+const DepositFormSheet = ({ boardingDates, refundOption }: DepositFormSheetProps) => {
   const { openModal } = useModalStore(['openModal']);
 
   const methods = useForm<DepositFormSchemaType>({
     resolver: zodResolver(depositFormSchema),
-    defaultValues: depositFormInitValues,
-    mode: 'onSubmit',
+    defaultValues: initialValues,
   });
 
-  const { watch, control, handleSubmit, reset } = methods;
-  const refundTypeValue = watch('refundType');
+  const { handleSubmit, watch, control } = methods;
 
-  const handleSubmitFormData = (formData: DepositFormSchemaType) => {
-    // 로직 수정
-    console.log('서버로 폼 제출:', formData);
-    reset(depositFormInitValues);
-  };
+  const refundType = watch('refundType');
 
-  const handleFormSubmit = handleSubmit((formData) => {
-    // console.log('submit', formData);
-    openModal(
-      'dialog',
-      'confirm',
-      <DepositDialog formData={formData} onConfirm={handleSubmitFormData} />
-    );
-  });
-
-  const InputTitle = ({
-    isRequired = true,
-    children,
-  }: {
-    isRequired?: boolean;
-    children: React.ReactNode;
-  }) => {
-    return (
-      <InputLabel>
-        {children}
-        {isRequired && <Asterisk>*</Asterisk>}
-      </InputLabel>
-    );
+  const onSubmit = (formData: DepositFormSchemaType) => {
+    console.log(formData);
+    openModal('dialog', 'confirm', <DepositDialog formData={formData} />);
   };
 
   return (
@@ -128,21 +89,21 @@ const DepositFormSheet = ({ boardingDates, refundType }: DepositFormSheetProps) 
           <BodyRegularText>입금 후에 폼을 작성해주세요!</BodyRegularText>
         </AlertMessage>
         <FormProvider {...methods}>
-          <DepositForm onSubmit={handleFormSubmit}>
-            <InputContainer>
-              <InputTitle>입금자명</InputTitle>
-              <RentalInputField name="depositorName" />
-            </InputContainer>
-            <InputContainer>
-              <InputTitle>입금시각</InputTitle>
-              <RentalInputField name="depositorTime" />
-            </InputContainer>
-            <InputContainer>
-              <InputTitle>전화번호</InputTitle>
-              <RentalInputField name="phone" pattern="###-####-####" />
-            </InputContainer>
-            <InputContainer isHorizontal>
-              <InputTitle>탑승 인원(본인 포함)</InputTitle>
+          <DepositForm onSubmit={handleSubmit(onSubmit)}>
+            <RentalFormField>
+              <RentalFormField.Title title="입금자명" />
+              <DepositInputField name="depositorName" />
+            </RentalFormField>
+            <RentalFormField>
+              <RentalFormField.Title title="입금시각" />
+              <DepositInputField name="depositorTime" pattern="##:##" />
+            </RentalFormField>
+            <RentalFormField>
+              <RentalFormField.Title title="전화번호" />
+              <DepositInputField name="phone" pattern="###-####-####" />
+            </RentalFormField>
+            <RentalFormField isHorizontal>
+              <RentalFormField.Title title="탑승 인원(본인 포함)" />
               <Controller
                 control={control}
                 name="passengerNum"
@@ -156,25 +117,26 @@ const DepositFormSheet = ({ boardingDates, refundType }: DepositFormSheetProps) 
                   />
                 )}
               />
-            </InputContainer>
-            <InputContainer>
-              <InputTitle>이용 날짜</InputTitle>
+            </RentalFormField>
+            <RentalFormField>
+              <RentalFormField.Title title="이용 날짜" />
               <BoardingDateRadio boardingDates={boardingDates} />
-            </InputContainer>
-            <InputContainer>
-              <InputTitle>이용 편도</InputTitle>
+            </RentalFormField>
+            <RentalFormField>
+              <RentalFormField.Title title="이용 편도" />
               <BoardingTypeRadio />
-            </InputContainer>
-            <InputContainer>
-              <InputTitle>인원 미달 시 희망 옵션</InputTitle>
-              <RefundTypeRadio refundOption={refundType} />
-              {refundTypeValue === '환불' && (
+            </RentalFormField>
+            <RentalFormField>
+              <RentalFormField.Title title="인원 미달 시 희망 옵션" />
+              <RefundTypeRadio refundOption={refundOption} />
+              {refundType === '환불' && (
                 <>
                   <InputDescription>환불 계좌 입력</InputDescription>
-                  <RentalInputField name="refundAccount" />
+                  <DepositInputField name="refundAccount" />
                 </>
               )}
-            </InputContainer>
+            </RentalFormField>
+
             <BottomButtonWrapper>
               <BaseButton color="primary" size="medium" type="submit" variant="fill">
                 제출
