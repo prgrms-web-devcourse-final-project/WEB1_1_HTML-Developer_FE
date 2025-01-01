@@ -215,6 +215,12 @@ const OpenSurvey = () => {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
+  };
+
   useEffect(() => {
     if (selectedConcert) {
       const dateRange = getDateRange(selectedConcert.stdate, selectedConcert.eddate);
@@ -242,7 +248,7 @@ const OpenSurvey = () => {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onKeyDown={handleKeyDown} onSubmit={handleSubmit(onSubmit)}>
         <OpenSurveyContainer>
           <SurveyTitle>
             <BodyRegularText>
