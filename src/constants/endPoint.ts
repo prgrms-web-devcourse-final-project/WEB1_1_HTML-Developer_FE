@@ -53,4 +53,5 @@ export const endPoint = {
   GET_CONCERT_SEARCH: '/search/concert',
   GET_CONCERT_SEARCH_LIST: '/search/concert/list',
   SEARCH_ARTISTS: '/artists/search',
+  SEARCH_POPULAR_KEYWORD: '/search/popular',
 };
