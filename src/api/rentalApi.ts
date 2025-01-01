@@ -1,20 +1,7 @@
-import axios from 'axios';
-
 import { endPoint } from 'constants/endPoint';
-import { API_URL } from 'constants/url';
 import type { PageParam } from 'types';
 import type { RentalAccountResponse, RentalDetailResponse, RentalListResponse } from 'types';
-import { publicAxios } from 'utils';
-
-export const tokenTestAxios = axios.create({
-  baseURL: API_URL,
-  withCredentials: true,
-  timeout: 15000,
-  headers: {
-    Authorization: `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`,
-    'Content-Type': 'application/json',
-  },
-});
+import { publicAxios, tokenAxios } from 'utils';
 
 export const createRentalQuery = (filterQuery: string, pageParam: PageParam) => {
   const { lastId, lastEndDate } = pageParam;
@@ -37,6 +24,5 @@ export const requestGetRentalDetails = (id: string) => {
 };
 
 export const requestGetDepositAccount = (id: string) => {
-  // 추후 수정
-  return tokenTestAxios.get<RentalAccountResponse>(endPoint.GET_DEPOSIT_ACCOUNT(id));
+  return tokenAxios.get<RentalAccountResponse>(endPoint.GET_DEPOSIT_ACCOUNT(id));
 };

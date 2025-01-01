@@ -40,6 +40,11 @@ export type BusType = keyof typeof BUS_TYPE;
 export type RefundType = keyof typeof REFUND_TYPE;
 export type BoardingType = keyof typeof BOARDING_TYPE;
 
+export interface BoardingDates {
+  date: string;
+  participationCount: number;
+}
+
 export interface RentalDetail {
   concertName: string;
   imageUrl: string;
@@ -50,7 +55,7 @@ export interface RentalDetail {
   dropOffArea: string;
   upTime: string;
   downTime: string;
-  rentBoardingDates: string[];
+  boardingDates: BoardingDates[];
   busSize: BusSize;
   busType: BusType;
   maxPassenger: number;
@@ -58,11 +63,11 @@ export interface RentalDetail {
   upTimePrice: number;
   downTimePrice: number;
   recruitmentCount: number;
-  currentRecruitmentCounts: number[];
   endDate: string;
   chatUrl: string;
   refundType: RefundType;
   information: string;
+  isClosed: boolean;
 }
 
 export interface RentalAccount {
