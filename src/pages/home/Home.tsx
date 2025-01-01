@@ -7,6 +7,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import MainPoster from './components/MainPoster';
 
+import PopularKeyword from 'components/popularKeyword/PopularKeyword';
 import { endPoint } from 'constants/endPoint';
 import RentalPostItem from 'pages/busRental/components/RentalPostItem';
 import { ChipText, TitleText2 } from 'styles/Typography';
@@ -55,8 +56,9 @@ const Home = () => {
 
   return (
     <HomeContainer>
+      <MainPoster concerts={concerts} />
+      <PopularKeyword />
       <BustRental>
-        <MainPoster concerts={concerts} />
         <RentalHead>
           <TitleText2>공연 차량 대절</TitleText2>
           <div onClick={() => navigate('/bus-rental')}>
