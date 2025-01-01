@@ -29,7 +29,7 @@ export const createRentalQuery = (filterQuery: string, pageParam: PageParam) => 
 
 export const requestGetRentalList = async (query: string) => {
   const { data } = await publicAxios.get<RentalListResponse>(`${endPoint.GET_RENT_LIST}?${query}`);
-  return data.result;
+  return data;
 };
 
 export const requestGetRentalDetails = (id: string) => {

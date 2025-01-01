@@ -11,11 +11,38 @@ export const getDday = (endDate: string) => {
   return deadline.diff(dayjs(), 'day');
 };
 
-// ISO Date -> YY.MM.DD(요일) 형식으로 변환
+// ISO Date -> YYYY.MM.DD(요일) 형식으로 변환
 export const formatDateWithDay = (dateString: string) => {
   const date = dayjs(dateString);
   const dayOfWeek = date.format('dd');
   return `${date.format('YYYY.MM.DD')}(${dayOfWeek})`;
+};
+
+// ISO Date -> YYYY.MM.DD - YYYY.MM.DD 형식으로 변환
+export const formatDateRange = (startDate: string, endDate: string) => {
+  const stDate = dayjs(startDate);
+  const edDate = dayjs(endDate);
+
+  if (startDate === endDate) return `${stDate.format('YYYY.MM.DD')}`;
+
+  return `${stDate.format('YYYY.MM.DD')} - ${edDate.format('YYYY.MM.DD')}`;
+};
+
+// startDate와 endDate 사이의 date array 생성 ['2024-12-27', '2024-12-28']
+export const getDateRangeArray = (startDate: string, endDate: string) => {
+  const stDate = dayjs(startDate);
+  const edDate = dayjs(endDate);
+  const totalDays = edDate.diff(stDate, 'day') + 1;
+
+  return Array.from({ length: totalDays }, (_, idx) => {
+    const date = stDate.add(idx, 'day').format('YYYY-MM-DD');
+    return `${date}`;
+  });
+};
+
+// YYYY.MM.DD (요일) -> YYYY-MM-DD 형식으로 변환
+export const formatISODate = (date: string) => {
+  return date.split(' ')[0].replaceAll('.', '-');
 };
 
 // 시작일, 종료일 사이 날짜를 배열로 반환

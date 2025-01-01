@@ -52,15 +52,7 @@ const BusRental = () => {
   const navigate = useNavigate();
   const { openModal } = useModalStore(['openModal']);
   const { rentalFilters } = useFilterStore(['rentalFilters']);
-
-  const {
-    data: rentalList,
-    isLoading,
-    isError,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useGetRentalList();
+  const { data: rentalList, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetRentalList();
 
   const handleFilterChipClick = (type: FilterType) => {
     openModal('bottomSheet', 'list', <FilterBottomSheet filterType={type} target="rental" />);
@@ -85,9 +77,6 @@ const BusRental = () => {
   const targetRef = useIntersectionObserver(() => {
     if (hasNextPage && !isFetchingNextPage) void fetchNextPage();
   });
-
-  if (isLoading) return <div>로딩중...</div>;
-  if (isError) return <div>ERROR</div>;
 
   return (
     <>

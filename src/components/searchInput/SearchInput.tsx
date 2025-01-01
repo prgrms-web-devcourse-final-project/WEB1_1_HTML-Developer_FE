@@ -9,12 +9,16 @@ interface SearchInputProps {
   text: string;
   isActive: boolean;
   onSearch: (query: string) => void;
+  onValueChange?: () => void;
+  onClear?: () => void;
 }
-const SearchInput = ({ text, isActive, onSearch }: SearchInputProps) => {
+
+const SearchInput = ({ text, isActive, onSearch, onValueChange, onClear }: SearchInputProps) => {
   const [searchValue, setSearchValue] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
+    onValueChange?.();
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -23,9 +27,14 @@ const SearchInput = ({ text, isActive, onSearch }: SearchInputProps) => {
     }
   };
 
+  const handleClearValue = () => {
+    setSearchValue('');
+    onClear?.();
+  };
+
   return (
     <SearchInputContainer isActive={isActive}>
-      <IoSearch size={24} />
+      <IoSearch size={20} />
       <Input
         hasValue={!!searchValue}
         onChange={handleChange}
@@ -34,7 +43,7 @@ const SearchInput = ({ text, isActive, onSearch }: SearchInputProps) => {
         type="search"
         value={isActive ? searchValue : ''}
       />
-      {searchValue && <ClearButton onClick={() => setSearchValue('')} size={24} />}
+      {searchValue && <ClearButton onClick={handleClearValue} size={20} />}
     </SearchInputContainer>
   );
 };
@@ -73,6 +82,10 @@ const Input = styled.input<{ hasValue: boolean }>`
   &::-webkit-search-results-button,
   &::-webkit-search-results-decoration {
     -webkit-appearance: none;
+  }
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.dark[300]};
   }
 `;
 

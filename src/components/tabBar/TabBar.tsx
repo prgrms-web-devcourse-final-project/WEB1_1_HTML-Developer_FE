@@ -10,18 +10,20 @@ interface TabBarProps {
   tabList: (typeof tabMap)[TabType];
   selectedTab?: (typeof tabMap)[TabType][number];
   onTabClick?: (activeTab: (typeof tabMap)[TabType][number]) => void;
+  isInactive?: boolean;
 }
 
 interface TabItemStyle {
   isActive: boolean;
 }
 
-const TabBarContainer = styled.div`
+const TabBarContainer = styled.div<{ isInactive?: boolean }>`
   display: flex;
   position: relative;
   width: 100%;
   padding: 0 2.4rem;
   border-bottom: 1px solid ${({ theme }) => theme.colors.dark[500]};
+  pointer-events: ${({ isInactive }) => (isInactive ? 'none' : 'auto')};
 `;
 
 const TabItem = styled(motion.button)<TabItemStyle>`
@@ -40,7 +42,7 @@ const Slider = styled(motion.div)`
   background: ${({ theme }) => theme.colors.dark[50]};
 `;
 
-const TabBar = ({ tabList, selectedTab, onTabClick }: TabBarProps) => {
+const TabBar = ({ tabList, selectedTab, onTabClick, isInactive }: TabBarProps) => {
   const [slider, setSlider] = useState({ left: 0, width: 0 });
   const tabItemRef = useRef<Map<string, HTMLButtonElement | null>>(new Map());
   const tabBarRef = useRef<HTMLDivElement>(null);
@@ -61,7 +63,7 @@ const TabBar = ({ tabList, selectedTab, onTabClick }: TabBarProps) => {
   }, [selectedTab]);
 
   return (
-    <TabBarContainer ref={tabBarRef}>
+    <TabBarContainer isInactive={isInactive} ref={tabBarRef}>
       {tabList.map((tab) => (
         <TabItem
           isActive={tab === selectedTab}
