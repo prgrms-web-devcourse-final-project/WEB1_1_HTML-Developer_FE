@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import CalendarBottomSheet from './components/CalendarBottomSheet';
 import SearchField from './components/SearchField';
 import SelectedConcertItem from './components/SelectedConcertItem';
+import type { Artist, ArtistResponse, ConcertResponse, SurveyFormData } from './type';
 
 import BaseButton from 'components/buttons/BaseButton';
 import Checkbox from 'components/checkbox/Checkbox';
@@ -19,41 +20,6 @@ import type { Concert } from 'pages/concert/type';
 import { useModalStore } from 'stores';
 import { BodyRegularText, ChipText } from 'styles/Typography';
 import { getDateRange, publicAxios, tokenAxios } from 'utils';
-
-interface SurveyFormData {
-  title: string;
-  concertId: number | null;
-  boardingDates: string[];
-  artistName: string;
-  region: string;
-  maxPassenger: string;
-  endDate: string;
-  information: string;
-}
-
-interface ConcertResponse {
-  timeStamp: Date;
-  code: string;
-  message: string;
-  result: Concert[];
-}
-
-interface ArtistResponse {
-  timeStamp: Date;
-  code: string;
-  message: string;
-  result: Artist[];
-}
-
-interface Artist {
-  id: string;
-  name: string;
-  images: Image[];
-}
-
-interface Image {
-  url: string;
-}
 
 const OpenSurvey = () => {
   const [title, setTitle] = useState('');
