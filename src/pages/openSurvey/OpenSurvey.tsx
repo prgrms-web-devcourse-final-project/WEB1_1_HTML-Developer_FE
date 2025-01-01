@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
-import { useQuery } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import CalendarBottomSheet from './components/CalendarBottomSheet';
 import SearchField from './components/SearchField';
 import SelectedConcertItem from './components/SelectedConcertItem';
 
@@ -57,10 +57,19 @@ const OpenSurvey = () => {
   const [artistSearchResult, setArtistSearchResult] = useState<Artist[]>([]);
 
   const [selectedRegion, setSelectedRegion] = useState('');
+  const [selectedPersonnel, setSelectedPersonnel] = useState('');
+  const [dueDate, setDueDate] = useState<string>('');
 
   const methods = useForm({
     defaultValues: {
-      surveyTitle: '',
+      title,
+      concertId: selectedConcert?.id,
+      boardingDates: [],
+      artistName: artistSearchResult[0]?.name,
+      region: selectedRegion,
+      endDate: dueDate,
+      maxPassenger: selectedPersonnel,
+      information: '',
     },
   });
 
@@ -121,12 +130,28 @@ const OpenSurvey = () => {
     setArtistSearchResult([]);
   };
 
-  const handleModalOpen = () => {
+  const handleRegionModalOpen = () => {
     openModal('bottomSheet', 'list', <ListItem onSelect={handleRegionSelect} title="지역" />);
+  };
+
+  const handlePersonnelModalOpen = () => {
+    openModal('bottomSheet', 'list', <ListItem onSelect={handlePersonnelSelect} title="인원수" />);
+  };
+
+  const handleCalendarModalOpen = () => {
+    openModal('bottomSheet', 'basic', <CalendarBottomSheet onSelect={handleDateSelect} />);
   };
 
   const handleRegionSelect = (value: string) => {
     setSelectedRegion(value);
+  };
+
+  const handleDateSelect = (date: string) => {
+    setDueDate(date);
+  };
+
+  const handlePersonnelSelect = (value: string) => {
+    setSelectedPersonnel(value);
   };
 
   useEffect(() => {
@@ -195,27 +220,25 @@ const OpenSurvey = () => {
           <BodyRegularText>
             탑승 지역<Mark>*</Mark>
           </BodyRegularText>
-          <Select onClick={handleModalOpen} value={selectedRegion}>
+          <Select onClick={handleRegionModalOpen} value={selectedRegion}>
             지역을 선택해주세요
           </Select>
         </BoardingArea>
-        <RecruitmentCount>
-          <BodyRegularText>
-            모집 인원 수<Mark>*</Mark>
-          </BodyRegularText>
-          <Select>인원수를 선택해주세요</Select>
-        </RecruitmentCount>
         <RecruitmentDeadline>
           <BodyRegularText>
             마감 기준<Mark>*</Mark>
           </BodyRegularText>
           <ParticipantCount>
             <ChipText>참여 인원 수</ChipText>
-            <Select>인원수를 선택해주세요</Select>
+            <Select onClick={handlePersonnelModalOpen} value={selectedPersonnel}>
+              인원수를 선택해주세요
+            </Select>
           </ParticipantCount>
           <DueDate>
             <ChipText>마감 날짜</ChipText>
-            <Select>날짜를 선택해주세요</Select>
+            <Select onClick={handleCalendarModalOpen} value={dueDate?.toString()}>
+              날짜를 선택해주세요
+            </Select>
           </DueDate>
         </RecruitmentDeadline>
         <EtcInfo>
@@ -251,8 +274,6 @@ const OpenSurveyContainer = styled.div`
 const SurveyTitle = styled.div``;
 
 const BoardingArea = styled.div``;
-
-const RecruitmentCount = styled.div``;
 
 const RecruitmentDeadline = styled.div`
   display: flex;
