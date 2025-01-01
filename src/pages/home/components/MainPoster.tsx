@@ -1,8 +1,10 @@
 import styled from '@emotion/styled';
 import { LuCalendar } from 'react-icons/lu';
+import { useNavigate } from 'react-router-dom';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import { endPoint } from 'constants/endPoint';
 import { BodyRegularText, HeaderText } from 'styles/Typography';
 
 interface Concert {
@@ -17,11 +19,16 @@ interface MainPosterProps {
   concerts: Concert[];
 }
 const MainPoster = ({ concerts }: MainPosterProps) => {
+  const navigate = useNavigate();
+
   return (
     <MainPosterContainer>
       <Swiper className="mySwiper" modules={[Pagination]} pagination={{ clickable: true }}>
         {concerts.map((concert) => (
-          <SwiperSlide key={concert.id}>
+          <SwiperSlide
+            key={concert.id}
+            onClick={() => navigate(`${endPoint.GET_CONCERT_DETAIL(concert.id)}`)}
+          >
             <Poster>
               <img alt="posterImg" src={concert?.poster} />
               <PosterWrapper>
@@ -72,6 +79,7 @@ const PosterWrapper = styled.div`
   width: 100%;
   background: linear-gradient(to top, #1b1d1f, rgba(27, 29, 31, 0));
   padding: 0 2.4rem 3.2rem 2.4rem;
+  cursor: pointer;
 `;
 
 const ConcertDate = styled.div`
