@@ -5,7 +5,9 @@ import ModalRenderer from 'components/modalRenderer/ModalRenderer';
 import ToastRenderer from 'components/toast/ToastRenderer';
 import { FullLayout, TitleHeaderLayout } from 'layout';
 import { AuthHeaderLayout, AuthTitleHeaderLayout, PublicOnlyLayout } from 'layout/ProtectedRoutes';
+import SearchLayout from 'layout/SearchLayout';
 import Callback from 'pages/callback/Callback';
+import Search from 'pages/search/Search';
 
 const Home = lazy(() => import('pages/home/Home'));
 const Concert = lazy(() => import('pages/concert/Concert'));
@@ -77,6 +79,8 @@ export const router = createBrowserRouter([
           },
         ],
       },
+
+      { element: <SearchLayout />, children: [{ path: '/search', element: <Search /> }] },
 
       // TODO: protected routes 추가
       {
