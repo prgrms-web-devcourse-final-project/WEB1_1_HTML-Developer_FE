@@ -38,7 +38,7 @@ const SurveyItemContainer = styled.li`
   flex-direction: column;
   gap: 1.2rem;
   padding: 2rem 1.6rem;
-  border: 1px solid ${({ theme }) => theme.colors.dark[300]};
+  background-color: ${({ theme }) => theme.colors.dark[700]};
   border-radius: 8px;
   transition: all 0.2s ease-in-out;
 
