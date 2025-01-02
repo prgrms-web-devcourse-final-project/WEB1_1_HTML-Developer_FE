@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
 import { useParams } from 'react-router-dom';
 
-import DepositFormSheet from './components/DepositFormSheet';
 import BusTime from './components/sections/BusTime';
 import DepositAccount from './components/sections/DepositAccount';
 import DrivingInfo from './components/sections/DrivingInfo';
 import ParticipantsStatus from './components/sections/ParticipantsStatus';
+import DepositFormSheet from './components/sheets/DepositFormSheet';
 
 import Badge from 'components/badge/Badge';
 import BaseButton from 'components/buttons/BaseButton';
@@ -118,6 +118,7 @@ const BusRentalDetail = () => {
     information,
     refundType,
     closed,
+    refundAccount,
   } = details;
 
   const dDay = getDday(endDate);
@@ -128,7 +129,11 @@ const BusRentalDetail = () => {
     openModal(
       'bottomSheet',
       'list',
-      <DepositFormSheet boardingDates={rentDates} refundOption={refundType} />
+      <DepositFormSheet
+        boardingDates={boardingDates}
+        refundAccount={refundAccount}
+        refundOption={refundType}
+      />
     );
   };
 

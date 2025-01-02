@@ -1,27 +1,32 @@
 import styled from '@emotion/styled';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMemo } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { LuAlertCircle } from 'react-icons/lu';
+import { useParams } from 'react-router-dom';
 
-import DepositInputField from './items/DepositInputField';
-import BoardingDateRadio from './lists/BoardingDateRadio';
-import BoardingTypeRadio from './lists/BoardingTypeRadio';
-import RefundTypeRadio from './lists/RefundTypeRadio';
-import DepositDialog from './sheets/DepositDialog';
+import DepositDialog from './DepositDialog';
+import DepositInputField from '../items/DepositInputField';
+import BoardingDateRadio from '../lists/BoardingDateRadio';
+import BoardingTypeRadio from '../lists/BoardingTypeRadio';
+import RefundTypeRadio from '../lists/RefundTypeRadio';
 
 import BottomSheet from 'components/bottomSheet/BottomSheet';
 import BaseButton from 'components/buttons/BaseButton';
 import Counter from 'components/counter/Counter';
 import RentalFormField from 'pages/openBusRental/components/sections/RentalFormField';
 import type { DepositFormSchemaType } from 'schemas';
-import { depositFormSchema } from 'schemas';
+import { depoistForminitValues, depositFormSchema } from 'schemas';
 import { useModalStore } from 'stores';
 import { BodyRegularText } from 'styles/Typography';
-import type { RefundType } from 'types';
+import type { BoardingDates, BoardingType, RefundAccount } from 'types';
+import { BOARDING_TYPE, REFUND_TYPE, type RefundType } from 'types';
+import { formatISODate } from 'utils';
 
 interface DepositFormSheetProps {
-  boardingDates: string[];
+  boardingDates: BoardingDates[];
   refundOption: RefundType;
+  refundAccount?: RefundAccount;
 }
 
 const AlertMessage = styled.div`
@@ -53,33 +58,55 @@ const BottomButtonWrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.dark[700]};
 `;
 
-const initialValues: DepositFormSchemaType = {
-  depositorName: '',
-  depositorTime: '',
-  phone: '',
-  passengerNum: 1,
-  boardingDate: '',
-  refundType: null,
-  boardingType: null,
-  refundAccount: '',
-};
-
-const DepositFormSheet = ({ boardingDates, refundOption }: DepositFormSheetProps) => {
+const DepositFormSheet = ({
+  boardingDates,
+  refundOption,
+  refundAccount,
+}: DepositFormSheetProps) => {
+  const { id } = useParams();
   const { openModal } = useModalStore(['openModal']);
 
   const methods = useForm<DepositFormSchemaType>({
     resolver: zodResolver(depositFormSchema),
-    defaultValues: initialValues,
+    defaultValues: {
+      ...depoistForminitValues,
+      refundAccount: refundAccount?.bank ? `${refundAccount?.bank} ${refundAccount?.number}` : '',
+    },
   });
 
   const { handleSubmit, watch, control } = methods;
-
   const refundType = watch('refundType');
 
-  const onSubmit = (formData: DepositFormSchemaType) => {
-    console.log(formData);
-    openModal('dialog', 'confirm', <DepositDialog formData={formData} />);
+  const convertData = (depositFormData: DepositFormSchemaType) => {
+    const { boardingDate, boardingType, refundType, ...restValues } = depositFormData;
+
+    const newBoardingDate = formatISODate(boardingDate);
+    const newBoardingType =
+      (Object.keys(BOARDING_TYPE) as BoardingType[]).find(
+        (key) => BOARDING_TYPE[key] === boardingType
+      ) || null;
+    const newRefundType =
+      (Object.keys(REFUND_TYPE) as RefundType[]).find((key) => REFUND_TYPE[key] === refundType) ||
+      null;
+
+    return {
+      rentId: Number(id),
+      boardingDate: newBoardingDate,
+      boardingType: newBoardingType,
+      refundType: newRefundType,
+      ...restValues,
+    };
   };
+
+  const onSubmit = (formData: DepositFormSchemaType) => {
+    const convertedFormData = convertData(formData);
+    openModal('dialog', 'confirm', <DepositDialog formData={convertedFormData} />);
+  };
+
+  const allApplied = useMemo(
+    () => boardingDates.every((boardingDate) => boardingDate.isApplied === true),
+    [boardingDates]
+  );
 
   return (
     <BottomSheet name="list">
@@ -136,9 +163,14 @@ const DepositFormSheet = ({ boardingDates, refundOption }: DepositFormSheetProps
                 </>
               )}
             </RentalFormField>
-
             <BottomButtonWrapper>
-              <BaseButton color="primary" size="medium" type="submit" variant="fill">
+              <BaseButton
+                color="primary"
+                isDisabled={allApplied}
+                size="medium"
+                type="submit"
+                variant="fill"
+              >
                 제출
               </BaseButton>
             </BottomButtonWrapper>

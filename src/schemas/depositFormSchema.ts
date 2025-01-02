@@ -1,5 +1,16 @@
 import { z } from 'zod';
 
+export const depoistForminitValues: DepositFormSchemaType = {
+  depositorName: '',
+  depositorTime: '',
+  phone: '',
+  passengerNum: 1,
+  boardingDate: '',
+  refundType: null,
+  boardingType: null,
+  refundAccount: '',
+};
+
 const requiredString = () => z.string().min(1, '필수 입력 항목입니다.');
 const nullableToValidString = () =>
   z

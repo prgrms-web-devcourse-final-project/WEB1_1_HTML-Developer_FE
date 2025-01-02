@@ -4,9 +4,11 @@ import { Controller, useFormContext } from 'react-hook-form';
 import RadioItem from '../items/RadioItem';
 
 import ValidationMessage from 'components/message/ValidationMessage';
+import type { BoardingDates } from 'types';
+import { formatDateWithDay } from 'utils';
 
 interface BoardingDateRadioProps {
-  boardingDates: string[];
+  boardingDates: BoardingDates[];
 }
 
 const BoardingDateRadioList = styled.div`
@@ -25,15 +27,19 @@ const BoardingDateRadio = ({ boardingDates }: BoardingDateRadioProps) => {
       render={({ field, fieldState }) => (
         <>
           <BoardingDateRadioList {...field}>
-            {boardingDates.map((date) => (
-              <RadioItem
-                isChecked={field.value === date}
-                key={date}
-                name="boardingDate"
-                onValueChange={field.onChange}
-                value={date}
-              />
-            ))}
+            {boardingDates.map((boardingDate) => {
+              const formattedDate = formatDateWithDay(boardingDate.date);
+              return (
+                <RadioItem
+                  isChecked={field.value === formattedDate}
+                  isDisabled={boardingDate.isApplied}
+                  key={boardingDate.date}
+                  name="boardingDate"
+                  onValueChange={field.onChange}
+                  value={formattedDate}
+                />
+              );
+            })}
           </BoardingDateRadioList>
           {fieldState?.error && fieldState.error.message && (
             <ValidationMessage message={fieldState.error.message} />

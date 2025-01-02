@@ -10,7 +10,8 @@ export const useGetRentalList = () => {
 
   const fetchFilteredList = async (pageParam: PageParam) => {
     const query = buildPaginatedFilterQuery(rentalFilters, pageParam);
-    return (await requestGetRentalList(query)).result;
+    const response = await requestGetRentalList(query);
+    return response.data.result;
   };
 
   return useInfiniteQuery<RentalList[]>({

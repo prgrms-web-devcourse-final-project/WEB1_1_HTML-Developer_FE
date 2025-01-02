@@ -43,6 +43,12 @@ export type BoardingType = keyof typeof BOARDING_TYPE;
 export interface BoardingDates {
   date: string;
   participationCount: number;
+  isApplied?: boolean;
+}
+
+export interface RefundAccount {
+  bank: string;
+  number: string;
 }
 
 export interface RentalDetail {
@@ -67,10 +73,11 @@ export interface RentalDetail {
   chatUrl: string;
   refundType: RefundType;
   information: string;
+  refundAccount?: RefundAccount;
   closed: boolean;
 }
 
-export interface RentalAccount {
+export interface DepositAccount {
   depositAccount: string | null;
 }
 
@@ -83,11 +90,13 @@ export interface DepositFormData {
   boardingDate: string;
   boardingType: BoardingType | null;
   refundType: RefundType | null;
-  refundAccount: string;
+  refundAccount: string | null;
 }
 
-export interface AllRentalDetail extends RentalDetail, RentalAccount {}
+export interface AllRentalDetail extends RentalDetail, DepositAccount {}
 
 export type RentalListResponse = ApiResponse<RentalList[]>;
 export type RentalDetailResponse = ApiResponse<RentalDetail>;
-export type RentalAccountResponse = ApiResponse<RentalAccount>;
+export type RentalAccountResponse = ApiResponse<DepositAccount>;
+
+export type DepositFormResponse = ApiResponse<0>;

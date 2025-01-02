@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 
 import BaseButton from 'components/buttons/BaseButton';
 import Dialog from 'components/dialog/Dialog';
-import { usePostRentalForm } from 'queries/rentForm/usePostRentalForm';
+import { usePostRentalForm } from 'queries/rentForm';
 import { rentalFormStore, useModalStore, useRentalFormStore } from 'stores';
 import { TitleText2 } from 'styles/Typography';
 
@@ -16,13 +16,11 @@ const FormSubmitDialog = () => {
     resetFormData();
     rentalFormStore.persist.clearStorage();
     navigate('/bus-rental');
+    closeModal('dialog', 'confirm');
   };
 
   const handleSubmitClick = () => {
-    mutate(formData, {
-      onSuccess: handleSubmitSuccess,
-    });
-    closeModal('dialog', 'confirm');
+    mutate(formData, { onSuccess: handleSubmitSuccess });
   };
 
   return (

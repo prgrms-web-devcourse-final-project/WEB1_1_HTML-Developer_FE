@@ -42,7 +42,7 @@ export const getDateRangeArray = (startDate: string, endDate: string) => {
 
 // YYYY.MM.DD (요일) -> YYYY-MM-DD 형식으로 변환
 export const formatISODate = (date: string) => {
-  return date.split(' ')[0].replaceAll('.', '-');
+  return date.split('(')[0].replaceAll('.', '-');
 };
 
 // 시작일, 종료일 사이 날짜를 배열로 반환

@@ -4,20 +4,25 @@ import { requestGetDepositAccount, requestGetRentalDetails } from 'api';
 import { useAuthStore } from 'stores';
 import type { AllRentalDetail } from 'types';
 
-const fetchDetails = async (id: string, isLoggedIn: boolean) => {
-  const detailPromise = await requestGetRentalDetails(id);
-  const accountPromise = isLoggedIn ? requestGetDepositAccount(id) : Promise.resolve(null);
+const fetchRentalDetails = async (id: string) => {
+  const response = await requestGetRentalDetails(id);
+  return response.data.result;
+};
 
-  const [detailResponse, accountResponse] = await Promise.all([detailPromise, accountPromise]);
-  const rentalDetails = detailResponse.data.result;
-  const depositAccount = accountResponse?.data.result.depositAccount ?? null;
-
-  return { ...rentalDetails, depositAccount };
+const fetchDepositAccount = async (id: string) => {
+  const { data } = await requestGetDepositAccount(id);
+  return data.result.depositAccount;
 };
 
 export const useGetRentalDetails = (id: string) => {
   const { isLoggedIn } = useAuthStore(['isLoggedIn']);
-  const fetchDetailsWithAuth = () => fetchDetails(id, isLoggedIn);
+
+  const fetchDetailsWithAuth = async () => {
+    const rentalDetails = await fetchRentalDetails(id);
+    const depositAccount = isLoggedIn ? await fetchDepositAccount(id) : null;
+
+    return { ...rentalDetails, depositAccount };
+  };
 
   return useQuery<AllRentalDetail>({
     queryKey: ['rentalDetail', id],
