@@ -4,6 +4,7 @@ import { join, sortBy, uniq } from 'lodash-es';
 import { BodyRegularText } from 'styles/Typography';
 import type { BusSize, BusType } from 'types';
 import { BUS_SIZE, BUS_TYPE } from 'types';
+import { formatDateRange } from 'utils';
 
 interface DrivingInfoProps {
   rentDates: string[];
@@ -49,9 +50,7 @@ const DrivingInfo = ({
       <DrivingInfoItem>
         <DrivingInfoLabel>운행 기간</DrivingInfoLabel>
         <BodyRegularText>
-          {rentDates.length > 0
-            ? `${rentDates[0]} - ${rentDates[rentDates.length - 1]}`
-            : rentDates[0]}
+          {formatDateRange(rentDates[0], rentDates[rentDates.length - 1])}
         </BodyRegularText>
       </DrivingInfoItem>
       <DrivingInfoItem>

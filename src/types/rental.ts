@@ -40,6 +40,17 @@ export type BusType = keyof typeof BUS_TYPE;
 export type RefundType = keyof typeof REFUND_TYPE;
 export type BoardingType = keyof typeof BOARDING_TYPE;
 
+export interface BoardingDates {
+  date: string;
+  participationCount: number;
+  isApplied?: boolean;
+}
+
+export interface RefundAccount {
+  bank: string;
+  number: string;
+}
+
 export interface RentalDetail {
   concertName: string;
   imageUrl: string;
@@ -50,7 +61,7 @@ export interface RentalDetail {
   dropOffArea: string;
   upTime: string;
   downTime: string;
-  rentBoardingDates: string[];
+  boardingDates: BoardingDates[];
   busSize: BusSize;
   busType: BusType;
   maxPassenger: number;
@@ -58,19 +69,20 @@ export interface RentalDetail {
   upTimePrice: number;
   downTimePrice: number;
   recruitmentCount: number;
-  currentRecruitmentCounts: number[];
   endDate: string;
   chatUrl: string;
   refundType: RefundType;
   information: string;
+  refundAccount?: RefundAccount;
+  closed: boolean;
 }
 
-export interface RentalAccount {
+export interface DepositAccount {
   depositAccount: string | null;
 }
 
-export interface DepositFormValues {
-  rentId: number | null;
+export interface DepositFormData {
+  rentId: number;
   depositorName: string;
   depositorTime: string;
   phone: string;
@@ -78,11 +90,13 @@ export interface DepositFormValues {
   boardingDate: string;
   boardingType: BoardingType | null;
   refundType: RefundType | null;
-  refundAccount: string;
+  refundAccount: string | null;
 }
 
-export interface AllRentalDetail extends RentalDetail, RentalAccount {}
+export interface AllRentalDetail extends RentalDetail, DepositAccount {}
 
 export type RentalListResponse = ApiResponse<RentalList[]>;
 export type RentalDetailResponse = ApiResponse<RentalDetail>;
-export type RentalAccountResponse = ApiResponse<RentalAccount>;
+export type RentalAccountResponse = ApiResponse<DepositAccount>;
+
+export type DepositFormResponse = ApiResponse<0>;

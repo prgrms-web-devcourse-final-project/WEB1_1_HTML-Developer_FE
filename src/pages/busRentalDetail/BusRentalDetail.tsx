@@ -1,18 +1,17 @@
 import styled from '@emotion/styled';
-import { every } from 'lodash-es';
 import { useParams } from 'react-router-dom';
 
-import BusTime from './components/BusTime';
-import DepositAccount from './components/DepositAccount';
-import DepositFormSheet from './components/DepositFormSheet';
-import DrivingInfo from './components/DrivingInfo';
-import ParticipantsStatus from './components/ParticipantsStatus';
+import BusTime from './components/sections/BusTime';
+import DepositAccount from './components/sections/DepositAccount';
+import DrivingInfo from './components/sections/DrivingInfo';
+import ParticipantsStatus from './components/sections/ParticipantsStatus';
+import DepositFormSheet from './components/sheets/DepositFormSheet';
 
 import Badge from 'components/badge/Badge';
 import BaseButton from 'components/buttons/BaseButton';
 import SimpleChip from 'components/chips/SimpleChip';
 import { useGetRentalDetails } from 'queries/rent';
-import { useModalStore } from 'stores';
+import { useAuthStore, useModalStore } from 'stores';
 import { BodyRegularText, TitleText1, TitleText2 } from 'styles/Typography';
 import { formatDateWithDay, getDday } from 'utils';
 
@@ -91,10 +90,9 @@ const InfoSection = ({ title, children }: { title: string; children: React.React
 const BusRentalDetail = () => {
   const { id } = useParams();
   const { openModal } = useModalStore(['openModal']);
-  const { data: details, error, isLoading } = useGetRentalDetails(id as string);
+  const { isLoggedIn } = useAuthStore(['isLoggedIn']);
+  const { data: details } = useGetRentalDetails(id as string);
 
-  if (isLoading) return <div>로딩중</div>;
-  if (error) return <div>Error 발생: {error.message}</div>;
   if (!details) return <div>세부 정보가 존재하지 않습니다.</div>;
 
   const {
@@ -104,9 +102,8 @@ const BusRentalDetail = () => {
     region,
     artistName,
     endDate,
-    rentBoardingDates,
+    boardingDates,
     recruitmentCount,
-    currentRecruitmentCounts,
     boardingArea,
     dropOffArea,
     busSize,
@@ -120,17 +117,23 @@ const BusRentalDetail = () => {
     downTime,
     information,
     refundType,
+    closed,
+    refundAccount,
   } = details;
 
   const dDay = getDday(endDate);
-  const rentDates = rentBoardingDates.map((date) => formatDateWithDay(date));
+  const rentDates = boardingDates.map((item) => formatDateWithDay(item.date));
   const busPrices = [roundPrice, upTimePrice, downTimePrice];
 
   const handleDepositFormClick = () => {
     openModal(
       'bottomSheet',
       'list',
-      <DepositFormSheet boardingDates={rentDates} refundType={refundType} />
+      <DepositFormSheet
+        boardingDates={boardingDates}
+        refundAccount={refundAccount}
+        refundOption={refundType}
+      />
     );
   };
 
@@ -150,11 +153,7 @@ const BusRentalDetail = () => {
             <SimpleChip>{region}</SimpleChip>
             <SimpleChip>{artistName}</SimpleChip>
           </ChipWrapper>
-          <ParticipantsStatus
-            participants={currentRecruitmentCounts}
-            recruitmentCount={recruitmentCount}
-            rentDates={rentDates}
-          />
+          <ParticipantsStatus boardingDates={boardingDates} recruitmentCount={recruitmentCount} />
         </SectionWrapper>
         <InfoSection title="운행 정보">
           <DrivingInfo
@@ -184,15 +183,12 @@ const BusRentalDetail = () => {
       <BottomButtonWrapper>
         <BaseButton
           color="primary"
-          isDisabled={every(
-            currentRecruitmentCounts,
-            (participant) => participant === recruitmentCount
-          )}
+          isDisabled={closed || !isLoggedIn}
           onClick={handleDepositFormClick}
           size="medium"
           variant="fill"
         >
-          폼 작성하기
+          {closed ? '신청 마감' : !isLoggedIn ? '로그인 후 신청 가능' : '폼 작성하기'}
         </BaseButton>
       </BottomButtonWrapper>
     </DetailContainer>

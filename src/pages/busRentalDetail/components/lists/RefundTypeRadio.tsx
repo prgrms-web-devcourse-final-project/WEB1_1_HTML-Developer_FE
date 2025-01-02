@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import RadioItem from './RadioItem';
+import RadioItem from '../items/RadioItem';
 
 import ValidationMessage from 'components/message/ValidationMessage';
 import type { RefundType } from 'types';
@@ -22,7 +22,7 @@ const RadioList = styled.div`
   gap: 1.2rem;
 `;
 
-const refundType = ['추가 입금', '환불'];
+const refundOptions = ['추가 입금', '환불'];
 
 const RefundTypeRadio = ({ refundOption }: RefundTypeRadioProps) => {
   const { control } = useFormContext();
@@ -40,7 +40,7 @@ const RefundTypeRadio = ({ refundOption }: RefundTypeRadioProps) => {
       render={({ field, fieldState }) => (
         <RefundTypeRadioContainer>
           <RadioList {...field}>
-            {refundType.map((type) => (
+            {refundOptions.map((type) => (
               <RadioItem
                 isChecked={field.value === type}
                 isDisabled={refundOption !== 'BOTH' && getKeyFromValue(type) !== refundOption}

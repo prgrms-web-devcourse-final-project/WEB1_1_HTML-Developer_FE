@@ -1,14 +1,15 @@
 import styled from '@emotion/styled';
+import { useParams } from 'react-router-dom';
 
 import BaseButton from 'components/buttons/BaseButton';
 import Dialog from 'components/dialog/Dialog';
-import type { DepositFormSchemaType } from 'schemas';
+import { usePostDepositForm } from 'queries/rent';
 import { useModalStore } from 'stores';
 import { TitleText2 } from 'styles/Typography';
+import type { DepositFormData } from 'types';
 
 interface DepositDialogProps {
-  formData: DepositFormSchemaType;
-  onConfirm: (formData: DepositFormSchemaType) => void;
+  formData: DepositFormData;
 }
 
 const DepositDialogContainer = styled.div`
@@ -16,13 +17,18 @@ const DepositDialogContainer = styled.div`
   z-index: 1004;
 `;
 
-const DepositDialog = ({ formData, onConfirm }: DepositDialogProps) => {
+const DepositDialog = ({ formData }: DepositDialogProps) => {
+  const { id } = useParams();
+  const { mutate } = usePostDepositForm();
   const { closeModal } = useModalStore(['closeModal']);
 
-  const handleApplyClick = () => {
-    console.log('폼 제출', formData);
-    onConfirm(formData);
+  const handleSubmitSuccess = () => {
     closeModal('dialog', 'confirm');
+    closeModal('bottomSheet', 'list');
+  };
+
+  const handleApplyClick = () => {
+    if (id) mutate({ id, depositFormData: formData }, { onSuccess: handleSubmitSuccess });
   };
 
   return (

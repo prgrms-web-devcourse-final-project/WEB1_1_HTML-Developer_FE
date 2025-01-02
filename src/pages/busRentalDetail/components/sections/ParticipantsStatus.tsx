@@ -3,10 +3,11 @@ import { FaUserGroup } from 'react-icons/fa6';
 
 import Badge from 'components/badge/Badge';
 import { CaptionText } from 'styles/Typography';
+import type { BoardingDates } from 'types';
+import { formatDateWithDay } from 'utils';
 
 interface ParticipantsStatusProps {
-  rentDates: string[];
-  participants: number[];
+  boardingDates: BoardingDates[];
   recruitmentCount: number;
 }
 
@@ -47,24 +48,20 @@ const StatusDescription = styled(CaptionText)`
   color: ${({ theme }) => theme.colors.dark[200]};
 `;
 
-const ParticipantsStatus = ({
-  rentDates,
-  participants,
-  recruitmentCount,
-}: ParticipantsStatusProps) => {
+const ParticipantsStatus = ({ boardingDates, recruitmentCount }: ParticipantsStatusProps) => {
   return (
     <StatusContainer>
       <StatusWrapper>
-        {rentDates.map((date, idx) => {
-          const isClosed = participants[idx] === recruitmentCount;
+        {boardingDates.map(({ date, participationCount }) => {
+          const isClosed = participationCount === recruitmentCount;
           return (
             <StatusItem key={date}>
               <Badge color={isClosed ? 'red' : 'gray'} size="small" variant="square">
                 {isClosed ? '마감완료' : '신청가능'}
               </Badge>
-              <RentDate isClosed={isClosed}>{date}</RentDate>
+              <RentDate isClosed={isClosed}>{formatDateWithDay(date)}</RentDate>
               <ParticipantNums isClosed={isClosed}>
-                {participants[idx] || 0} / {recruitmentCount}
+                {participationCount} / {recruitmentCount}
               </ParticipantNums>
             </StatusItem>
           );

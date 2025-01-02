@@ -1,26 +1,32 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { requestGetDepositAccount, requestGetRentalDetails } from 'api';
+import { useAuthStore } from 'stores';
 import type { AllRentalDetail } from 'types';
 
+const fetchRentalDetails = async (id: string) => {
+  const response = await requestGetRentalDetails(id);
+  return response.data.result;
+};
+
+const fetchDepositAccount = async (id: string) => {
+  const { data } = await requestGetDepositAccount(id);
+  return data.result.depositAccount;
+};
+
 export const useGetRentalDetails = (id: string) => {
-  // 로그인 여부 (추후 수정)
-  const isLoggedIn = false;
+  const { isLoggedIn } = useAuthStore(['isLoggedIn']);
 
-  const fetchDetails = async () => {
-    const detailPromise = await requestGetRentalDetails(id);
-    const accountPromise = isLoggedIn ? requestGetDepositAccount(id) : Promise.resolve(null);
-
-    const [detailResponse, accountResponse] = await Promise.all([detailPromise, accountPromise]);
-    const rentalDetails = detailResponse.data.result;
-    const depositAccount = accountResponse?.data.result.depositAccount ?? null;
+  const fetchDetailsWithAuth = async () => {
+    const rentalDetails = await fetchRentalDetails(id);
+    const depositAccount = isLoggedIn ? await fetchDepositAccount(id) : null;
 
     return { ...rentalDetails, depositAccount };
   };
 
   return useQuery<AllRentalDetail>({
     queryKey: ['rentalDetail', id],
-    queryFn: fetchDetails,
+    queryFn: fetchDetailsWithAuth,
     enabled: !!id,
   });
 };
