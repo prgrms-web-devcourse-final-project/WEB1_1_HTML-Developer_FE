@@ -1,18 +1,28 @@
 import styled from '@emotion/styled';
+import { FaUser } from 'react-icons/fa6';
 
 import BaseButton from 'components/buttons/BaseButton';
-import { CaptionText, TitleText2 } from 'styles/Typography';
+import { CaptionText, TitleText1 } from 'styles/Typography';
+import type { UserInfo } from 'types';
 
-const UserProfile = () => {
+interface UserProfileProps {
+  userInfo?: UserInfo;
+}
+
+const UserProfile = ({ userInfo }: UserProfileProps) => {
   return (
     <UserProfileWrapper>
       <ProfileSection>
         <ProfileImage>
-          <img alt="profile_image" src="src/assets/react.svg" />
+          {userInfo?.profileImageUrl ? (
+            <img alt="profile_image" src={userInfo.profileImageUrl} />
+          ) : (
+            <FaUser size={32} />
+          )}
         </ProfileImage>
         <UserInfo>
-          <TitleText2>닉네임</TitleText2>
-          <CaptionText>한 줄 소개가 들어갈 자리</CaptionText>
+          <TitleText1>{userInfo?.nickname}</TitleText1>
+          <CaptionText>{userInfo?.introduce || '한 줄 소개를 입력해주세요'}</CaptionText>
         </UserInfo>
       </ProfileSection>
       <BaseButton color="dark" size="medium" to="/edit-profile" variant="fill">
@@ -35,12 +45,16 @@ const ProfileSection = styled.div`
 `;
 
 const ProfileImage = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 8rem;
   height: 8rem;
   border-radius: 50%;
   padding: 0.4rem;
   background-color: ${({ theme }) => theme.colors.dark[100]};
   overflow: hidden;
+  color: ${({ theme }) => theme.colors.dark[300]};
 
   img {
     width: 100%;

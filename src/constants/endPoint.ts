@@ -38,6 +38,7 @@ export const endPoint = {
   // User API
   GET_PROFILE: '/members',
   UPDATE_PROFILE: '/members/info',
+  CHECK_NICKNAME: '/members/check-nickname',
   CREATE_REFUND_ACCOUNT: '/members/refund-account',
   UPDATE_REFUND_ACCOUNT: '/members/refund-account',
   DELETE_REFUND_ACCOUNT: '/members/refund-account',
