@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
 import { FiPlusCircle } from 'react-icons/fi';
 
 import RefundBottomSheet from './RefundBottomSheet';
@@ -7,13 +6,17 @@ import RefundBottomSheet from './RefundBottomSheet';
 import BaseButton from 'components/buttons/BaseButton';
 import { useModalStore } from 'stores';
 import { MediumButtonText, TitleText2, CaptionText, BodyMediumText } from 'styles/Typography';
-import type { RefundAccountInfo } from 'types';
+import type { BankAccount } from 'types';
+
+interface AccountInfoProps {
+  accountInfo: BankAccount | null;
+}
 
 const EmptyAccount = () => {
   const { openModal } = useModalStore(['openModal']);
 
   const handleAccountBS = () => {
-    openModal('bottomSheet', 'refundAccount', <RefundBottomSheet />);
+    openModal('bottomSheet', 'refundAccount', <RefundBottomSheet accountInfo={null} />);
   };
 
   return (
@@ -29,7 +32,7 @@ const EmptyAccount = () => {
   );
 };
 
-const RegisteredAccountView = ({ accountInfo }: { accountInfo: RefundAccountInfo }) => {
+const RegisteredAccountView = ({ accountInfo }: AccountInfoProps) => {
   const { openModal } = useModalStore(['openModal']);
 
   const handleAccountBS = () => {
@@ -42,8 +45,8 @@ const RegisteredAccountView = ({ accountInfo }: { accountInfo: RefundAccountInfo
       <AccountInfoWrapper onClick={handleAccountBS}>
         <AccountInfoContent>
           <AccountDetails>
-            <CaptionText>{accountInfo.bank}</CaptionText>
-            <BodyMediumText>{accountInfo.number}</BodyMediumText>
+            <CaptionText>{accountInfo?.bank}</CaptionText>
+            <BodyMediumText>{accountInfo?.number}</BodyMediumText>
           </AccountDetails>
         </AccountInfoContent>
       </AccountInfoWrapper>
@@ -51,15 +54,7 @@ const RegisteredAccountView = ({ accountInfo }: { accountInfo: RefundAccountInfo
   );
 };
 
-const AccountStatus = () => {
-  const [accountInfo, setAccountInfo] = useState<RefundAccountInfo | null>(
-    null
-    // {
-    //   bank: '신한은행',
-    //   accountNumber: '123-456-789',
-    // }
-  );
-
+const AccountStatus = ({ accountInfo }: AccountInfoProps) => {
   return accountInfo ? <RegisteredAccountView accountInfo={accountInfo} /> : <EmptyAccount />;
 };
 

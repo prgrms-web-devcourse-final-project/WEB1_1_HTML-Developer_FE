@@ -5,11 +5,23 @@ import ApplicationSection from './components/ApplicationSection';
 import ManagementSection from './components/ManagementSection';
 import UserProfile from './components/UserProfile';
 
+import { useGetUserInfo } from 'queries/user/useGetUserInfo';
+
 const MyPage = () => {
+  const { data: userInfo } = useGetUserInfo();
+
+  const accountInfo =
+    userInfo?.bank && userInfo?.number
+      ? {
+          bank: userInfo.bank,
+          number: userInfo.number,
+        }
+      : null;
+
   return (
     <MyPageContainer>
-      <UserProfile />
-      <AccountStatus />
+      <UserProfile userInfo={userInfo} />
+      <AccountStatus accountInfo={accountInfo} />
       <ManagementSection />
       <ApplicationSection />
     </MyPageContainer>

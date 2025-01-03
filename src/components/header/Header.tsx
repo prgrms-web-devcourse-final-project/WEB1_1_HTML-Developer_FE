@@ -86,8 +86,8 @@ const ProfileLink = styled(StyledLink)`
 `;
 
 const ProfileImage = styled.img`
-  width: 3.2rem;
-  height: 3.2rem;
+  max-width: 3.2rem;
+  max-height: 3.2rem;
   border-radius: 50%;
   object-fit: cover;
 `;
