@@ -64,6 +64,7 @@ const Header = styled.div`
 const SearchResult = styled.div`
   display: flex;
   gap: 1rem;
+  flex-wrap: wrap;
 `;
 
 export default RecentSearch;
