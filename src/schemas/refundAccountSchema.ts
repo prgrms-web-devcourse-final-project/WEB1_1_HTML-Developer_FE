@@ -7,7 +7,7 @@ export const refundAccountSchema = z.object({
     .regex(/^[가-힣A-Za-z\s]+$/, {
       message: '올바른 은행명을 입력해주세요',
     }),
-  accountNumber: z
+  number: z
     .string()
     .min(1, { message: '계좌번호를 입력해주세요' })
     .regex(/^[0-9-]+$/, {

@@ -3,18 +3,22 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 
+import { createRefundAccount } from 'api';
 import BottomSheet from 'components/bottomSheet/BottomSheet';
 import BaseButton from 'components/buttons/BaseButton';
 import type { RefundAccountSchemaType } from 'schemas';
 import { refundAccountSchema } from 'schemas';
+import { useModalStore } from 'stores';
 import { MediumButtonText } from 'styles/Typography';
-import type { RefundAccountInfo } from 'types';
+import type { BankAccount } from 'types';
 
 interface RefundBottomSheetProps {
-  accountInfo?: RefundAccountInfo;
+  accountInfo: BankAccount | null;
 }
 
 const RefundBottomSheet = ({ accountInfo }: RefundBottomSheetProps) => {
+  const { closeModal } = useModalStore(['closeModal']);
+
   const {
     register,
     handleSubmit,
@@ -23,18 +27,19 @@ const RefundBottomSheet = ({ accountInfo }: RefundBottomSheetProps) => {
     resolver: zodResolver(refundAccountSchema),
     defaultValues: {
       bank: accountInfo?.bank || '',
-      accountNumber: accountInfo?.number || '',
+      number: accountInfo?.number || '',
     },
     mode: 'onChange',
   });
 
   const onSubmit = async (data: RefundAccountSchemaType) => {
     try {
-      // TODO: API
-      console.log('Submitting:', data);
+      const response = await createRefundAccount(data);
+      console.log('Submitting:', response);
     } catch (err) {
       console.error('Failed to save account info:', err);
     }
+    closeModal('bottomSheet', 'refundAccount');
   };
 
   return (
@@ -63,9 +68,9 @@ const RefundBottomSheet = ({ accountInfo }: RefundBottomSheetProps) => {
 
           <InputContainer>
             <Label>계좌번호</Label>
-            <Input {...register('accountNumber')} placeholder="계좌번호를 입력해주세요" />
+            <Input {...register('number')} placeholder="계좌번호를 입력해주세요" />
             <AnimatePresence mode="wait">
-              {errors.accountNumber && (
+              {errors.number && (
                 <ErrorMessage
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
@@ -75,7 +80,7 @@ const RefundBottomSheet = ({ accountInfo }: RefundBottomSheetProps) => {
                     ease: 'easeOut',
                   }}
                 >
-                  {errors.accountNumber.message}
+                  {errors.number.message}
                 </ErrorMessage>
               )}
             </AnimatePresence>
