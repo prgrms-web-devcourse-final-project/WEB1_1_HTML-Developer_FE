@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { TbChevronLeft } from 'react-icons/tb';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 import SearchInput from 'components/searchInput/SearchInput';
 import { endPoint } from 'constants/endPoint';
@@ -11,9 +11,9 @@ import { publicAxios } from 'utils';
 
 const SearchLayout = () => {
   const [isFocused, setIsFocused] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
-  const searchInputRef = useRef<HTMLDivElement>(null);
   const [concertSearchResult, setConcertSearchResult] = useState<Concert[]>([]);
+  const searchInputRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const getConcert = async (keyword: string) => {
     const {
@@ -30,11 +30,25 @@ const SearchLayout = () => {
     setConcertSearchResult(result);
   };
 
+  useEffect(() => {
+    const handleClickOutSide = (e: MouseEvent) => {
+      if (searchInputRef.current && !searchInputRef.current.contains(e.target as Node)) {
+        setIsFocused(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutSide);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutSide);
+    };
+  }, []);
+
   return (
     <>
       <HeaderContainer>
-        <TbChevronLeft size={24} />
-        <SearchWrapper ref={searchInputRef}>
+        <TbChevronLeft onClick={() => navigate(-1)} size={24} />
+        <SearchWrapper onClick={() => setIsFocused(true)} ref={searchInputRef}>
           <SearchInput
             isActive={isFocused}
             onSearch={handleConcertSearch}
@@ -42,7 +56,7 @@ const SearchLayout = () => {
           />
         </SearchWrapper>
       </HeaderContainer>
-      <Outlet context={{ concertSearchResult, isFocused, setIsFocused }} />
+      <Outlet context={{ concertSearchResult }} />
     </>
   );
 };
