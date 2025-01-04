@@ -33,6 +33,7 @@ const MySurveyList = lazy(() => import('pages/mySurveyList/MySurveyList'));
 const MyRentalManagement = lazy(() => import('pages/myRentalManagement/MyRentalManagement'));
 const MySurveyManagement = lazy(() => import('pages/mySurveyManagement/MySurveyManagement'));
 const ConcertRecord = lazy(() => import('pages/concertRecord/ConcertRecord'));
+const CreateConcertRecord = lazy(() => import('pages/createConcertRecord/CreateConcertRecord'));
 
 export const router = createBrowserRouter([
   {
@@ -176,6 +177,11 @@ export const router = createBrowserRouter([
             path: '/concert-record',
             element: <ConcertRecord />,
             handle: { title: '공연 기록' },
+          },
+          {
+            path: '/concert-record/create',
+            element: <CreateConcertRecord />,
+            handle: { title: '공연 기록 등록' },
           },
         ],
       },
