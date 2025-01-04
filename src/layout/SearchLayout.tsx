@@ -9,9 +9,25 @@ import type { Concert } from 'pages/concert/type';
 import type { ConcertResponse } from 'pages/openSurvey/type';
 import { publicAxios } from 'utils';
 
+interface SurveyResponse {
+  timeStamp: string;
+  code: string;
+  message: string;
+  result: SurveysResult[];
+}
+
+export interface SurveysResult {
+  id: number;
+  title: string;
+  region: string;
+  participantNum: number;
+  edDate: string;
+}
+
 const SearchLayout = () => {
   const [isFocused, setIsFocused] = useState(false);
   const [concertSearchResult, setConcertSearchResult] = useState<Concert[]>([]);
+  const [surveySearchResult, setSurveySearchResult] = useState<SurveysResult[]>([]);
   const [searchHistory, setSearchHistory] = useState<string[]>(() => {
     const savedHistory = localStorage.getItem('searchHistory');
 
@@ -21,7 +37,7 @@ const SearchLayout = () => {
   const searchInputRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  const getConcert = async (keyword: string) => {
+  const getConcerts = async (keyword: string) => {
     const {
       data: { result },
     } = await publicAxios.get<ConcertResponse>(
@@ -31,11 +47,24 @@ const SearchLayout = () => {
     return result;
   };
 
+  const getSurveys = async (keyword: string) => {
+    const {
+      data: { result },
+    } = await publicAxios.get<SurveyResponse>(
+      `${endPoint.GET_SURVEYS_SEARCH}/?query=${encodeURIComponent(keyword)}`
+    );
+
+    return result;
+  };
+
   const handleConcertSearch = async (keyword: string) => {
     if (!keyword.trim()) return;
 
-    const result = await getConcert(keyword);
-    setConcertSearchResult(result);
+    const concerts = await getConcerts(keyword);
+    setConcertSearchResult(concerts);
+
+    const surveys = await getSurveys(keyword);
+    setSurveySearchResult(surveys);
 
     setSearchHistory((prev) => {
       if (prev.includes(keyword)) {
@@ -76,7 +105,9 @@ const SearchLayout = () => {
           />
         </SearchWrapper>
       </HeaderContainer>
-      <Outlet context={{ concertSearchResult, searchHistory, setSearchHistory }} />
+      <Outlet
+        context={{ concertSearchResult, surveySearchResult, searchHistory, setSearchHistory }}
+      />
     </>
   );
 };

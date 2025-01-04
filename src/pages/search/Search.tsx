@@ -6,16 +6,19 @@ import RecentSearch from './components/RecentSearch';
 
 import PopularKeyword from 'components/popularKeyword/PopularKeyword';
 import { endPoint } from 'constants/endPoint';
+import type { SurveysResult } from 'layout/SearchLayout';
 import ConcertItem from 'pages/concert/components/ConcertItem';
 import type { Concert } from 'pages/concert/type';
+import SurveyItem from 'pages/surveys/components/SurveyItem';
 import { TitleText2 } from 'styles/Typography';
 
 interface SearchOutlet {
   concertSearchResult: Concert[];
+  surveySearchResult: SurveysResult[];
 }
 
 const Search = () => {
-  const { concertSearchResult } = useOutletContext<SearchOutlet>();
+  const { concertSearchResult, surveySearchResult } = useOutletContext<SearchOutlet>();
   const navigate = useNavigate();
 
   return (
@@ -40,6 +43,24 @@ const Search = () => {
               <IoChevronDown size={24} />
             </MoreIcon>
           </ConcertList>
+          <SurveyList>
+            <TitleText2>차량 대절 수요 조사</TitleText2>
+            <Surveys>
+              {surveySearchResult.map((survey) => (
+                <SurveyItem
+                  endDate={survey.edDate}
+                  key={survey.id}
+                  participationCount={survey.participantNum}
+                  region={survey.region}
+                  surveyId={survey.id}
+                  title={survey.title}
+                />
+              ))}
+              <MoreIcon>
+                <IoChevronDown size={24} />
+              </MoreIcon>
+            </Surveys>
+          </SurveyList>
         </>
       )}
     </SearchContainer>
@@ -64,6 +85,23 @@ const ConcertList = styled.div`
 const MoreIcon = styled.div`
   display: flex;
   justify-content: center;
+`;
+
+const SurveyList = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 0 2.4rem 1.6rem 2.4rem;
+  gap: 2.4rem;
+
+  svg {
+    cursor: pointer;
+  }
+`;
+
+const Surveys = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 `;
 
 export default Search;
