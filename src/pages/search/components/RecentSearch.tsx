@@ -1,15 +1,16 @@
 import styled from '@emotion/styled';
 import type React from 'react';
+import { useOutletContext } from 'react-router-dom';
 
 import SimpleChip from 'components/chips/SimpleChip';
 import { CaptionText, TitleText2 } from 'styles/Typography';
 
-interface RecentSearchProps {
+interface HistoryOutlet {
   searchHistory: string[];
   setSearchHistory: React.Dispatch<React.SetStateAction<string[]>>;
 }
-
-const RecentSearch = ({ searchHistory, setSearchHistory }: RecentSearchProps) => {
+const RecentSearch = () => {
+  const { searchHistory, setSearchHistory } = useOutletContext<HistoryOutlet>();
   const handleHistoryDelete = () => {
     setSearchHistory([]);
   };

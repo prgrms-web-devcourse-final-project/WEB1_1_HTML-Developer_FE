@@ -12,6 +12,12 @@ import { publicAxios } from 'utils';
 const SearchLayout = () => {
   const [isFocused, setIsFocused] = useState(false);
   const [concertSearchResult, setConcertSearchResult] = useState<Concert[]>([]);
+  const [searchHistory, setSearchHistory] = useState<string[]>(() => {
+    const savedHistory = localStorage.getItem('searchHistory');
+
+    return savedHistory ? JSON.parse(savedHistory) : [];
+  });
+
   const searchInputRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -26,8 +32,18 @@ const SearchLayout = () => {
   };
 
   const handleConcertSearch = async (keyword: string) => {
+    if (!keyword.trim()) return;
+
     const result = await getConcert(keyword);
     setConcertSearchResult(result);
+
+    setSearchHistory((prev) => {
+      if (prev.includes(keyword)) {
+        return [keyword, ...prev.filter((item) => item != keyword)];
+      }
+
+      return [keyword, ...prev];
+    });
   };
 
   useEffect(() => {
@@ -44,6 +60,10 @@ const SearchLayout = () => {
     };
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+  }, [searchHistory]);
+
   return (
     <>
       <HeaderContainer>
@@ -56,7 +76,7 @@ const SearchLayout = () => {
           />
         </SearchWrapper>
       </HeaderContainer>
-      <Outlet context={{ concertSearchResult }} />
+      <Outlet context={{ concertSearchResult, searchHistory, setSearchHistory }} />
     </>
   );
 };
@@ -65,6 +85,10 @@ const HeaderContainer = styled.header`
   display: flex;
   align-items: center;
   padding: 1.6rem 2.4rem 2.6rem 2.4rem;
+
+  svg {
+    cursor: pointer;
+  }
 `;
 
 const SearchWrapper = styled.div`

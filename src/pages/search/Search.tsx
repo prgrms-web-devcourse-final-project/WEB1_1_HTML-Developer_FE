@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { IoChevronDown } from 'react-icons/io5';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 
 import RecentSearch from './components/RecentSearch';
@@ -16,19 +16,13 @@ interface SearchOutlet {
 
 const Search = () => {
   const { concertSearchResult } = useOutletContext<SearchOutlet>();
-  const [searchHistory, setSearchHistory] = useState<string[]>([
-    'day6',
-    'aespa',
-    'NewJeans',
-    '아이유',
-  ]);
   const navigate = useNavigate();
 
   return (
     <SearchContainer>
       {concertSearchResult.length === 0 ? (
         <>
-          <RecentSearch searchHistory={searchHistory} setSearchHistory={setSearchHistory} />
+          <RecentSearch />
           <PopularKeyword />
         </>
       ) : (
@@ -42,6 +36,9 @@ const Search = () => {
                 onClick={() => navigate(endPoint.GET_CONCERT_DETAIL(concert.id))}
               />
             ))}
+            <MoreIcon>
+              <IoChevronDown size={24} />
+            </MoreIcon>
           </ConcertList>
         </>
       )}
@@ -58,6 +55,15 @@ const ConcertList = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 2.4rem 1.6rem 2.4rem;
+
+  svg {
+    cursor: pointer;
+  }
+`;
+
+const MoreIcon = styled.div`
+  display: flex;
+  justify-content: center;
 `;
 
 export default Search;
