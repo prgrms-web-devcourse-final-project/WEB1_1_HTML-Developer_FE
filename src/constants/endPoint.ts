@@ -58,6 +58,7 @@ export const endPoint = {
   GET_SURVEYS_SEARCH: '/search/surveys',
   GET_MORE_SURVEYS_SEARCH: '/search/surveys/list',
   GET_CONCERT_SEARCH_LIST: '/search/concert/list',
+  GET_CONCERT_SEARCH_ALL: '/search/concert/list/all',
   SEARCH_ARTISTS: '/artists/search',
   SEARCH_POPULAR_KEYWORD: '/search/popular',
 };
