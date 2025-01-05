@@ -51,8 +51,11 @@ export const endPoint = {
 
   // Search API
   GET_CONCERT_SEARCH: '/search/concert',
+  GET_MORE_CONCERT_SEARCH: '/search/concert/list',
   GET_RENTS_SEARCH: '/search/rents',
+  GET_MORE_RENTS_LIST: '/search/rents/list',
   GET_SURVEYS_SEARCH: '/search/surveys',
+  GET_MORE_SURVEYS_SEARCH: '/search/surveys/list',
   GET_CONCERT_SEARCH_LIST: '/search/concert/list',
   SEARCH_ARTISTS: '/artists/search',
   SEARCH_POPULAR_KEYWORD: '/search/popular',

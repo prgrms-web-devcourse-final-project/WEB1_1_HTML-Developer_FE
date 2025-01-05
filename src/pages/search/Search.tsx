@@ -46,9 +46,7 @@ const Search = () => {
             <MoreIcon>
               <IoChevronDown
                 onClick={() =>
-                  navigate(
-                    `/search/more?category=survey&keyword=${encodeURIComponent(searchValue)}`
-                  )
+                  navigate(`/search/concerts/more?keyword=${encodeURIComponent(searchValue)}`)
                 }
                 size={24}
               />
@@ -66,7 +64,12 @@ const Search = () => {
               />
             ))}
             <MoreIcon>
-              <IoChevronDown onClick={() => navigate('/search/more?category=rent')} size={24} />
+              <IoChevronDown
+                onClick={() =>
+                  navigate(`/search/rents/more?keyword=${encodeURIComponent(searchValue)}`)
+                }
+                size={24}
+              />
             </MoreIcon>
           </RentsList>
           <SurveyList>
@@ -83,7 +86,12 @@ const Search = () => {
                 />
               ))}
               <MoreIcon>
-                <IoChevronDown onClick={() => navigate('/search/more?category=survey')} size={24} />
+                <IoChevronDown
+                  onClick={() =>
+                    navigate(`/search/surveys/more?keyword=${encodeURIComponent(searchValue)}`)
+                  }
+                  size={24}
+                />
               </MoreIcon>
             </Surveys>
           </SurveyList>
