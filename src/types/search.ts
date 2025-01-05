@@ -7,6 +7,7 @@ export interface ConcertData {
   concertHallName: string;
   stdate: string;
   eddate: string;
+  episodes?: string[];
 }
 
 interface SearchAfter {

@@ -24,10 +24,27 @@ export interface SurveysResult {
   edDate: string;
 }
 
+interface RentResponse {
+  timeStamp: string;
+  code: string;
+  message: string;
+  result: RentsResult[];
+}
+
+export interface RentsResult {
+  id: number;
+  title: string;
+  boardingArea: string;
+  imageUrl: string;
+  edDate: string;
+}
+
 const SearchLayout = () => {
   const [isFocused, setIsFocused] = useState(false);
   const [concertSearchResult, setConcertSearchResult] = useState<Concert[]>([]);
   const [surveySearchResult, setSurveySearchResult] = useState<SurveysResult[]>([]);
+  const [rentsSearchResult, setRentSearchResult] = useState<RentsResult[]>([]);
+  const [searchValue, setSearchValue] = useState('');
   const [searchHistory, setSearchHistory] = useState<string[]>(() => {
     const savedHistory = localStorage.getItem('searchHistory');
 
@@ -47,6 +64,16 @@ const SearchLayout = () => {
     return result;
   };
 
+  const getRents = async (keyword: string) => {
+    const {
+      data: { result },
+    } = await publicAxios.get<RentResponse>(
+      `${endPoint.GET_RENTS_SEARCH}/?query=${encodeURIComponent(keyword)}`
+    );
+
+    return result;
+  };
+
   const getSurveys = async (keyword: string) => {
     const {
       data: { result },
@@ -60,11 +87,16 @@ const SearchLayout = () => {
   const handleConcertSearch = async (keyword: string) => {
     if (!keyword.trim()) return;
 
+    setSearchValue(keyword);
+
     const concerts = await getConcerts(keyword);
     setConcertSearchResult(concerts);
 
     const surveys = await getSurveys(keyword);
     setSurveySearchResult(surveys);
+
+    const rents = await getRents(keyword);
+    setRentSearchResult(rents);
 
     setSearchHistory((prev) => {
       if (prev.includes(keyword)) {
@@ -106,7 +138,14 @@ const SearchLayout = () => {
         </SearchWrapper>
       </HeaderContainer>
       <Outlet
-        context={{ concertSearchResult, surveySearchResult, searchHistory, setSearchHistory }}
+        context={{
+          concertSearchResult,
+          surveySearchResult,
+          rentsSearchResult,
+          searchValue,
+          searchHistory,
+          setSearchHistory,
+        }}
       />
     </>
   );

@@ -6,7 +6,8 @@ import RecentSearch from './components/RecentSearch';
 
 import PopularKeyword from 'components/popularKeyword/PopularKeyword';
 import { endPoint } from 'constants/endPoint';
-import type { SurveysResult } from 'layout/SearchLayout';
+import type { RentsResult, SurveysResult } from 'layout/SearchLayout';
+import RentalPostItem from 'pages/busRental/components/RentalPostItem';
 import ConcertItem from 'pages/concert/components/ConcertItem';
 import type { Concert } from 'pages/concert/type';
 import SurveyItem from 'pages/surveys/components/SurveyItem';
@@ -15,10 +16,13 @@ import { TitleText2 } from 'styles/Typography';
 interface SearchOutlet {
   concertSearchResult: Concert[];
   surveySearchResult: SurveysResult[];
+  rentsSearchResult: RentsResult[];
+  searchValue: string;
 }
 
 const Search = () => {
-  const { concertSearchResult, surveySearchResult } = useOutletContext<SearchOutlet>();
+  const { concertSearchResult, surveySearchResult, rentsSearchResult, searchValue } =
+    useOutletContext<SearchOutlet>();
   const navigate = useNavigate();
 
   return (
@@ -40,9 +44,31 @@ const Search = () => {
               />
             ))}
             <MoreIcon>
-              <IoChevronDown size={24} />
+              <IoChevronDown
+                onClick={() =>
+                  navigate(
+                    `/search/more?category=survey&keyword=${encodeURIComponent(searchValue)}`
+                  )
+                }
+                size={24}
+              />
             </MoreIcon>
           </ConcertList>
+          <RentsList>
+            <TitleText2>콘서트 차량 대절</TitleText2>
+            {rentsSearchResult.map((rent) => (
+              <RentalPostItem
+                boardingArea={rent.boardingArea}
+                endDate={rent.edDate}
+                imageUrl={rent.imageUrl}
+                rentId={rent.id}
+                title={rent.title}
+              />
+            ))}
+            <MoreIcon>
+              <IoChevronDown onClick={() => navigate('/search/more?category=rent')} size={24} />
+            </MoreIcon>
+          </RentsList>
           <SurveyList>
             <TitleText2>차량 대절 수요 조사</TitleText2>
             <Surveys>
@@ -57,7 +83,7 @@ const Search = () => {
                 />
               ))}
               <MoreIcon>
-                <IoChevronDown size={24} />
+                <IoChevronDown onClick={() => navigate('/search/more?category=survey')} size={24} />
               </MoreIcon>
             </Surveys>
           </SurveyList>
@@ -85,6 +111,17 @@ const ConcertList = styled.div`
 const MoreIcon = styled.div`
   display: flex;
   justify-content: center;
+`;
+
+const RentsList = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 0 2.4rem 1.6rem 2.4rem;
+  gap: 2.4rem;
+
+  svg {
+    cursor: pointer;
+  }
 `;
 
 const SurveyList = styled.div`
