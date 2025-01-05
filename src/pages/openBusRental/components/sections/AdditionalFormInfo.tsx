@@ -3,16 +3,25 @@ import RentalFormSelect from '../items/RentalFormSelect';
 import RentalInputField from '../items/RentalInputField';
 import TextArea from '../items/TextArea';
 import RefundTypeRadio from '../lists/RefundTypeRadio';
-import EndDateSheet from '../sheets/EndDateSheet';
 
+import DateSheet from 'components/sheets/DateSheet';
 import { RENTAL_FORM_PLACEHOLDER } from 'constants/placeholder';
-import { useModalStore } from 'stores';
+import { useModalStore, useRentalFormStore } from 'stores';
 
 const AdditionalFormInfo = () => {
   const { openModal } = useModalStore(['openModal']);
+  const { updateFormData } = useRentalFormStore(['updateFormData']);
 
   const handleSelectClick = () => {
-    openModal('bottomSheet', 'list', <EndDateSheet />);
+    openModal(
+      'bottomSheet',
+      'list',
+      <DateSheet
+        isAllowFromToday
+        onDateSelect={(date) => updateFormData('endDate', date)}
+        title="모집 마감 날짜"
+      />
+    );
   };
 
   return (

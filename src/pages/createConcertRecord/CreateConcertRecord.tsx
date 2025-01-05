@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { LuCalendar } from 'react-icons/lu';
 import { TbChevronDown } from 'react-icons/tb';
 
@@ -8,7 +8,9 @@ import BaseButton from 'components/buttons/BaseButton';
 import ImageField from 'components/imageField/ImageField';
 import SearchConcertItem from 'components/items/SearchConcertItem';
 import SearchField from 'components/searchField/SearchField';
+import DateSheet from 'components/sheets/DateSheet';
 import SearchConcertSheet from 'components/sheets/SearchConcertSheet';
+import { CONCERT_RECORD_PLACEHOLDER } from 'constants/placeholder';
 import { useModalStore } from 'stores';
 import { BodyMediumText, BodyRegularText } from 'styles/Typography';
 import type { ConcertData } from 'types';
@@ -132,11 +134,15 @@ const CreateConcertRecord = () => {
   const { openModal } = useModalStore(['openModal']);
   const [concertData, setConcertData] = useState<ConcertData | null>(null);
 
-  const { setValue } = useForm();
+  const { control, setValue } = useForm();
 
   const handleConcertSelect = (concertData: ConcertData) => {
     setConcertData(concertData);
     setValue('concertId', concertData.id);
+  };
+
+  const handleDateSelect = (date: string) => {
+    setValue('date', date);
   };
 
   return (
@@ -157,11 +163,27 @@ const CreateConcertRecord = () => {
       </FormFieldContainer>
       <FormFieldContainer>
         <FormFieldLabel>언제 보셨나요?</FormFieldLabel>
-        <DateSelect onClick={() => {}}>
-          <LuCalendar size={20} />
-          <DateSelectValue isValid={false}>날짜를 선택해주세요</DateSelectValue>
-          <DropdownIcon size={24} />
-        </DateSelect>
+        <Controller
+          control={control}
+          name="date"
+          render={({ field }) => (
+            <DateSelect
+              onClick={() =>
+                openModal(
+                  'bottomSheet',
+                  'list',
+                  <DateSheet onDateSelect={handleDateSelect} title="공연 기록 날짜" />
+                )
+              }
+            >
+              <LuCalendar size={20} />
+              <DateSelectValue isValid={field.value}>
+                {field.value || CONCERT_RECORD_PLACEHOLDER.date}
+              </DateSelectValue>
+              <DropdownIcon size={24} />
+            </DateSelect>
+          )}
+        />
       </FormFieldContainer>
       <FormFieldContainer>
         <FormFieldLabel>어떤 회차를 보셨나요?</FormFieldLabel>

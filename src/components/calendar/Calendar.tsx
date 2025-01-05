@@ -9,10 +9,11 @@ import type { DateButtonProps } from './types';
 import { BodyRegularText, ChipText } from 'styles/Typography';
 
 interface CalendarProps {
+  isAllowFromToday?: boolean;
   onSelect?: (date: string) => void;
 }
 
-const Calendar = ({ onSelect }: CalendarProps) => {
+const Calendar = ({ isAllowFromToday = false, onSelect }: CalendarProps) => {
   const [currentMonth, setCurrentMonth] = useState(dayjs());
   const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
 
@@ -89,6 +90,7 @@ const Calendar = ({ onSelect }: CalendarProps) => {
         {generateCalendar().map(({ date, isCurrentMonth }, index) => (
           <DateButton
             isCurrentMonth={isCurrentMonth}
+            isDisabled={isAllowFromToday && date < dayjs()}
             isSelected={isSelected(date)}
             isToday={isToday(date)}
             key={index}
@@ -108,7 +110,7 @@ const CalendarWrapper = styled.div`
   width: 100%;
   max-width: 32.7rem;
   height: fit-content;
-  padding: 1.6rem;
+  /* padding: 1.6rem; */
   background-color: ${({ theme }) => theme.colors.dark[700]};
   border-radius: 0.5rem;
 
@@ -167,6 +169,7 @@ const DateButton = styled.button<DateButtonProps>`
   justify-content: center;
   align-items: center;
   aspect-ratio: 1;
+  pointer-events: ${({ isDisabled }) => (isDisabled ? 'none' : 'auto')};
 
   span {
     width: 2.4rem;
@@ -177,8 +180,9 @@ const DateButton = styled.button<DateButtonProps>`
   }
 
   color: ${(props) => {
-    if (!props.isCurrentMonth) return ({ theme }) => theme.colors.dark[300];
     if (props.isSelected) return ({ theme }) => theme.colors.dark[100];
+    if (props.isDisabled) return ({ theme }) => theme.colors.dark[500];
+    if (!props.isCurrentMonth) return ({ theme }) => theme.colors.dark[300];
     if (props.isToday) return ({ theme }) => theme.colors.primaryLight;
     return ({ theme }) => theme.colors.dark[100];
   }};
