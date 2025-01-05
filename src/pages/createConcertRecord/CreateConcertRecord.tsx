@@ -1,11 +1,17 @@
 import styled from '@emotion/styled';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { LuCalendar } from 'react-icons/lu';
 import { TbChevronDown } from 'react-icons/tb';
 
 import BaseButton from 'components/buttons/BaseButton';
 import ImageField from 'components/imageField/ImageField';
+import SearchConcertItem from 'components/items/SearchConcertItem';
 import SearchField from 'components/searchField/SearchField';
+import SearchConcertSheet from 'components/sheets/SearchConcertSheet';
+import { useModalStore } from 'stores';
 import { BodyMediumText, BodyRegularText } from 'styles/Typography';
+import type { ConcertData } from 'types';
 
 const ConcertRecordForm = styled.form`
   display: flex;
@@ -123,11 +129,31 @@ const ButtonWrapper = styled.div`
 `;
 
 const CreateConcertRecord = () => {
+  const { openModal } = useModalStore(['openModal']);
+  const [concertData, setConcertData] = useState<ConcertData | null>(null);
+
+  const { setValue } = useForm();
+
+  const handleConcertSelect = (concertData: ConcertData) => {
+    setConcertData(concertData);
+    setValue('concertId', concertData.id);
+  };
+
   return (
     <ConcertRecordForm>
       <FormFieldContainer>
         <FormFieldLabel>어떤 콘서트를 보셨나요?</FormFieldLabel>
-        <SearchField name="concert" onClick={() => {}} />
+        <SearchField
+          name="concert"
+          onClick={() =>
+            openModal(
+              'bottomSheet',
+              'list',
+              <SearchConcertSheet isPastSearch onConcertSelect={handleConcertSelect} />
+            )
+          }
+        />
+        {concertData && <SearchConcertItem concertData={concertData} isInactive />}
       </FormFieldContainer>
       <FormFieldContainer>
         <FormFieldLabel>언제 보셨나요?</FormFieldLabel>
