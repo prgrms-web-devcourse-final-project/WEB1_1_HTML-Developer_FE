@@ -11,7 +11,7 @@ import RentalPostItem from 'pages/busRental/components/RentalPostItem';
 import ConcertItem from 'pages/concert/components/ConcertItem';
 import type { Concert } from 'pages/concert/type';
 import SurveyItem from 'pages/surveys/components/SurveyItem';
-import { TitleText2 } from 'styles/Typography';
+import { BodyRegularText, TitleText2 } from 'styles/Typography';
 
 interface SearchOutlet {
   concertSearchResult: Concert[];
@@ -36,13 +36,19 @@ const Search = () => {
         <>
           <ConcertList>
             <TitleText2>예정 공연</TitleText2>
-            {concertSearchResult.map((concert) => (
-              <ConcertItem
-                concert={concert}
-                key={concert.id}
-                onClick={() => navigate(endPoint.GET_CONCERT_DETAIL(concert.id))}
-              />
-            ))}
+            {concertSearchResult.length === 0 ? (
+              <EmptySearchList>
+                <BodyRegularText>검색 결과가 없습니다</BodyRegularText>
+              </EmptySearchList>
+            ) : (
+              concertSearchResult.map((concert) => (
+                <ConcertItem
+                  concert={concert}
+                  key={concert.id}
+                  onClick={() => navigate(endPoint.GET_CONCERT_DETAIL(concert.id))}
+                />
+              ))
+            )}
             <MoreIcon>
               <IoChevronDown
                 onClick={() =>
@@ -54,15 +60,21 @@ const Search = () => {
           </ConcertList>
           <RentsList>
             <TitleText2>콘서트 차량 대절</TitleText2>
-            {rentsSearchResult.map((rent) => (
-              <RentalPostItem
-                boardingArea={rent.boardingArea}
-                endDate={rent.edDate}
-                imageUrl={rent.imageUrl}
-                rentId={rent.id}
-                title={rent.title}
-              />
-            ))}
+            {rentsSearchResult.length === 0 ? (
+              <EmptySearchList>
+                <BodyRegularText>검색 결과가 없습니다</BodyRegularText>
+              </EmptySearchList>
+            ) : (
+              rentsSearchResult.map((rent) => (
+                <RentalPostItem
+                  boardingArea={rent.boardingArea}
+                  endDate={rent.edDate}
+                  imageUrl={rent.imageUrl}
+                  rentId={rent.id}
+                  title={rent.title}
+                />
+              ))
+            )}
             <MoreIcon>
               <IoChevronDown
                 onClick={() =>
@@ -75,16 +87,22 @@ const Search = () => {
           <SurveyList>
             <TitleText2>차량 대절 수요 조사</TitleText2>
             <Surveys>
-              {surveySearchResult.map((survey) => (
-                <SurveyItem
-                  endDate={survey.edDate}
-                  key={survey.id}
-                  participationCount={survey.participantNum}
-                  region={survey.region}
-                  surveyId={survey.id}
-                  title={survey.title}
-                />
-              ))}
+              {surveySearchResult.length === 0 ? (
+                <EmptySearchList>
+                  <BodyRegularText>검색 결과가 없습니다</BodyRegularText>
+                </EmptySearchList>
+              ) : (
+                surveySearchResult.map((survey) => (
+                  <SurveyItem
+                    endDate={survey.edDate}
+                    key={survey.id}
+                    participationCount={survey.participantNum}
+                    region={survey.region}
+                    surveyId={survey.id}
+                    title={survey.title}
+                  />
+                ))
+              )}
               <MoreIcon>
                 <IoChevronDown
                   onClick={() =>
@@ -148,5 +166,7 @@ const Surveys = styled.div`
   flex-direction: column;
   gap: 1rem;
 `;
+
+const EmptySearchList = styled.div``;
 
 export default Search;
