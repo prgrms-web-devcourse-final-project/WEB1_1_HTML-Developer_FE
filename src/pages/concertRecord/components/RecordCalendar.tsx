@@ -9,7 +9,8 @@ import { useGetConcertRecordList } from 'queries/concertRecord';
 import { BodyRegularText, ChipText } from 'styles/Typography';
 
 interface CalendarProps {
-  onDateSelect?: (date: string) => void;
+  onDateSelect: (diaryId: string) => void;
+  onMove: () => void;
 }
 
 export interface DateButtonProps {
@@ -101,13 +102,13 @@ const DateButton = styled.button<DateButtonProps>`
     }
   `}
 
-  &:hover {
+  &:hover, &:active {
     background-color: ${({ theme }) => theme.colors.dark[700]};
     filter: ${({ imageUrl }) => (imageUrl ? 'opacity(60%)' : 'none')};
   }
 `;
 
-const RecordCalendar = ({ onDateSelect }: CalendarProps) => {
+const RecordCalendar = ({ onDateSelect, onMove }: CalendarProps) => {
   const navigate = useNavigate();
   const [currentMonth, setCurrentMonth] = useState(dayjs());
 
@@ -155,20 +156,34 @@ const RecordCalendar = ({ onDateSelect }: CalendarProps) => {
 
   const weekDays = ['일', '월', '화', '수', '목', '금', '토'];
 
-  const handleDateSelect = (date: Dayjs, isRecordExist: boolean) => {
+  const handlePrevClick = () => {
+    changeMonth('prev');
+    onMove();
+  };
+
+  const handleNextClick = () => {
+    changeMonth('next');
+    onMove();
+  };
+
+  const handleDateSelect = (id: number | null, date: Dayjs, isRecordExist: boolean) => {
     const formattedDate = date.format('YYYY-MM-DD');
 
     if (!isRecordExist) {
       navigate('/concert-record/create', { state: { date: formattedDate } });
     }
 
-    onDateSelect?.(formattedDate);
+    if (id) {
+      onDateSelect?.(id.toString());
+    }
   };
 
-  const concertImage = useCallback(
+  const concertData = useCallback(
     (date: Dayjs) => {
       const record = recordList?.find((record) => record.date === date.format('YYYY-MM-DD'));
-      return record?.concertPoster.url || '';
+      return record
+        ? { url: record?.concertPoster.url, id: record?.diaryId }
+        : { url: null, id: null };
     },
     [recordList]
   );
@@ -176,13 +191,13 @@ const RecordCalendar = ({ onDateSelect }: CalendarProps) => {
   return (
     <CalendarWrapper>
       <CalendarHeader>
-        <NavigationButton onClick={() => changeMonth('prev')}>
+        <NavigationButton onClick={handlePrevClick}>
           <TbChevronLeft size={16} />
         </NavigationButton>
         <HeaderTitle onClick={() => changeMonth('today')}>
           <BodyRegularText>{currentMonth.format('YYYY년 MM월')}</BodyRegularText>
         </HeaderTitle>
-        <NavigationButton onClick={() => changeMonth('next')}>
+        <NavigationButton onClick={handleNextClick}>
           <TbChevronRight size={16} />
         </NavigationButton>
       </CalendarHeader>
@@ -195,14 +210,14 @@ const RecordCalendar = ({ onDateSelect }: CalendarProps) => {
       </WeekdayHeader>
       <DateGrid>
         {generateCalendar().map(({ date, isCurrentMonth }, index) => {
-          const image = concertImage(date);
+          const { url, id } = concertData(date);
           return (
             <DateButton
-              imageUrl={image}
+              imageUrl={url || ''}
               isCurrentMonth={isCurrentMonth}
               isToday={isToday(date)}
               key={index}
-              onClick={() => handleDateSelect(date, !!image)}
+              onClick={() => handleDateSelect(id, date, !!url)}
             >
               <ChipText>{date.format('D')}</ChipText>
             </DateButton>

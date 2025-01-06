@@ -14,8 +14,24 @@ interface ConcertPoster {
 }
 
 export interface ConcertRecord {
+  diaryId: number;
   concertPoster: ConcertPoster;
   date: string;
 }
 
+interface DiaryImages {
+  url: string;
+}
+
+export interface ConcertRecordDetail {
+  concertTitle: string;
+  concertPoster: ConcertPoster;
+  diaryDate: string;
+  episode: string;
+  seatName: string;
+  diaryImages: DiaryImages[];
+  content: string;
+}
+
 export type RecordListResponse = ApiResponse<ConcertRecord[]>;
+export type RecordDetailResponse = ApiResponse<ConcertRecordDetail>;
