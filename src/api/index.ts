@@ -4,3 +4,4 @@ export * from './surveyApi';
 export * from './rentalFormApi';
 export * from './searchApi';
 export * from './userApi';
+export * from './concertRecord';

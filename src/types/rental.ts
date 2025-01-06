@@ -1,5 +1,6 @@
 import type { ApiResponse } from './api';
 import type { Region } from './filter';
+import type { RefundAccount } from './user';
 
 // Rental List
 export interface RentalList {
@@ -44,11 +45,6 @@ export interface BoardingDates {
   date: string;
   participationCount: number;
   isApplied?: boolean;
-}
-
-export interface RefundAccount {
-  bank: string;
-  number: string;
 }
 
 export interface RentalDetail {

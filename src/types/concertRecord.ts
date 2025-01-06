@@ -4,5 +4,5 @@ export interface ConcertRecord {
   episode: string;
   content: string;
   seatName: string;
-  images: string[];
+  images: File[] | [];
 }

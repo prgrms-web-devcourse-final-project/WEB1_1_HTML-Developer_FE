@@ -1,12 +1,14 @@
 import styled from '@emotion/styled';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { LuCalendar } from 'react-icons/lu';
 import { TbChevronDown } from 'react-icons/tb';
 
 import ConcertTime from './components/ConcertTime';
 import RecordImageField from './components/RecordImageField';
+import RecordSubmitDialog from './components/RecordSubmitDialog';
 
 import BaseButton from 'components/buttons/BaseButton';
 import SearchConcertItem from 'components/items/SearchConcertItem';
@@ -14,9 +16,11 @@ import SearchField from 'components/searchField/SearchField';
 import DateSheet from 'components/sheets/DateSheet';
 import SearchConcertSheet from 'components/sheets/SearchConcertSheet';
 import { CONCERT_RECORD_PLACEHOLDER } from 'constants/placeholder';
+import { concertRecordSchema, type ConcertRecordSchemaType } from 'schemas/concertRecordSchema';
 import { useModalStore } from 'stores';
 import { BodyMediumText, BodyRegularText } from 'styles/Typography';
 import type { ConcertData } from 'types';
+import type { ConcertRecord } from 'types/concertRecord';
 
 interface FieldStyleProps {
   isError: boolean;
@@ -52,7 +56,7 @@ const DateSelect = styled.div`
   gap: 0.8rem;
   width: 100%;
   height: 4rem;
-  padding: 0 1.2rem 0 1.6rem;
+  padding: 0 1.2rem;
   border-radius: 4px;
   background-color: ${({ theme }) => theme.colors.dark[500]};
   cursor: pointer;
@@ -144,9 +148,25 @@ const CreateConcertRecord = () => {
   const { openModal } = useModalStore(['openModal']);
   const [concertData, setConcertData] = useState<ConcertData | null>(null);
 
-  const methods = useForm();
+  const methods = useForm<ConcertRecordSchemaType>({
+    resolver: zodResolver(concertRecordSchema),
+    defaultValues: {
+      concertId: 0,
+      date: '',
+      episode: '',
+      content: '',
+      seatName: '',
+      images: [],
+    },
+  });
 
-  const { control, setValue, watch } = methods;
+  const {
+    control,
+    setValue,
+    watch,
+    handleSubmit,
+    formState: { isValid },
+  } = methods;
 
   const handleConcertSelect = (concertData: ConcertData) => {
     setConcertData(concertData);
@@ -157,13 +177,13 @@ const CreateConcertRecord = () => {
     setValue('date', date);
   };
 
-  useEffect(() => {
-    console.log(watch('image'));
-  }, [watch]);
+  const onSubmit = (recordData: ConcertRecord) => {
+    openModal('dialog', 'confirm', <RecordSubmitDialog recordData={recordData} />);
+  };
 
   return (
     <FormProvider {...methods}>
-      <ConcertRecordForm>
+      <ConcertRecordForm onSubmit={handleSubmit(onSubmit)}>
         <FormFieldContainer>
           <FormFieldLabel>언제 보셨나요?</FormFieldLabel>
           <Controller
@@ -180,7 +200,7 @@ const CreateConcertRecord = () => {
                 }
               >
                 <LuCalendar size={20} />
-                <DateSelectValue isValid={field.value}>
+                <DateSelectValue isValid={field.value !== ''}>
                   {field.value || CONCERT_RECORD_PLACEHOLDER.date}
                 </DateSelectValue>
                 <DropdownIcon size={24} />
@@ -254,17 +274,16 @@ const CreateConcertRecord = () => {
             </FormFieldContainer>
             <FormFieldContainer>
               <FormFieldLabel>사진 첨부 (선택)</FormFieldLabel>
-              <RecordImageField />
+              <RecordImageField onUploadImages={(images) => setValue('images', images)} />
             </FormFieldContainer>
           </ActiveContent>
         )}
         <ButtonWrapper>
           <BaseButton
             color="primary"
-            isDisabled={false}
-            onClick={() => {}}
+            isDisabled={!isValid}
             size="medium"
-            type="button"
+            type="submit"
             variant="fill"
           >
             등록

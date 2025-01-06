@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
 import { LuCamera } from 'react-icons/lu';
 import { TbX } from 'react-icons/tb';
 
@@ -9,13 +8,12 @@ import { hexToRgba } from 'utils';
 
 interface ImageFieldProps {
   initialImages?: string[];
+  onUploadImages?: (images: File[]) => void;
 }
 
 const MAX_IMAGES = 5;
 
-const RecordImageField = ({ initialImages = [] }: ImageFieldProps) => {
-  const { setValue } = useFormContext();
-
+const RecordImageField = ({ initialImages = [], onUploadImages }: ImageFieldProps) => {
   // 모든 이미지의 미리보기
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   // 새로 추가된 파일들
@@ -49,7 +47,7 @@ const RecordImageField = ({ initialImages = [] }: ImageFieldProps) => {
     setNewImageFiles((prev) => [...prev, ...files]);
     setPreviewImages((prev) => [...prev, ...encodedImages]);
 
-    setValue('image', [...newImageFiles, ...files]);
+    onUploadImages?.([...newImageFiles, ...files]);
   };
 
   const handleImageDelete = (index: number) => {
@@ -63,7 +61,7 @@ const RecordImageField = ({ initialImages = [] }: ImageFieldProps) => {
       // 새로 추가된 이미지 삭제
       const newImageIndex = index - initialImages.length;
       setNewImageFiles((prev) => prev.filter((_, i) => i !== newImageIndex));
-      setValue('image', [...newImageFiles.filter((_, i) => i !== newImageIndex)]);
+      onUploadImages?.([...newImageFiles.filter((_, i) => i !== newImageIndex)]);
     }
 
     setPreviewImages((prev) => prev.filter((_, i) => i !== index));

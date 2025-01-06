@@ -61,4 +61,11 @@ export const endPoint = {
   GET_CONCERT_SEARCH_ALL: '/search/concert/list/all',
   SEARCH_ARTISTS: '/artists/search',
   SEARCH_POPULAR_KEYWORD: '/search/popular',
+
+  // Concert Record API
+  GET_CONCERT_RECORD_LIST: '/diaries/list',
+  GET_CONCERT_RECORD_DETAILS: (diaryId: string) => `/diaries/${diaryId}`,
+  CREATE_CONCERT_RECORD: '/diaries',
+  UPDATE_CONCERT_RECORD: '/diaries',
+  DELETE_CONCERT_RECORD: (diaryId: string) => `/diaries/${diaryId}`,
 };
