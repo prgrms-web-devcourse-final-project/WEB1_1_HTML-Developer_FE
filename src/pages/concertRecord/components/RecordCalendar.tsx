@@ -6,12 +6,8 @@ import { TbChevronLeft, TbChevronRight } from 'react-icons/tb';
 import { useNavigate } from 'react-router-dom';
 
 import { useGetConcertRecordList } from 'queries/concertRecord';
+import { useConcertRecordStore } from 'stores/concertRecordStore';
 import { BodyRegularText, ChipText } from 'styles/Typography';
-
-interface CalendarProps {
-  onDateSelect: (diaryId: string) => void;
-  onMove: () => void;
-}
 
 export interface DateButtonProps {
   imageUrl?: string;
@@ -108,8 +104,12 @@ const DateButton = styled.button<DateButtonProps>`
   }
 `;
 
-const RecordCalendar = ({ onDateSelect, onMove }: CalendarProps) => {
+const RecordCalendar = () => {
   const navigate = useNavigate();
+  const { updateRecordData, resetRecordData } = useConcertRecordStore([
+    'updateRecordData',
+    'resetRecordData',
+  ]);
   const [currentMonth, setCurrentMonth] = useState(dayjs());
 
   const { data: recordList } = useGetConcertRecordList(
@@ -158,12 +158,12 @@ const RecordCalendar = ({ onDateSelect, onMove }: CalendarProps) => {
 
   const handlePrevClick = () => {
     changeMonth('prev');
-    onMove();
+    resetRecordData();
   };
 
   const handleNextClick = () => {
     changeMonth('next');
-    onMove();
+    resetRecordData();
   };
 
   const handleDateSelect = (id: number | null, date: Dayjs, isRecordExist: boolean) => {
@@ -174,7 +174,7 @@ const RecordCalendar = ({ onDateSelect, onMove }: CalendarProps) => {
     }
 
     if (id) {
-      onDateSelect?.(id.toString());
+      updateRecordData({ id: id.toString(), date: formattedDate });
     }
   };
 

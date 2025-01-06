@@ -8,7 +8,10 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
+import RecordDeleteDialog from './RecordDeleteDialog';
+
 import { useGetConcertRecordDetail } from 'queries/concertRecord/useGetConcertRecordDetail';
+import { useModalStore } from 'stores';
 import { BodyRegularText, HeaderText, TitleText2 } from 'styles/Typography';
 import { formatDateWithDay } from 'utils';
 
@@ -104,6 +107,7 @@ const ConcertRecordContent = styled(BodyRegularText)`
 `;
 
 const RecordDetails = ({ id }: RecordDetailsProps) => {
+  const { openModal } = useModalStore(['openModal']);
   const { data: recordData } = useGetConcertRecordDetail(id);
 
   if (!recordData) return <div>세부 정보가 존재하지 않습니다.</div>;
@@ -112,6 +116,10 @@ const RecordDetails = ({ id }: RecordDetailsProps) => {
     recordData;
 
   const images = [concertPoster.url, ...diaryImages.map((image) => image.url)];
+
+  const handleDeleteRecord = () => {
+    openModal('dialog', 'confirm', <RecordDeleteDialog />);
+  };
 
   return (
     <RecordDetailContainer
@@ -126,7 +134,7 @@ const RecordDetails = ({ id }: RecordDetailsProps) => {
         <ActionButton>
           <PiPencilSimpleLineBold size={24} />
         </ActionButton>
-        <ActionButton>
+        <ActionButton onClick={handleDeleteRecord}>
           <TbTrash size={24} />
         </ActionButton>
       </ButtonWrapper>

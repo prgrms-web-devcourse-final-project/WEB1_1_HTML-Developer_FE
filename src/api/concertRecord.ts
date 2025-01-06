@@ -19,3 +19,7 @@ export const requestGetConcertRecordDetails = async (id: string) => {
   );
   return data;
 };
+
+export const requestDeleteConcertRecord = async (id: string) => {
+  return await tokenAxios.delete(`${endPoint.DELETE_CONCERT_RECORD(id)}`);
+};

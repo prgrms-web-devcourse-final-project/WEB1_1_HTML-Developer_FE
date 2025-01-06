@@ -4,6 +4,8 @@ import { useState } from 'react';
 import RecordCalendar from './components/RecordCalendar';
 import RecordDetails from './components/RecordDetails';
 
+import { useConcertRecordStore } from 'stores/concertRecordStore';
+
 const ConcertRecordContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -14,12 +16,13 @@ const ConcertRecordContainer = styled.div`
 `;
 
 const ConcertRecord = () => {
-  const [recordId, setRecordId] = useState<string | null>(null);
+  const { recordData } = useConcertRecordStore(['recordData']);
+  const { id } = recordData;
 
   return (
     <ConcertRecordContainer>
-      <RecordCalendar onDateSelect={(id) => setRecordId(id)} onMove={() => setRecordId(null)} />
-      {recordId && <RecordDetails id={recordId} />}
+      <RecordCalendar />
+      {id && <RecordDetails id={id} />}
     </ConcertRecordContainer>
   );
 };
