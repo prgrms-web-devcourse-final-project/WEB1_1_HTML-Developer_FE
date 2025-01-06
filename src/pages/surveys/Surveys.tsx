@@ -1,9 +1,11 @@
 import styled from '@emotion/styled';
 import { TbClipboardText } from 'react-icons/tb';
+import { useNavigate } from 'react-router-dom';
 
 import SurveyItem from './components/SurveyItem';
 
 import FilterBottomSheet from 'components/bottomSheet/FilterBottomSheet';
+import FAB from 'components/buttons/FAB';
 import FilterChip from 'components/chips/FilterChip';
 import { FILTER_TYPE } from 'constants/filterTypes';
 import { useIntersectionObserver } from 'hooks';
@@ -14,8 +16,8 @@ import { BodyRegularText, HeaderText } from 'styles/Typography';
 import type { FilterType } from 'types';
 
 const Surveys = () => {
+  const navigate = useNavigate();
   const { surveyFilters } = useFilterStore(['surveyFilters']);
-
   const {
     data: surveyList,
     isLoading,
@@ -29,6 +31,10 @@ const Surveys = () => {
 
   const handleFilterChipClick = (type: FilterType) => {
     openModal('bottomSheet', 'list', <FilterBottomSheet filterType={type} target="survey" />);
+  };
+
+  const handleFABClick = () => {
+    navigate('/survey/create');
   };
 
   const renderFilterChips = () => {
@@ -73,6 +79,7 @@ const Surveys = () => {
         )}
         <div ref={targetRef} />
       </ContentContainer>
+      <FAB onFABClick={handleFABClick} />
     </>
   );
 };
