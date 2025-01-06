@@ -65,9 +65,11 @@ const Surveys = () => {
             <BodyRegularText>아직 등록된 수요 조사가 없어요.</BodyRegularText>
           </EmptySurveyList>
         ) : (
-          surveyList?.pages.map((page) =>
-            page.map((item) => <SurveyItem key={item.surveyId} {...item} />)
-          )
+          <SurveyList>
+            {surveyList?.pages.map((page) =>
+              page.map((item) => <SurveyItem key={item.surveyId} {...item} />)
+            )}
+          </SurveyList>
         )}
         <div ref={targetRef} />
       </ContentContainer>
@@ -109,6 +111,12 @@ const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 2rem;
+`;
+
+const SurveyList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
 `;
 
 export default Surveys;
