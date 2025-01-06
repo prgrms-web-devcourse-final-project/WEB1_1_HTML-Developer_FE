@@ -18,6 +18,10 @@ import { useModalStore } from 'stores';
 import { BodyMediumText, BodyRegularText } from 'styles/Typography';
 import type { ConcertData } from 'types';
 
+interface FieldStyleProps {
+  isError: boolean;
+}
+
 const ConcertRecordForm = styled.form`
   display: flex;
   flex-direction: column;
@@ -73,7 +77,7 @@ const ConcertTimeList = styled.div`
   gap: 1.2rem;
 `;
 
-const Input = styled.input<{ isError: boolean }>`
+const Input = styled.input<FieldStyleProps>`
   width: 100%;
   height: 4rem;
   padding: 0 1.6rem;
@@ -102,7 +106,7 @@ const TextAreaContainer = styled.div`
   width: 100%;
 `;
 
-const TextAreaField = styled.textarea`
+const TextAreaField = styled.textarea<FieldStyleProps>`
   overflow: hidden;
   overflow-y: auto;
   -ms-overflow-style: none;
@@ -115,11 +119,18 @@ const TextAreaField = styled.textarea`
   background: ${({ theme }) => theme.colors.dark[500]};
   color: ${({ theme }) => theme.colors.dark[100]};
   font-size: ${({ theme }) => theme.typography.bodyR.size};
-  outline: none;
+  outline: 2px solid
+    ${({ isError, theme }) => (isError ? theme.colors.red : theme.colors.dark[500])};
+  outline-offset: -2px;
   resize: none;
 
   &::placeholder {
     color: ${({ theme }) => theme.colors.dark[300]};
+  }
+
+  &:focus-within {
+    outline: 2px solid
+      ${({ isError, theme }) => (isError ? theme.colors.red : theme.colors.primary)};
   }
 `;
 
@@ -206,19 +217,34 @@ const CreateConcertRecord = () => {
             </FormFieldContainer>
             <FormFieldContainer>
               <FormFieldLabel>좌석은 어디였나요?</FormFieldLabel>
-              <Input
-                isError={false}
-                onChange={() => {}}
-                placeholder="예시) 3층 309구역 B열 05번"
-                type="text"
+              <Controller
+                control={control}
+                name="seatName"
+                render={({ field, fieldState }) => (
+                  <Input
+                    {...field}
+                    isError={!!fieldState.error}
+                    onChange={(e) => field.onChange(e.target.value)}
+                    placeholder={CONCERT_RECORD_PLACEHOLDER.seatName}
+                    type="text"
+                  />
+                )}
               />
             </FormFieldContainer>
             <FormFieldContainer>
               <FormFieldLabel>공연 기록</FormFieldLabel>
               <TextAreaContainer>
-                <TextAreaField
-                  onChange={() => {}}
-                  placeholder="공연에 대한 간단한 기록을 남겨주세요"
+                <Controller
+                  control={control}
+                  name="content"
+                  render={({ field, fieldState }) => (
+                    <TextAreaField
+                      {...field}
+                      isError={!!fieldState.error}
+                      onChange={(e) => field.onChange(e.target.value)}
+                      placeholder={CONCERT_RECORD_PLACEHOLDER.content}
+                    />
+                  )}
                 />
               </TextAreaContainer>
             </FormFieldContainer>
