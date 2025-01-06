@@ -1,14 +1,14 @@
 import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { LuCalendar } from 'react-icons/lu';
 import { TbChevronDown } from 'react-icons/tb';
 
 import ConcertTime from './components/ConcertTime';
+import RecordImageField from './components/RecordImageField';
 
 import BaseButton from 'components/buttons/BaseButton';
-import ImageField from 'components/imageField/ImageField';
 import SearchConcertItem from 'components/items/SearchConcertItem';
 import SearchField from 'components/searchField/SearchField';
 import DateSheet from 'components/sheets/DateSheet';
@@ -157,6 +157,10 @@ const CreateConcertRecord = () => {
     setValue('date', date);
   };
 
+  useEffect(() => {
+    console.log(watch('image'));
+  }, [watch]);
+
   return (
     <FormProvider {...methods}>
       <ConcertRecordForm>
@@ -250,7 +254,7 @@ const CreateConcertRecord = () => {
             </FormFieldContainer>
             <FormFieldContainer>
               <FormFieldLabel>사진 첨부 (선택)</FormFieldLabel>
-              <ImageField />
+              <RecordImageField />
             </FormFieldContainer>
           </ActiveContent>
         )}
