@@ -6,10 +6,10 @@ import Dialog from 'components/dialog/Dialog';
 import { usePostConcertRecord } from 'queries/concertRecord';
 import { useModalStore } from 'stores';
 import { TitleText2 } from 'styles/Typography';
-import type { ConcertRecord } from 'types';
+import type { ConcertRecordForm } from 'types';
 
 interface RecordSubmitDialogProps {
-  recordData: ConcertRecord;
+  recordData: ConcertRecordForm;
 }
 
 const DialogContainer = styled.div`

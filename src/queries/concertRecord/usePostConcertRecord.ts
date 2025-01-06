@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { requestPostConcertRecord } from 'api';
-import type { ConcertRecord } from 'types';
+import type { ConcertRecordForm } from 'types';
 
-const postFormData = async (recordFormData: ConcertRecord) => {
+const postFormData = async (recordFormData: ConcertRecordForm) => {
   const formData = new FormData();
   const { images, ...rest } = recordFormData;
 

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { LuCalendar } from 'react-icons/lu';
 import { TbChevronDown } from 'react-icons/tb';
+import { useLocation } from 'react-router-dom';
 
 import ConcertTime from './components/ConcertTime';
 import RecordImageField from './components/RecordImageField';
@@ -19,8 +20,7 @@ import { CONCERT_RECORD_PLACEHOLDER } from 'constants/placeholder';
 import { concertRecordSchema, type ConcertRecordSchemaType } from 'schemas/concertRecordSchema';
 import { useModalStore } from 'stores';
 import { BodyMediumText, BodyRegularText } from 'styles/Typography';
-import type { ConcertData } from 'types';
-import type { ConcertRecord } from 'types/concertRecord';
+import type { ConcertData, ConcertRecordForm } from 'types';
 
 interface FieldStyleProps {
   isError: boolean;
@@ -145,14 +145,17 @@ const ButtonWrapper = styled.div`
 `;
 
 const CreateConcertRecord = () => {
+  const location = useLocation();
   const { openModal } = useModalStore(['openModal']);
   const [concertData, setConcertData] = useState<ConcertData | null>(null);
+
+  const { date } = location.state || {};
 
   const methods = useForm<ConcertRecordSchemaType>({
     resolver: zodResolver(concertRecordSchema),
     defaultValues: {
       concertId: 0,
-      date: '',
+      date: date || '',
       episode: '',
       content: '',
       seatName: '',
@@ -177,7 +180,7 @@ const CreateConcertRecord = () => {
     setValue('date', date);
   };
 
-  const onSubmit = (recordData: ConcertRecord) => {
+  const onSubmit = (recordData: ConcertRecordForm) => {
     openModal('dialog', 'confirm', <RecordSubmitDialog recordData={recordData} />);
   };
 
