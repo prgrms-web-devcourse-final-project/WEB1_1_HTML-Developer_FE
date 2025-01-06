@@ -89,6 +89,12 @@ const SearchLayout = () => {
 
     setSearchValue(keyword);
 
+    setSearchHistory((prev) => {
+      const filteredHistory = prev.filter((item) => item !== keyword);
+
+      return [keyword, ...filteredHistory];
+    });
+
     const concerts = await getConcerts(keyword);
     setConcertSearchResult(concerts);
 
@@ -97,14 +103,6 @@ const SearchLayout = () => {
 
     const rents = await getRents(keyword);
     setRentSearchResult(rents);
-
-    setSearchHistory((prev) => {
-      if (prev.includes(keyword)) {
-        return [keyword, ...prev.filter((item) => item != keyword)];
-      }
-
-      return [keyword, ...prev];
-    });
   };
 
   useEffect(() => {
