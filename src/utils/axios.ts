@@ -27,6 +27,12 @@ const addRefreshSubscriber = (callback: (token: string) => void) => {
 };
 
 tokenAxios.interceptors.request.use((config) => {
+  const token = authStore.getState().token;
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
   if (config.data instanceof FormData) {
     delete config.headers['Content-Type'];
   }
