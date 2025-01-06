@@ -106,15 +106,17 @@ const Home = () => {
             <TbChevronRight size={20} />
           </div>
         </SurveyHead>
-        {surveys?.map((survey) => (
-          <SurveyItem
-            endDate={survey.endDate}
-            participationCount={survey.participationCount}
-            region={survey.region}
-            surveyId={survey.surveyId}
-            title={survey.title}
-          />
-        ))}
+        {surveys
+          ?.slice(0, 3)
+          .map((survey) => (
+            <SurveyItem
+              endDate={survey.endDate}
+              participationCount={survey.participationCount}
+              region={survey.region}
+              surveyId={survey.surveyId}
+              title={survey.title}
+            />
+          ))}
       </SurveyList>
     </HomeContainer>
   );

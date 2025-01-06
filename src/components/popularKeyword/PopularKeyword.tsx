@@ -52,7 +52,7 @@ const PopularKeyword = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % (data?.result.length || 1));
-    }, 3500);
+    }, 2000);
 
     return () => clearInterval(interval);
   }, [data?.result]);

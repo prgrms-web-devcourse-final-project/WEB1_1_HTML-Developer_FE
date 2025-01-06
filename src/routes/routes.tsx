@@ -5,7 +5,12 @@ import ModalRenderer from 'components/modalRenderer/ModalRenderer';
 import ToastRenderer from 'components/toast/ToastRenderer';
 import { FullLayout, TitleHeaderLayout } from 'layout';
 import { AuthHeaderLayout, AuthTitleHeaderLayout, PublicOnlyLayout } from 'layout/ProtectedRoutes';
+import SearchLayout from 'layout/SearchLayout';
 import Callback from 'pages/callback/Callback';
+import Search from 'pages/search/Search';
+import SearchMoreConcerts from 'pages/searchMore/SearchMoreConcerts';
+import SearchMoreRents from 'pages/searchMore/SearchMoreRents';
+import SearchMoreSurveys from 'pages/searchMore/SearchMoreSurveys';
 
 const Home = lazy(() => import('pages/home/Home'));
 const Concert = lazy(() => import('pages/concert/Concert'));
@@ -75,8 +80,34 @@ export const router = createBrowserRouter([
               isTransparent: true,
             },
           },
+          {
+            path: '/search/concerts/more',
+            element: <SearchMoreConcerts />,
+            handle: {
+              isSharePage: true,
+              isTransparent: true,
+            },
+          },
+          {
+            path: '/search/rents/more',
+            element: <SearchMoreRents />,
+            handle: {
+              isSharePage: true,
+              isTransparent: true,
+            },
+          },
+          {
+            path: '/search/surveys/more',
+            element: <SearchMoreSurveys />,
+            handle: {
+              isSharePage: true,
+              isTransparent: true,
+            },
+          },
         ],
       },
+
+      { element: <SearchLayout />, children: [{ path: '/search', element: <Search /> }] },
 
       // TODO: protected routes 추가
       {

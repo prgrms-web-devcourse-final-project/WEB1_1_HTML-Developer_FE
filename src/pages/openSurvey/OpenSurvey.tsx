@@ -28,7 +28,7 @@ const OpenSurvey = () => {
   const [artistIsActive, setArtistIsActive] = useState(false);
   const concertInputRef = useRef<HTMLDivElement>(null);
   const artistInputRef = useRef<HTMLDivElement>(null);
-  const { openModal } = useModalStore(['openModal']);
+  const { openModal, closeModal } = useModalStore(['openModal', 'closeModal']);
 
   const [searchResults, setSearchResults] = useState<Concert[]>([]);
   const [selectedConcert, setSelectedConcert] = useState<Concert | null>(null);
@@ -133,6 +133,7 @@ const OpenSurvey = () => {
 
   const handleDateSelect = (date: string) => {
     setValue('endDate', date);
+    closeModal('bottomSheet', 'basic');
   };
 
   const handlePersonnelSelect = (value: string) => {
