@@ -30,19 +30,20 @@ const SearchMoreConcerts = () => {
     return await publicAxios.get(endPoint.GET_MORE_CONCERT_SEARCH, { params });
   };
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery<ConcertResult>({
-    queryKey: ['search-concerts', keyword],
-    queryFn: async ({ pageParam }) => {
-      const {
-        data: { result },
-      } = await getMoreConcerts({ keyword, searchAfter: pageParam as Param });
-      return result;
-    },
-    initialPageParam: null,
-    getNextPageParam: (lastPage) => {
-      return lastPage.searchAfter || undefined;
-    },
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useInfiniteQuery<ConcertResult>({
+      queryKey: ['search-concerts', keyword],
+      queryFn: async ({ pageParam }) => {
+        const {
+          data: { result },
+        } = await getMoreConcerts({ keyword, searchAfter: pageParam as Param });
+        return result;
+      },
+      initialPageParam: null,
+      getNextPageParam: (lastPage) => {
+        return lastPage.searchAfter || undefined;
+      },
+    });
 
   const handleObserver = () => {
     if (hasNextPage && !isFetchingNextPage) {
@@ -54,11 +55,20 @@ const SearchMoreConcerts = () => {
 
   const targetRef = useIntersectionObserver(handleObserver);
 
+  if (isLoading) {
+    return (
+      <SearchMoreConcertsContainer>
+        <TitleText2>예정 공연</TitleText2>
+        <div>로딩 중...</div>
+      </SearchMoreConcertsContainer>
+    );
+  }
+
   return (
     <SearchMoreConcertsContainer>
       <TitleText2>예정 공연</TitleText2>
-      {data?.pages.map((page) =>
-        page.concertThumbnails.map((concert) => (
+      {data?.pages?.map((page) =>
+        page?.concertThumbnails?.map((concert) => (
           <ConcertItem
             concert={concert}
             key={concert.id}

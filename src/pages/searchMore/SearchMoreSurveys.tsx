@@ -29,19 +29,20 @@ const SearchMoreSurveys = () => {
     return await publicAxios.get(endPoint.GET_MORE_SURVEYS_SEARCH, { params });
   };
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery<SurveyResult>({
-    queryKey: ['search-concerts', keyword],
-    queryFn: async ({ pageParam }) => {
-      const {
-        data: { result },
-      } = await getMoreSurveys({ keyword, searchAfter: pageParam as Param });
-      return result;
-    },
-    initialPageParam: null,
-    getNextPageParam: (lastPage) => {
-      return lastPage.searchAfter || undefined;
-    },
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useInfiniteQuery<SurveyResult>({
+      queryKey: ['search-concerts', keyword],
+      queryFn: async ({ pageParam }) => {
+        const {
+          data: { result },
+        } = await getMoreSurveys({ keyword, searchAfter: pageParam as Param });
+        return result;
+      },
+      initialPageParam: null,
+      getNextPageParam: (lastPage) => {
+        return lastPage.searchAfter || undefined;
+      },
+    });
 
   const handleObserver = () => {
     if (hasNextPage && !isFetchingNextPage) {
@@ -53,11 +54,20 @@ const SearchMoreSurveys = () => {
 
   const targetRef = useIntersectionObserver(handleObserver);
 
+  if (isLoading) {
+    return (
+      <SearchMoreSurveysContainer>
+        <TitleText2>차량 대절 수요 조사</TitleText2>
+        <div>로딩 중...</div>
+      </SearchMoreSurveysContainer>
+    );
+  }
+
   return (
     <SearchMoreSurveysContainer>
       <TitleText2>차량 대절 수요 조사</TitleText2>
-      {data?.pages.map((page) =>
-        page.surveyThumbnails.map((survey) => (
+      {data?.pages?.map((page) =>
+        page?.surveyThumbnails?.map((survey) => (
           <SurveyItem
             endDate={survey.edDate}
             key={survey.id}

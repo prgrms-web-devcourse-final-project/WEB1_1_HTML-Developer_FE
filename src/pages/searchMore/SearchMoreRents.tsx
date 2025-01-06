@@ -29,19 +29,20 @@ const SearchMoreRents = () => {
     return await publicAxios.get(endPoint.GET_MORE_RENTS_LIST, { params });
   };
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery<RentResult>({
-    queryKey: ['search-concerts', keyword],
-    queryFn: async ({ pageParam }) => {
-      const {
-        data: { result },
-      } = await getMoreRents({ keyword, searchAfter: pageParam as Param });
-      return result;
-    },
-    initialPageParam: null,
-    getNextPageParam: (lastPage) => {
-      return lastPage.searchAfter || undefined;
-    },
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useInfiniteQuery<RentResult>({
+      queryKey: ['search-concerts', keyword],
+      queryFn: async ({ pageParam }) => {
+        const {
+          data: { result },
+        } = await getMoreRents({ keyword, searchAfter: pageParam as Param });
+        return result;
+      },
+      initialPageParam: null,
+      getNextPageParam: (lastPage) => {
+        return lastPage.searchAfter || undefined;
+      },
+    });
 
   const handleObserver = () => {
     if (hasNextPage && !isFetchingNextPage) {
@@ -53,11 +54,20 @@ const SearchMoreRents = () => {
 
   const targetRef = useIntersectionObserver(handleObserver);
 
+  if (isLoading) {
+    return (
+      <SearchMoreRentsContainer>
+        <TitleText2>콘서트 차량 대절</TitleText2>
+        <div>로딩 중...</div>
+      </SearchMoreRentsContainer>
+    );
+  }
+
   return (
     <SearchMoreRentsContainer>
       <TitleText2>콘서트 차량 대절</TitleText2>
-      {data?.pages.map((page) =>
-        page.rentThumbnails.map((rent) => (
+      {data?.pages?.map((page) =>
+        page?.rentThumbnails?.map((rent) => (
           <RentalPostItem
             boardingArea={rent.boardingArea}
             endDate={rent.edDate}
