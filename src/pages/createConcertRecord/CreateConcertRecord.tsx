@@ -1,8 +1,11 @@
 import styled from '@emotion/styled';
+import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { LuCalendar } from 'react-icons/lu';
 import { TbChevronDown } from 'react-icons/tb';
+
+import ConcertTime from './components/ConcertTime';
 
 import BaseButton from 'components/buttons/BaseButton';
 import ImageField from 'components/imageField/ImageField';
@@ -18,8 +21,15 @@ import type { ConcertData } from 'types';
 const ConcertRecordForm = styled.form`
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   gap: 2.4rem;
   padding: 2.4rem;
+`;
+
+const ActiveContent = styled(motion.div)`
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
 `;
 
 const FormFieldContainer = styled.div`
@@ -61,18 +71,6 @@ const ConcertTimeList = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 1.2rem;
-`;
-
-const ConcertTime = styled.div<{ isActive: boolean }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: fit-content;
-  min-width: 9.2rem;
-  padding: 0.8rem 1.6rem;
-  border-radius: 4px;
-  background-color: ${({ theme, isActive }) =>
-    isActive ? theme.colors.dark[300] : theme.colors.dark[500]};
 `;
 
 const Input = styled.input<{ isError: boolean }>`
@@ -128,13 +126,16 @@ const TextAreaField = styled.textarea`
 const ButtonWrapper = styled.div`
   display: flex;
   gap: 1.6rem;
+  margin-top: auto;
 `;
 
 const CreateConcertRecord = () => {
   const { openModal } = useModalStore(['openModal']);
   const [concertData, setConcertData] = useState<ConcertData | null>(null);
 
-  const { control, setValue } = useForm();
+  const methods = useForm();
+
+  const { control, setValue, watch } = methods;
 
   const handleConcertSelect = (concertData: ConcertData) => {
     setConcertData(concertData);
@@ -146,88 +147,101 @@ const CreateConcertRecord = () => {
   };
 
   return (
-    <ConcertRecordForm>
-      <FormFieldContainer>
-        <FormFieldLabel>어떤 콘서트를 보셨나요?</FormFieldLabel>
-        <SearchField
-          name="concert"
-          onClick={() =>
-            openModal(
-              'bottomSheet',
-              'list',
-              <SearchConcertSheet isPastSearch onConcertSelect={handleConcertSelect} />
-            )
-          }
-        />
-        {concertData && <SearchConcertItem concertData={concertData} isInactive />}
-      </FormFieldContainer>
-      <FormFieldContainer>
-        <FormFieldLabel>언제 보셨나요?</FormFieldLabel>
-        <Controller
-          control={control}
-          name="date"
-          render={({ field }) => (
-            <DateSelect
-              onClick={() =>
-                openModal(
-                  'bottomSheet',
-                  'list',
-                  <DateSheet onDateSelect={handleDateSelect} title="공연 기록 날짜" />
-                )
-              }
-            >
-              <LuCalendar size={20} />
-              <DateSelectValue isValid={field.value}>
-                {field.value || CONCERT_RECORD_PLACEHOLDER.date}
-              </DateSelectValue>
-              <DropdownIcon size={24} />
-            </DateSelect>
-          )}
-        />
-      </FormFieldContainer>
-      <FormFieldContainer>
-        <FormFieldLabel>어떤 회차를 보셨나요?</FormFieldLabel>
-        <ConcertTimeList>
-          <ConcertTime isActive={false}>
-            <BodyRegularText>14:00</BodyRegularText>
-          </ConcertTime>
-          <ConcertTime isActive={true}>
-            <BodyRegularText>18:00</BodyRegularText>
-          </ConcertTime>
-        </ConcertTimeList>
-      </FormFieldContainer>
-      <FormFieldContainer>
-        <FormFieldLabel>좌석은 어디였나요?</FormFieldLabel>
-        <Input
-          isError={false}
-          onChange={() => {}}
-          placeholder="예시) 3층 309구역 B열 05번"
-          type="text"
-        />
-      </FormFieldContainer>
-      <FormFieldContainer>
-        <FormFieldLabel>공연 기록</FormFieldLabel>
-        <TextAreaContainer>
-          <TextAreaField onChange={() => {}} placeholder="공연에 대한 간단한 기록을 남겨주세요" />
-        </TextAreaContainer>
-      </FormFieldContainer>
-      <FormFieldContainer>
-        <FormFieldLabel>사진 첨부 (선택)</FormFieldLabel>
-        <ImageField />
-      </FormFieldContainer>
-      <ButtonWrapper>
-        <BaseButton
-          color="primary"
-          isDisabled={false}
-          onClick={() => {}}
-          size="medium"
-          type="button"
-          variant="fill"
-        >
-          등록
-        </BaseButton>
-      </ButtonWrapper>
-    </ConcertRecordForm>
+    <FormProvider {...methods}>
+      <ConcertRecordForm>
+        <FormFieldContainer>
+          <FormFieldLabel>언제 보셨나요?</FormFieldLabel>
+          <Controller
+            control={control}
+            name="date"
+            render={({ field }) => (
+              <DateSelect
+                onClick={() =>
+                  openModal(
+                    'bottomSheet',
+                    'list',
+                    <DateSheet onDateSelect={handleDateSelect} title="공연 기록 날짜" />
+                  )
+                }
+              >
+                <LuCalendar size={20} />
+                <DateSelectValue isValid={field.value}>
+                  {field.value || CONCERT_RECORD_PLACEHOLDER.date}
+                </DateSelectValue>
+                <DropdownIcon size={24} />
+              </DateSelect>
+            )}
+          />
+        </FormFieldContainer>
+        <FormFieldContainer>
+          <FormFieldLabel>어떤 콘서트를 보셨나요?</FormFieldLabel>
+          <SearchField
+            name="concert"
+            onClick={() =>
+              openModal(
+                'bottomSheet',
+                'list',
+                <SearchConcertSheet isPastSearch onConcertSelect={handleConcertSelect} />
+              )
+            }
+          />
+          {concertData && <SearchConcertItem concertData={concertData} isInactive />}
+        </FormFieldContainer>
+        {concertData && watch('date') && (
+          <ActiveContent
+            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 100 }}
+            transition={{
+              duration: 0.6,
+              ease: [0.25, 0.1, 0.25, 1],
+            }}
+          >
+            <FormFieldContainer>
+              <FormFieldLabel>어떤 회차를 보셨나요?</FormFieldLabel>
+              <ConcertTimeList>
+                {concertData.episodes.map((time) => (
+                  <ConcertTime key={time} time={time} />
+                ))}
+              </ConcertTimeList>
+            </FormFieldContainer>
+            <FormFieldContainer>
+              <FormFieldLabel>좌석은 어디였나요?</FormFieldLabel>
+              <Input
+                isError={false}
+                onChange={() => {}}
+                placeholder="예시) 3층 309구역 B열 05번"
+                type="text"
+              />
+            </FormFieldContainer>
+            <FormFieldContainer>
+              <FormFieldLabel>공연 기록</FormFieldLabel>
+              <TextAreaContainer>
+                <TextAreaField
+                  onChange={() => {}}
+                  placeholder="공연에 대한 간단한 기록을 남겨주세요"
+                />
+              </TextAreaContainer>
+            </FormFieldContainer>
+            <FormFieldContainer>
+              <FormFieldLabel>사진 첨부 (선택)</FormFieldLabel>
+              <ImageField />
+            </FormFieldContainer>
+          </ActiveContent>
+        )}
+        <ButtonWrapper>
+          <BaseButton
+            color="primary"
+            isDisabled={false}
+            onClick={() => {}}
+            size="medium"
+            type="button"
+            variant="fill"
+          >
+            등록
+          </BaseButton>
+        </ButtonWrapper>
+      </ConcertRecordForm>
+    </FormProvider>
   );
 };
 
