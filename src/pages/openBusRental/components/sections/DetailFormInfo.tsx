@@ -5,13 +5,13 @@ import RentalFormSelect from '../items/RentalFormSelect';
 import RentalInputField from '../items/RentalInputField';
 import RentalThumbField from '../items/RentalThumbField';
 import RentalTitleField from '../items/RentalTitleField';
-import RegionListSheet from '../sheets/RegionListSheet';
-import SearchArtistSheet from '../sheets/SearchArtistSheet';
 
 import SimpleChip from 'components/chips/SimpleChip';
 import SearchConcertItem from 'components/items/SearchConcertItem';
 import ValidationMessage from 'components/message/ValidationMessage';
 import SearchField from 'components/searchField/SearchField';
+import RegionListSheet from 'components/sheets/RegionListSheet';
+import SearchArtistSheet from 'components/sheets/SearchArtistSheet';
 import SearchConcertSheet from 'components/sheets/SearchConcertSheet';
 import type { REGIONS } from 'constants/filterTypes';
 import { RENTAL_FORM_PLACEHOLDER } from 'constants/placeholder';

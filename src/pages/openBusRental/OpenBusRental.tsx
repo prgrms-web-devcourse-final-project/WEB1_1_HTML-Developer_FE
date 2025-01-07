@@ -3,10 +3,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import FormSubmitDialog from './components/modal/FormSubmitDialog';
 import AdditionalFormInfo from './components/sections/AdditionalFormInfo';
 import DetailFormInfo from './components/sections/DetailFormInfo';
 import DrivingFormInfo from './components/sections/DrivingFormInfo';
-import FormSubmitDialog from './components/sections/FormSubmitDialog';
 
 import BaseButton from 'components/buttons/BaseButton';
 import TabBar from 'components/tabBar/TabBar';

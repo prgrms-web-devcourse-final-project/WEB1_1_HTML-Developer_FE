@@ -1,7 +1,7 @@
 import RentalFormField from './RentalFormField';
 import RentalFormSelect from '../items/RentalFormSelect';
 import RentalInputField from '../items/RentalInputField';
-import TextArea from '../items/TextArea';
+import TextArea from '../items/RentalTextArea';
 import RefundTypeRadio from '../lists/RefundTypeRadio';
 
 import DateSheet from 'components/sheets/DateSheet';

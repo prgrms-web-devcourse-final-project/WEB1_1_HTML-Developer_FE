@@ -1,10 +1,9 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
 
-import SearchArtistItem from '../items/SearchArtistItem';
-
 import Magnifier from 'assets/images/magnifier-icon.svg?react';
 import BottomSheet from 'components/bottomSheet/BottomSheet';
+import SearchArtistItem from 'components/items/SearchArtistItem';
 import SearchInput from 'components/searchInput/SearchInput';
 import { SEARCH_PLACEHOLDER } from 'constants/placeholder';
 import { useGetSearchArtist } from 'queries/search/useGetSearchArtist';

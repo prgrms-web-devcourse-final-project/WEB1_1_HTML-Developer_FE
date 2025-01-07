@@ -5,7 +5,7 @@ import CheckboxItem from '../items/CheckboxItem';
 import RentalFormSelect from '../items/RentalFormSelect';
 import RentalInputField from '../items/RentalInputField';
 import BoardingDateCheckList from '../lists/BoardingDateCheckList';
-import BusInfoSheet from '../sheets/BusInfoSheet';
+import BusInfoSheet from '../modal/BusInfoSheet';
 
 import { RENTAL_FORM_PLACEHOLDER } from 'constants/placeholder';
 import { useModalStore } from 'stores';
