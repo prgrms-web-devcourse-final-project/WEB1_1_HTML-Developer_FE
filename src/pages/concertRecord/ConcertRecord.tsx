@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import RecordCalendar from './components/RecordCalendar';
 import RecordDetails from './components/RecordDetails';
 
-import { useConcertRecordStore } from 'stores/concertRecordStore';
+import { useConcertRecordStore } from 'stores';
 
 const ConcertRecordContainer = styled.div`
   display: flex;

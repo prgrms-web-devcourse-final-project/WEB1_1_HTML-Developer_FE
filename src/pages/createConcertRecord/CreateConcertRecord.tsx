@@ -333,7 +333,7 @@ const CreateConcertRecord = ({ type }: createConcertRecordProps) => {
             type="submit"
             variant="fill"
           >
-            등록
+            {type === 'create' ? '등록' : '수정 완료'}
           </BaseButton>
         </ButtonWrapper>
       </ConcertRecordForm>

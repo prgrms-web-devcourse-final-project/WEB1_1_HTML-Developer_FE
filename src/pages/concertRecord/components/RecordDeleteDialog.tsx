@@ -1,8 +1,7 @@
 import BaseButton from 'components/buttons/BaseButton';
 import Dialog from 'components/dialog/Dialog';
 import { useDeleteConcertRecord } from 'queries/concertRecord/useDeleteConcertRecord';
-import { useModalStore } from 'stores';
-import { useConcertRecordStore } from 'stores/concertRecordStore';
+import { useConcertRecordStore, useModalStore } from 'stores';
 import { TitleText2 } from 'styles/Typography';
 
 const RecordDeleteDialog = () => {

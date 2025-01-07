@@ -6,7 +6,7 @@ import { TbChevronLeft, TbChevronRight } from 'react-icons/tb';
 import { useNavigate } from 'react-router-dom';
 
 import { useGetConcertRecordList } from 'queries/concertRecord';
-import { useConcertRecordStore } from 'stores/concertRecordStore';
+import { useConcertRecordStore } from 'stores';
 import { BodyRegularText, ChipText } from 'styles/Typography';
 
 export interface DateButtonProps {

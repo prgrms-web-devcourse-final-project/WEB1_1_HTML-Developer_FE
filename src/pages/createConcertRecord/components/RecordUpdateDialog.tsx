@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import BaseButton from 'components/buttons/BaseButton';
 import Dialog from 'components/dialog/Dialog';
 import { usePatchConcertRecord } from 'queries/concertRecord';
-import { useModalStore } from 'stores';
+import { useConcertRecordStore, useModalStore } from 'stores';
 import { TitleText2 } from 'styles/Typography';
 import type { ConcertRecordForm } from 'types';
 
@@ -20,10 +20,12 @@ const DialogContainer = styled.div`
 const RecordUpdateDialog = ({ recordData }: RecordUpdateDialogProps) => {
   const { id } = useParams();
   const { closeModal } = useModalStore(['closeModal']);
+  const { resetRecordData } = useConcertRecordStore(['resetRecordData']);
   const { mutate } = usePatchConcertRecord();
   const navigate = useNavigate();
 
   const handleSubmitSuccess = () => {
+    resetRecordData();
     navigate('/concert-record');
     closeModal('dialog', 'confirm');
   };
