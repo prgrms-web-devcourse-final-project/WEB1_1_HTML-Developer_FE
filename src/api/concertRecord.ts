@@ -23,3 +23,7 @@ export const requestGetConcertRecordDetails = async (id: string) => {
 export const requestDeleteConcertRecord = async (id: string) => {
   return await tokenAxios.delete(`${endPoint.DELETE_CONCERT_RECORD(id)}`);
 };
+
+export const requestPatchConcertRecord = async (formData: FormData) => {
+  return await tokenAxios.patch(`${endPoint.UPDATE_CONCERT_RECORD}`, formData);
+};

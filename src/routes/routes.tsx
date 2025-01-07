@@ -180,8 +180,13 @@ export const router = createBrowserRouter([
           },
           {
             path: '/concert-record/create',
-            element: <CreateConcertRecord />,
+            element: <CreateConcertRecord type="create" />,
             handle: { title: '공연 기록 등록' },
+          },
+          {
+            path: '/concert-record/edit/:id',
+            element: <CreateConcertRecord type="edit" />,
+            handle: { title: '공연 기록 수정' },
           },
         ],
       },

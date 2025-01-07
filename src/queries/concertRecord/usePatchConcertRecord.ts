@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { requestPostConcertRecord } from 'api';
-import type { ConcertRecordForm } from 'types';
+import { requestPatchConcertRecord } from 'api';
+import type { ConcertRecordUpdate } from 'types';
 import { getYearAndMonth } from 'utils';
 
-const createFormData = async (recordFormData: ConcertRecordForm) => {
+const updateFormData = async (recordFormData: ConcertRecordUpdate) => {
   const formData = new FormData();
   const { images, ...rest } = recordFormData;
 
@@ -14,20 +14,20 @@ const createFormData = async (recordFormData: ConcertRecordForm) => {
 
   formData.append('request', JSON.stringify(rest));
 
-  return await requestPostConcertRecord(formData);
+  return await requestPatchConcertRecord(formData);
 };
 
-export const usePostConcertRecord = () => {
+export const usePatchConcertRecord = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: createFormData,
-    onSuccess: async (_, variables: ConcertRecordForm) => {
+    mutationFn: updateFormData,
+    onSuccess: async (_, variables: ConcertRecordUpdate) => {
       const { year, month } = getYearAndMonth(variables.date);
       await queryClient.invalidateQueries({ queryKey: ['recordList', year, month] });
     },
     onError: (err) => {
-      console.log('공연 기록 생성 오류: ', err);
+      console.log('공연 기록 수정 오류: ', err);
     },
   });
 };

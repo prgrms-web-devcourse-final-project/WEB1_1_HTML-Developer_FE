@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { LuCalendar } from 'react-icons/lu';
 import { PiPencilSimpleLineBold } from 'react-icons/pi';
 import { TbArmchair, TbTrash } from 'react-icons/tb';
+import { useNavigate } from 'react-router-dom';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -10,7 +11,7 @@ import 'swiper/css/pagination';
 
 import RecordDeleteDialog from './RecordDeleteDialog';
 
-import { useGetConcertRecordDetail } from 'queries/concertRecord/useGetConcertRecordDetail';
+import { useGetConcertRecordDetail } from 'queries/concertRecord';
 import { useModalStore } from 'stores';
 import { BodyRegularText, HeaderText, TitleText2 } from 'styles/Typography';
 import { formatDateWithDay } from 'utils';
@@ -107,6 +108,7 @@ const ConcertRecordContent = styled(BodyRegularText)`
 `;
 
 const RecordDetails = ({ id }: RecordDetailsProps) => {
+  const navigate = useNavigate();
   const { openModal } = useModalStore(['openModal']);
   const { data: recordData } = useGetConcertRecordDetail(id);
 
@@ -116,6 +118,10 @@ const RecordDetails = ({ id }: RecordDetailsProps) => {
     recordData;
 
   const images = [concertPoster.url, ...diaryImages.map((image) => image.url)];
+
+  const handleEditRecord = () => {
+    navigate(`/concert-record/edit/${id}`, { state: { concertTitle: concertTitle } });
+  };
 
   const handleDeleteRecord = () => {
     openModal('dialog', 'confirm', <RecordDeleteDialog />);
@@ -131,7 +137,7 @@ const RecordDetails = ({ id }: RecordDetailsProps) => {
       }}
     >
       <ButtonWrapper>
-        <ActionButton>
+        <ActionButton onClick={handleEditRecord}>
           <PiPencilSimpleLineBold size={24} />
         </ActionButton>
         <ActionButton onClick={handleDeleteRecord}>

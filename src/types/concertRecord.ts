@@ -33,5 +33,9 @@ export interface ConcertRecordDetail {
   content: string;
 }
 
+export interface ConcertRecordUpdate extends ConcertRecordForm {
+  diaryId: number;
+}
+
 export type RecordListResponse = ApiResponse<ConcertRecord[]>;
 export type RecordDetailResponse = ApiResponse<ConcertRecordDetail>;

@@ -1,16 +1,18 @@
 import styled from '@emotion/styled';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { LuCalendar } from 'react-icons/lu';
 import { TbChevronDown } from 'react-icons/tb';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 import ConcertTime from './components/ConcertTime';
 import RecordImageField from './components/RecordImageField';
 import RecordSubmitDialog from './components/RecordSubmitDialog';
+import RecordUpdateDialog from './components/RecordUpdateDialog';
 
+import { requestGetConcertRecordDetails, requestGetSearchAllConcert } from 'api';
 import BaseButton from 'components/buttons/BaseButton';
 import SearchConcertItem from 'components/items/SearchConcertItem';
 import SearchField from 'components/searchField/SearchField';
@@ -21,6 +23,10 @@ import { concertRecordSchema, type ConcertRecordSchemaType } from 'schemas/conce
 import { useModalStore } from 'stores';
 import { BodyMediumText, BodyRegularText } from 'styles/Typography';
 import type { ConcertData, ConcertRecordForm } from 'types';
+
+interface createConcertRecordProps {
+  type: 'create' | 'edit';
+}
 
 interface FieldStyleProps {
   isError: boolean;
@@ -144,24 +150,58 @@ const ButtonWrapper = styled.div`
   margin-top: auto;
 `;
 
-const CreateConcertRecord = () => {
+const CreateConcertRecord = ({ type }: createConcertRecordProps) => {
   const location = useLocation();
+  const { id } = useParams();
+  const { date } = location.state || {};
   const { openModal } = useModalStore(['openModal']);
   const [concertData, setConcertData] = useState<ConcertData | null>(null);
+  const [initValues, setInitValues] = useState<ConcertRecordForm>({
+    concertId: 0,
+    date: date || '',
+    episode: '',
+    content: '',
+    seatName: '',
+    images: [],
+  });
 
-  const { date } = location.state || {};
+  useEffect(() => {
+    const fetchConcertData = async () => {
+      if (type === 'edit' && id) {
+        try {
+          const { concertTitle } = location.state || {};
+          const { result } = await requestGetConcertRecordDetails(id);
+          const { diaryDate, episode, content, seatName } = result;
+
+          const concert = (await requestGetSearchAllConcert(`query=${concertTitle}`)).result
+            .concertThumbnails[0];
+          setConcertData(concert);
+
+          setInitValues({
+            concertId: concert.id,
+            date: diaryDate,
+            episode,
+            content,
+            seatName,
+            images: [],
+          });
+        } catch (error) {
+          console.error('Error fetching concert record details:', error);
+        }
+      }
+    };
+
+    void fetchConcertData();
+  }, [type, id, location.state]);
 
   const methods = useForm<ConcertRecordSchemaType>({
     resolver: zodResolver(concertRecordSchema),
-    defaultValues: {
-      concertId: 0,
-      date: date || '',
-      episode: '',
-      content: '',
-      seatName: '',
-      images: [],
-    },
+    defaultValues: initValues,
   });
+
+  useEffect(() => {
+    methods.reset(initValues); // 초깃값 갱신
+  }, [initValues, methods]);
 
   const {
     control,
@@ -181,7 +221,11 @@ const CreateConcertRecord = () => {
   };
 
   const onSubmit = (recordData: ConcertRecordForm) => {
-    openModal('dialog', 'confirm', <RecordSubmitDialog recordData={recordData} />);
+    if (type === 'create') {
+      openModal('dialog', 'confirm', <RecordSubmitDialog recordData={recordData} />);
+    } else {
+      openModal('dialog', 'confirm', <RecordUpdateDialog recordData={recordData} />);
+    }
   };
 
   return (
