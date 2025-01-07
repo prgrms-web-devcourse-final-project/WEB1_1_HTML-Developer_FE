@@ -33,4 +33,10 @@ export const SEARCH_PLACEHOLDER = {
   artist: `아티스트를 검색해주세요`,
 };
 
+export const CONCERT_RECORD_PLACEHOLDER = {
+  date: `날짜를 선택해주세요`,
+  seatName: `예시) 3층 309구역 B열 05번`,
+  content: `공연에 대한 간단한 기록을 남겨주세요`,
+};
+
 export type SearchPlaceholderKeys = keyof typeof SEARCH_PLACEHOLDER;

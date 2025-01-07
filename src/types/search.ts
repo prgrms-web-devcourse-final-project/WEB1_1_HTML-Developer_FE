@@ -7,17 +7,14 @@ export interface ConcertData {
   concertHallName: string;
   stdate: string;
   eddate: string;
-  episodes?: string[];
+  episodes: string[];
 }
 
-interface SearchAfter {
-  searchAfter1: string;
-  searchAfter2: string;
-}
+export type SearchAfter = (string | number)[] | null;
 
 export interface SearchConcert {
   concertThumbnails: ConcertData[];
-  searchAfter: SearchAfter[] | null;
+  searchAfter: SearchAfter;
 }
 
 interface SearchArtistImages {

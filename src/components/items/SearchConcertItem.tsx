@@ -21,7 +21,7 @@ const ConcertTitle = styled(BodyMediumText)`
   margin-bottom: 1.2rem;
 `;
 
-const ConcertItemContainer = styled.div<{ isInactive?: boolean }>`
+const ConcertItemContainer = styled.li<{ isInactive?: boolean }>`
   display: flex;
   align-items: stretch;
   gap: 1.6rem;

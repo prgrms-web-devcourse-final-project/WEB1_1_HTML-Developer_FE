@@ -1,10 +1,15 @@
 import styled from '@emotion/styled';
 
-import EndDateCalendar from '../items/EndDateCalendar';
-
 import BottomSheet from 'components/bottomSheet/BottomSheet';
-import { useModalStore, useRentalFormStore } from 'stores';
+import Calendar from 'components/calendar/Calendar';
+import { useModalStore } from 'stores';
 import { TitleText2 } from 'styles/Typography';
+
+interface DateSheetProps {
+  title: string;
+  isAllowFromToday?: boolean;
+  onDateSelect?: (date: string) => void;
+}
 
 const CalendarWrapper = styled.div`
   display: flex;
@@ -12,27 +17,29 @@ const CalendarWrapper = styled.div`
   align-items: center;
 `;
 
-const EndDateSheet = () => {
-  const { updateFormData } = useRentalFormStore(['updateFormData']);
+const DateSheet = ({ title, isAllowFromToday = false, onDateSelect }: DateSheetProps) => {
   const { closeModal } = useModalStore(['closeModal']);
 
   const handleEndDateSelect = (date: string) => {
-    updateFormData('endDate', date);
+    onDateSelect?.(date);
     closeModal('bottomSheet', 'list');
   };
 
   return (
     <BottomSheet name="list">
       <BottomSheet.Header>
-        <TitleText2>모집 마감 날짜</TitleText2>
+        <TitleText2>{title}</TitleText2>
       </BottomSheet.Header>
       <BottomSheet.Content>
         <CalendarWrapper>
-          <EndDateCalendar isAllowFromToday onDateSelect={(date) => handleEndDateSelect(date)} />
+          <Calendar
+            isAllowFromToday={isAllowFromToday}
+            onSelect={(date) => handleEndDateSelect(date)}
+          />
         </CalendarWrapper>
       </BottomSheet.Content>
     </BottomSheet>
   );
 };
 
-export default EndDateSheet;
+export default DateSheet;

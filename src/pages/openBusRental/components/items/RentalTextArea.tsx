@@ -6,7 +6,7 @@ import { RENTAL_FORM_PLACEHOLDER } from 'constants/placeholder';
 import { useRentalFormStore } from 'stores';
 import type { RentalFormData } from 'types';
 
-interface TextAreaProps {
+interface RentalTextAreaProps {
   name: keyof RentalFormData;
 }
 
@@ -38,7 +38,7 @@ const TextAreaField = styled.textarea`
   }
 `;
 
-const TextArea = ({ name }: TextAreaProps) => {
+const RentalTextArea = ({ name }: RentalTextAreaProps) => {
   const { control } = useFormContext();
   const { updateFormData } = useRentalFormStore(['updateFormData']);
 
@@ -74,4 +74,4 @@ const TextArea = ({ name }: TextAreaProps) => {
   );
 };
 
-export default TextArea;
+export default RentalTextArea;

@@ -6,3 +6,4 @@ export * from './user';
 export * from './api';
 export * from './filter';
 export * from './search';
+export * from './concertRecord';

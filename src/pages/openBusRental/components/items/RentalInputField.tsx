@@ -58,7 +58,8 @@ const InputFieldWrapper = styled.div<{ isError: boolean; isDisabled: boolean }>`
     isDisabled ? theme.colors.dark[700] : theme.colors.dark[500]};
   color: ${({ theme, isDisabled }) =>
     isDisabled ? theme.colors.dark[300] : theme.colors.dark[100]};
-  outline: 2px solid ${({ isError, theme }) => (isError ? theme.colors.red : 'none')};
+  outline: 2px solid
+    ${({ isError, theme }) => (isError ? theme.colors.red : theme.colors.dark[500])};
   outline-offset: -2px;
   pointer-events: ${({ isDisabled }) => (isDisabled ? 'none' : 'auto')};
 

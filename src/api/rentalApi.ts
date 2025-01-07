@@ -20,8 +20,6 @@ export const requestGetRentalList = async (query: string) => {
 };
 
 export const requestGetRentalDetails = async (id: string) => {
-  const token = authStore.getState().token;
-  if (token) tokenAxios.defaults.headers.Authorization = `Bearer ${token}`;
   return await tokenAxios.get<RentalDetailResponse>(endPoint.GET_RENT_DETAIL(id));
 };
 

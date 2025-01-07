@@ -58,3 +58,11 @@ export const getDateRange = (startDate: string, endDate: string) => {
 
   return dates;
 };
+
+// '2024-01-01' -> year, month 반환
+export const getYearAndMonth = (date: string) => {
+  const year = Number(dayjs(date).format('YYYY'));
+  const month = Number(dayjs(date).format('MM'));
+
+  return { year, month };
+};

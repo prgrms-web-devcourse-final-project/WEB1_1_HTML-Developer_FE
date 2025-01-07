@@ -1,25 +1,33 @@
-import type { UseQueryOptions } from '@tanstack/react-query';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
-import { requestGetSearchConcert } from 'api';
-import type { ConcertData } from 'types';
+import { requestGetSearchAllConcert, requestGetSearchConcert } from 'api';
+import type { SearchConcert, SearchAfter } from 'types';
 
-export const useGetSearchConcert = (
-  searches: string | null,
-  options?: UseQueryOptions<ConcertData[], Error>
-) => {
-  const fetchConcert = async (): Promise<ConcertData[]> => {
-    if (!searches) return [];
+const generateSearchQuery = (searches: string | null, searchAfter: SearchAfter | null): string => {
+  if (!searches) return '';
+  return searchAfter
+    ? `query=${searches}&searchAfter1=${searchAfter[0]}&searchAfter2=${searchAfter[1]}`
+    : `query=${searches}`;
+};
 
-    const { result } = await requestGetSearchConcert(searches);
-    return result.concertThumbnails;
+export const useGetSearchConcert = (searches: string | null, isPastSearch: boolean) => {
+  const fetchSearchResultList = async (searchAfter: SearchAfter): Promise<SearchConcert> => {
+    if (!searches) return { concertThumbnails: [], searchAfter: null };
+
+    const query = generateSearchQuery(searches, searchAfter);
+
+    const requestApi = isPastSearch ? requestGetSearchAllConcert : requestGetSearchConcert;
+    const { result } = await requestApi(query);
+
+    return result;
   };
 
-  return useQuery<ConcertData[], Error>({
-    queryKey: ['formSearchConcert', searches],
-    queryFn: fetchConcert,
+  return useInfiniteQuery<SearchConcert>({
+    queryKey: ['searchConcert', searches, isPastSearch],
+    queryFn: ({ pageParam }) => fetchSearchResultList(pageParam as SearchAfter),
+    initialPageParam: null,
+    getNextPageParam: (lastPage) => lastPage.searchAfter,
     enabled: !!searches?.trim(),
-    retry: false, // 검색 결과가 없을 경우 재시도 X
-    ...options,
+    retry: false,
   });
 };
