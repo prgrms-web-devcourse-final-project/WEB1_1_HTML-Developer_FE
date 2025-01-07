@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
 
 import RecordCalendar from './components/RecordCalendar';
 import RecordDetails from './components/RecordDetails';

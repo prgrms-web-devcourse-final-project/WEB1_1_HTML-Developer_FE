@@ -25,6 +25,7 @@ export const usePatchConcertRecord = () => {
     onSuccess: async (_, variables: ConcertRecordUpdate) => {
       const { year, month } = getYearAndMonth(variables.date);
       await queryClient.invalidateQueries({ queryKey: ['recordList', year, month] });
+      await queryClient.invalidateQueries({ queryKey: ['recordDetails', variables.diaryId] });
     },
     onError: (err) => {
       console.log('공연 기록 수정 오류: ', err);
