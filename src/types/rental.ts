@@ -1,6 +1,6 @@
 import type { ApiResponse } from './api';
 import type { Region } from './filter';
-import type { RefundAccount } from './user';
+import type { BankAccount } from './user';
 
 // Rental List
 export interface RentalList {
@@ -69,7 +69,7 @@ export interface RentalDetail {
   chatUrl: string;
   refundType: RefundType;
   information: string;
-  refundAccount?: RefundAccount;
+  refundAccount?: BankAccount;
   closed: boolean;
 }
 
