@@ -19,14 +19,14 @@ import type { DepositFormSchemaType } from 'schemas';
 import { depoistForminitValues, depositFormSchema } from 'schemas';
 import { useModalStore } from 'stores';
 import { BodyRegularText } from 'styles/Typography';
-import type { BoardingDates, BoardingType, RefundAccount } from 'types';
+import type { BoardingDates, BoardingType, BankAccount } from 'types';
 import { BOARDING_TYPE, REFUND_TYPE, type RefundType } from 'types';
 import { formatISODate } from 'utils';
 
 interface DepositFormSheetProps {
   boardingDates: BoardingDates[];
   refundOption: RefundType;
-  refundAccount?: RefundAccount;
+  refundAccount?: BankAccount;
 }
 
 const AlertMessage = styled.div`
