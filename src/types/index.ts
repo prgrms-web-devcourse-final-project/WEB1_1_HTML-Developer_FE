@@ -7,3 +7,4 @@ export * from './api';
 export * from './filter';
 export * from './search';
 export * from './concertRecord';
+export * from './concertHall';

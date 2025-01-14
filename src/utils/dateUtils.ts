@@ -66,3 +66,9 @@ export const getYearAndMonth = (date: string) => {
 
   return { year, month };
 };
+
+// ISO Date -> YYYY.MM.DD 형식으로 변환
+export const formatDotDate = (dateString: string) => {
+  const date = dayjs(dateString);
+  return `${date.format('YYYY.MM.DD')}`;
+};
