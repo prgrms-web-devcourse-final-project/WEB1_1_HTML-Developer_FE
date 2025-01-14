@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import type { Meta, StoryObj } from '@storybook/react';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 import TabBar from './TabBar';
 import type { TabType } from './tabData';
