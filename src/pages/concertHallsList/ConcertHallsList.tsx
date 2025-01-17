@@ -111,7 +111,7 @@ const ConcertHallList = styled.div`
   flex-direction: column;
   gap: 1.6rem;
   width: 100%;
-  padding: 2.4rem;
+  padding: 0 2.4rem 2.4rem 2.4rem;
 `;
 
 export default ConcertHallsList;
