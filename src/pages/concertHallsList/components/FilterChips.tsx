@@ -4,7 +4,7 @@ import FilterChip from 'components/chips/FilterChip';
 
 interface FilterChipsProps {
   selectedAddress: string;
-  selectedSeatScale: number;
+  selectedSeatScale: number | null;
   handleAddressSelect: (value: string) => void;
   handleSeatScaleSelect: (value: number) => void;
   handleModalOpen: <T extends string | number>(title: string, handler: (value: T) => void) => void;
@@ -23,7 +23,7 @@ const FilterChips = ({
         {selectedAddress}
       </FilterChip>
       <FilterChip isActive={false} onClick={() => handleModalOpen('좌석수', handleSeatScaleSelect)}>
-        {selectedSeatScale === 0
+        {selectedSeatScale === null
           ? '좌석 규모'
           : selectedSeatScale.toLocaleString().toString() + '석 이상'}
       </FilterChip>

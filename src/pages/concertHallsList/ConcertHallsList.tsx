@@ -2,19 +2,21 @@ import styled from '@emotion/styled';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
+import ConcertHallItem from './components/ConcertHallItem';
 import FilterChips from './components/FilterChips';
 import ListItem from './components/ListItem';
 import type { Result } from './type';
 
 import { getConcertHallsList } from 'api/concertHalls';
+import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
 import { useModalStore } from 'stores';
 import { BodyRegularText, HeaderText } from 'styles/Typography';
 
 type Param = [string, string, string] | null;
 const ConcertHallsList = () => {
   const { openModal } = useModalStore(['openModal']);
-  const [selectedAddress, setSelectedAddress] = useState('지역');
-  const [selectedSeatScale, setSelectedSeatScale] = useState(0);
+  const [selectedAddress, setSelectedAddress] = useState('전체');
+  const [selectedSeatScale, setSelectedSeatScale] = useState<number | null>(null);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery<Result>({
     queryKey: ['concerts', selectedAddress, selectedSeatScale],
@@ -45,6 +47,16 @@ const ConcertHallsList = () => {
     openModal('bottomSheet', 'list', <ListItem onSelect={onSelect} title={title} />);
   };
 
+  const handleObserver = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      if (hasNextPage) {
+        void fetchNextPage();
+      }
+    }
+  };
+
+  const targetRef = useIntersectionObserver(handleObserver);
+
   return (
     <>
       <BannerContainer>
@@ -60,6 +72,14 @@ const ConcertHallsList = () => {
           selectedSeatScale={selectedSeatScale}
         />
       </ContentContainer>
+      <ConcertHallList>
+        {data?.pages.map((page) =>
+          page.concertHallThumbnails.map((concertHall) => (
+            <ConcertHallItem concertHall={concertHall} key={concertHall.id} />
+          ))
+        )}
+      </ConcertHallList>
+      <div ref={targetRef} />
     </>
   );
 };
@@ -84,6 +104,14 @@ const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 2rem;
+`;
+
+const ConcertHallList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  width: 100%;
+  padding: 2.4rem;
 `;
 
 export default ConcertHallsList;
