@@ -21,6 +21,7 @@ const Surveys = lazy(() => import('pages/surveys/Surveys'));
 const ConcertDetail = lazy(() => import('pages/concertDetail/ConcertDetail'));
 const SurveyDetail = lazy(() => import('pages/surveyDetail/SurveyDetail'));
 const BusRentalDetail = lazy(() => import('pages/busRentalDetail/BusRentalDetail'));
+const ConcertHallDetail = lazy(() => import('pages/concertHallDetail/ConcertHallDetail'));
 
 const MyPage = lazy(() => import('pages/myPage/MyPage'));
 const SignIn = lazy(() => import('pages/signIn/SignIn'));
@@ -102,6 +103,14 @@ export const router = createBrowserRouter([
           {
             path: '/search/surveys/more',
             element: <SearchMoreSurveys />,
+            handle: {
+              isSharePage: true,
+              isTransparent: true,
+            },
+          },
+          {
+            path: '/concert-hall/:id',
+            element: <ConcertHallDetail />,
             handle: {
               isSharePage: true,
               isTransparent: true,
