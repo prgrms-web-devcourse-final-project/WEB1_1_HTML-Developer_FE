@@ -5,7 +5,7 @@ import { useState } from 'react';
 import ConcertHallItem from './components/ConcertHallItem';
 import FilterChips from './components/FilterChips';
 import ListItem from './components/ListItem';
-import type { Result } from './type';
+import type { FiltersActive, Result } from './type';
 
 import { getConcertHallsList } from 'api/concertHalls';
 import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
@@ -17,6 +17,10 @@ const ConcertHallsList = () => {
   const { openModal } = useModalStore(['openModal']);
   const [selectedAddress, setSelectedAddress] = useState('전체');
   const [selectedSeatScale, setSelectedSeatScale] = useState<number | null>(null);
+  const [filtersActive, setFiltersActive] = useState<FiltersActive>({
+    addressFilter: false,
+    seatScaleFilter: false,
+  });
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery<Result>({
     queryKey: ['concerts', selectedAddress, selectedSeatScale],
@@ -44,7 +48,11 @@ const ConcertHallsList = () => {
     title: string,
     onSelect: (value: T) => void
   ) => {
-    openModal('bottomSheet', 'list', <ListItem onSelect={onSelect} title={title} />);
+    openModal(
+      'bottomSheet',
+      'list',
+      <ListItem onSelect={onSelect} setFiltersActive={setFiltersActive} title={title} />
+    );
   };
 
   const handleObserver = () => {
@@ -65,6 +73,7 @@ const ConcertHallsList = () => {
       </BannerContainer>
       <ContentContainer>
         <FilterChips
+          filtersActive={filtersActive}
           handleAddressSelect={handleAddressSelect}
           handleModalOpen={handleModalOpen}
           handleSeatScaleSelect={handleSeatScaleSelect}

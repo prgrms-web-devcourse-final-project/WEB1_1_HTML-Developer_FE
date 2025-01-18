@@ -1,4 +1,7 @@
 import styled from '@emotion/styled';
+import type React from 'react';
+
+import type { FiltersActive } from '../type';
 
 import BottomSheet from 'components/bottomSheet/BottomSheet';
 import { useModalStore } from 'stores';
@@ -32,13 +35,25 @@ const seatScale = [1_000, 2_000, 5_000, 10_000, 15_000];
 interface ListItemProps<T extends string | number> {
   title: string;
   onSelect: (keyword: T) => void;
+  setFiltersActive: React.Dispatch<React.SetStateAction<FiltersActive>>;
 }
 
-const RegionListItem = ({ onSelect }: ListItemProps<string>) => {
+const RegionListItem = ({ onSelect, setFiltersActive }: ListItemProps<string>) => {
   const { closeModal } = useModalStore(['closeModal']);
 
   const handleRegionSelect = (selectedRegion: string) => {
     onSelect(selectedRegion);
+    if (selectedRegion !== '전체') {
+      setFiltersActive((prev) => ({
+        ...prev,
+        addressFilter: true,
+      }));
+    } else {
+      setFiltersActive((prev) => ({
+        ...prev,
+        addressFilter: false,
+      }));
+    }
     closeModal('bottomSheet', 'list');
   };
 
@@ -49,11 +64,15 @@ const RegionListItem = ({ onSelect }: ListItemProps<string>) => {
   ));
 };
 
-const SeatScaleListItem = ({ onSelect }: ListItemProps<number>) => {
+const SeatScaleListItem = ({ onSelect, setFiltersActive }: ListItemProps<number>) => {
   const { closeModal } = useModalStore(['closeModal']);
 
   const handleSeatSelect = (selectedScale: number) => {
     onSelect(selectedScale);
+    setFiltersActive((prev) => ({
+      ...prev,
+      seatScaleFilter: true,
+    }));
     closeModal('bottomSheet', 'list');
   };
 
@@ -64,14 +83,30 @@ const SeatScaleListItem = ({ onSelect }: ListItemProps<number>) => {
   ));
 };
 
-const ListItem = <T extends string | number>({ title, onSelect }: ListItemProps<T>) => {
+const ListItem = <T extends string | number>({
+  title,
+  onSelect,
+  setFiltersActive,
+}: ListItemProps<T>) => {
   const renderListItems = () => {
     if (title === '지역') {
-      return <RegionListItem onSelect={onSelect as (value: string) => void} title={'지역'} />;
+      return (
+        <RegionListItem
+          onSelect={onSelect as (value: string) => void}
+          setFiltersActive={setFiltersActive}
+          title={'지역'}
+        />
+      );
     }
 
     if (title === '좌석수') {
-      return <SeatScaleListItem onSelect={onSelect as (value: number) => void} title={'좌석수'} />;
+      return (
+        <SeatScaleListItem
+          onSelect={onSelect as (value: number) => void}
+          setFiltersActive={setFiltersActive}
+          title={'좌석수'}
+        />
+      );
     }
   };
 

@@ -27,3 +27,8 @@ interface ConvenienceInfo {
   hasElevator: boolean;
   hasRunway: boolean;
 }
+
+export interface FiltersActive {
+  addressFilter: boolean;
+  seatScaleFilter: boolean;
+}
