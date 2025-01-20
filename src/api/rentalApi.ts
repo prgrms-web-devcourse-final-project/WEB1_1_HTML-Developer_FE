@@ -1,5 +1,4 @@
 import { endPoint } from 'constants/endPoint';
-import { authStore } from 'stores';
 import type { DepositFormResponse, PageParam } from 'types';
 import type { RentalAccountResponse, RentalDetailResponse, RentalListResponse } from 'types';
 import { publicAxios, tokenAxios } from 'utils';
