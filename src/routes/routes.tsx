@@ -37,6 +37,8 @@ const MySurveyManagement = lazy(() => import('pages/mySurveyManagement/MySurveyM
 const ConcertRecord = lazy(() => import('pages/concertRecord/ConcertRecord'));
 const CreateConcertRecord = lazy(() => import('pages/createConcertRecord/CreateConcertRecord'));
 
+const Chat = lazy(() => import('pages/chat/Chat'));
+
 export const router = createBrowserRouter([
   {
     element: (
@@ -124,7 +126,10 @@ export const router = createBrowserRouter([
       // TODO: protected routes 추가
       {
         element: <AuthHeaderLayout />,
-        children: [{ path: '/mypage', element: <MyPage /> }],
+        children: [
+          { path: '/mypage', element: <MyPage /> },
+          { path: '/chat', element: <Chat /> },
+        ],
       },
 
       // TODO: protected routes 추가
