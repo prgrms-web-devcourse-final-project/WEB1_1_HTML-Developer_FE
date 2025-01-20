@@ -1,3 +1,5 @@
+import type { ApiResponse } from './api';
+
 // concert hall detail
 export interface ConvenienceInfo {
   hasParkingLot: boolean;
@@ -23,3 +25,5 @@ export interface concertHallDetail {
   convenienceInfo: ConvenienceInfo;
   location: ConcertHallLocation;
 }
+
+export type HallDetailResponse = ApiResponse<concertHallDetail>;

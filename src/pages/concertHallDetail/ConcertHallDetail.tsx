@@ -4,6 +4,7 @@ import { BiBus, BiCoffeeTogo } from 'react-icons/bi';
 import { IoRestaurantOutline } from 'react-icons/io5';
 import { MdOutlineStoreMallDirectory } from 'react-icons/md';
 import { TbDisabled } from 'react-icons/tb';
+import { useParams } from 'react-router-dom';
 
 import RelatedConcert from './components/RelatedConcert';
 import SeatReview from './components/SeatReview';
@@ -13,6 +14,7 @@ import Rating from 'components/rating/Rating';
 import TabBar from 'components/tabBar/TabBar';
 import type { TabType } from 'components/tabBar/tabData';
 import { tabMap } from 'components/tabBar/tabData';
+import { useGetConcertHallDetail } from 'queries/concertHall';
 import { useAuthStore } from 'stores';
 import { BodyRegularText, TitleText1, TitleText2 } from 'styles/Typography';
 import type { concertHallDetail, ConvenienceInfo } from 'types';
@@ -121,27 +123,6 @@ const BottomButtonWrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.black};
 `;
 
-const dummyData: concertHallDetail = {
-  name: '인스파이어 아레나',
-  seatScale: 15000,
-  star: 4.5,
-  convenienceInfo: {
-    hasParkingLot: true,
-    hasRestaurant: false,
-    hasCafe: false,
-    hasStore: false,
-    hasDisabledParking: true,
-    hasDisabledToilet: false,
-    hasElevator: false,
-    hasRunway: false,
-  },
-  location: {
-    longitude: 126.3891177,
-    latitude: 37.4655301,
-    address: '인천광역시 중구 공항문화로 127 (운서동)',
-  },
-};
-
 const FACILITIES = (convenienceInfo: ConvenienceInfo) => [
   { label: '주차 시설', icon: <BiBus size={24} />, isActive: convenienceInfo.hasParkingLot },
   {
@@ -165,10 +146,14 @@ const DISABLED_FACILITIES = (convenienceInfo: ConvenienceInfo) => [
 ];
 
 const ConcertHallDetail = () => {
+  const { id } = useParams();
   const { isLoggedIn } = useAuthStore(['isLoggedIn']);
+  const { data } = useGetConcertHallDetail(id as string);
   const [activeTab, setActiveTab] = useState<(typeof tabMap)[TabType][number]>('좌석 리뷰');
 
-  const { name, seatScale, star, convenienceInfo, location } = dummyData;
+  if (!data) return <div>세부 정보가 존재하지 않습니다.</div>;
+
+  const { name, seatScale, star, convenienceInfo, location } = data;
   const facilities = FACILITIES(convenienceInfo);
   const disabledFacilities = DISABLED_FACILITIES(convenienceInfo);
   const isActiveDisabledIcon =

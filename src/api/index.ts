@@ -5,3 +5,4 @@ export * from './rentalFormApi';
 export * from './searchApi';
 export * from './userApi';
 export * from './concertRecordApi';
+export * from './concertHallApi';
