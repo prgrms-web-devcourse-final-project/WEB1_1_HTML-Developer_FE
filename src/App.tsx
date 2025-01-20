@@ -2,6 +2,8 @@ import styled from '@emotion/styled';
 import { Suspense, useEffect } from 'react';
 import { RouterProvider } from 'react-router-dom';
 
+import { requestPermission } from './firebase-messaging-sw';
+
 import { endPoint } from 'constants/endPoint';
 import { useScreenSize } from 'hooks';
 import { router } from 'routes/routes';
@@ -15,6 +17,8 @@ function App() {
   useScreenSize();
 
   useEffect(() => {
+    void requestPermission();
+
     if (isLoggedIn) {
       const fetchLoginCheck = async () => {
         try {
