@@ -1,10 +1,12 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { BiBus, BiCoffeeTogo } from 'react-icons/bi';
 import { IoRestaurantOutline } from 'react-icons/io5';
 import { MdOutlineStoreMallDirectory } from 'react-icons/md';
 import { TbDisabled } from 'react-icons/tb';
+import { useParams } from 'react-router-dom';
 
+import ConcertHallMap from './components/ConcertHallMap';
 import RelatedConcert from './components/RelatedConcert';
 import SeatReview from './components/SeatReview';
 
@@ -13,33 +15,16 @@ import Rating from 'components/rating/Rating';
 import TabBar from 'components/tabBar/TabBar';
 import type { TabType } from 'components/tabBar/tabData';
 import { tabMap } from 'components/tabBar/tabData';
+import { useGetConcertHallDetail } from 'queries/concertHall';
 import { useAuthStore } from 'stores';
 import { BodyRegularText, TitleText1, TitleText2 } from 'styles/Typography';
-import type { concertHallDetail, ConvenienceInfo } from 'types';
+import type { ConvenienceInfo } from 'types';
 
 interface ActiveStyle {
   isActive?: boolean;
 }
 
 const DetailContainer = styled.div``;
-
-const MapContainer = styled.div`
-  position: relative;
-  width: 100%;
-  height: 66.7%;
-  padding-top: 66.7%;
-  overflow: hidden;
-  background-color: ${({ theme }) => theme.colors.dark[300]};
-`;
-
-const Map = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-`;
 
 const ContentContainer = styled.div`
   padding: 2.4rem;
@@ -85,7 +70,7 @@ const FacilitiesWrapper = styled.div`
   grid-template-columns: repeat(2, 1fr);
   gap: 1.2rem;
 
-  & > *:nth-last-child(1) {
+  & > *:nth-last-of-type(1) {
     grid-column: span 2;
   }
 `;
@@ -103,7 +88,9 @@ const DisabledFacilities = styled(BodyRegularText)<ActiveStyle>`
   color: ${({ theme, isActive }) => (isActive ? theme.colors.dark[100] : theme.colors.dark[500])};
 `;
 
-const DisabledIcon = styled(TbDisabled)<ActiveStyle>`
+const DisabledIcon = styled(TbDisabled, {
+  shouldForwardProp: (prop) => prop !== 'isActive',
+})<ActiveStyle>`
   color: ${({ theme, isActive }) => (isActive ? theme.colors.dark[100] : theme.colors.dark[500])};
 `;
 
@@ -120,27 +107,6 @@ const BottomButtonWrapper = styled.div`
   padding: 2.4rem;
   background-color: ${({ theme }) => theme.colors.black};
 `;
-
-const dummyData: concertHallDetail = {
-  name: '인스파이어 아레나',
-  seatScale: 15000,
-  star: 4.5,
-  convenienceInfo: {
-    hasParkingLot: true,
-    hasRestaurant: false,
-    hasCafe: false,
-    hasStore: false,
-    hasDisabledParking: true,
-    hasDisabledToilet: false,
-    hasElevator: false,
-    hasRunway: false,
-  },
-  location: {
-    longitude: 126.3891177,
-    latitude: 37.4655301,
-    address: '인천광역시 중구 공항문화로 127 (운서동)',
-  },
-};
 
 const FACILITIES = (convenienceInfo: ConvenienceInfo) => [
   { label: '주차 시설', icon: <BiBus size={24} />, isActive: convenienceInfo.hasParkingLot },
@@ -165,10 +131,14 @@ const DISABLED_FACILITIES = (convenienceInfo: ConvenienceInfo) => [
 ];
 
 const ConcertHallDetail = () => {
+  const { id } = useParams();
   const { isLoggedIn } = useAuthStore(['isLoggedIn']);
+  const { data } = useGetConcertHallDetail(id as string);
   const [activeTab, setActiveTab] = useState<(typeof tabMap)[TabType][number]>('좌석 리뷰');
 
-  const { name, seatScale, star, convenienceInfo, location } = dummyData;
+  if (!data) return;
+
+  const { name, seatScale, star, convenienceInfo, location } = data;
   const facilities = FACILITIES(convenienceInfo);
   const disabledFacilities = DISABLED_FACILITIES(convenienceInfo);
   const isActiveDisabledIcon =
@@ -183,9 +153,7 @@ const ConcertHallDetail = () => {
 
   return (
     <DetailContainer>
-      <MapContainer>
-        <Map />
-      </MapContainer>
+      <ConcertHallMap latitude={location.latitude} longitude={location.longitude} />
       <ContentContainer>
         <HallName>{name}</HallName>
         <HallAddress>{location.address}</HallAddress>
@@ -201,17 +169,17 @@ const ConcertHallDetail = () => {
           <TitleText2>공연 주변 시설</TitleText2>
           <FacilitiesWrapper>
             {facilities.map((item) => (
-              <FacilitiesInfo isActive={item.isActive}>
+              <FacilitiesInfo isActive={item.isActive} key={item.label}>
                 {item.icon} {item.label}
               </FacilitiesInfo>
             ))}
-            <FacilitiesInfo>
+            <FacilitiesInfo key="장애 시설">
               <DisabledIcon isActive={isActiveDisabledIcon} size={24} />
               {disabledFacilities.map((item, idx) => (
-                <>
+                <Fragment key={item.label}>
                   <DisabledFacilities isActive={item.isActive}>{item.label}</DisabledFacilities>
                   {idx < disabledFacilities.length - 1 && <span> | </span>}
-                </>
+                </Fragment>
               ))}
             </FacilitiesInfo>
           </FacilitiesWrapper>

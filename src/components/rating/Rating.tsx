@@ -10,7 +10,9 @@ const RatingContainer = styled.div`
   gap: 0.4rem;
 `;
 
-const StarIcon = styled(TbStarFilled)<{ isFilled: boolean }>`
+const StarIcon = styled(TbStarFilled, {
+  shouldForwardProp: (prop) => prop !== 'isFilled',
+})<{ isFilled: boolean }>`
   color: ${({ theme, isFilled }) => (isFilled ? theme.colors.primary : theme.colors.dark[500])};
 `;
 
@@ -20,7 +22,7 @@ const Rating = ({ score }: RatingProps) => {
   return (
     <RatingContainer>
       {Array.from({ length: 5 }).map((_, idx) => (
-        <StarIcon isFilled={idx < filledStars} size={16} />
+        <StarIcon isFilled={idx < filledStars} key={idx} size={16} />
       ))}
     </RatingContainer>
   );

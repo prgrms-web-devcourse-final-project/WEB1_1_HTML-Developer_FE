@@ -137,7 +137,7 @@ const SeatReviewItem = () => {
       </ReviewInfo>
       <ReviewImageWrapper>
         {images.map((url) => (
-          <ReviewImage src={url} />
+          <ReviewImage key={url} src={url} />
         ))}
       </ReviewImageWrapper>
       <ReviewContent>
