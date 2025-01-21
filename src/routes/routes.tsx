@@ -38,6 +38,7 @@ const ConcertRecord = lazy(() => import('pages/concertRecord/ConcertRecord'));
 const CreateConcertRecord = lazy(() => import('pages/createConcertRecord/CreateConcertRecord'));
 
 const Chat = lazy(() => import('pages/chat/Chat'));
+const JoinChat = lazy(() => import('pages/joinChat/JoinChat'));
 
 export const router = createBrowserRouter([
   {
@@ -204,6 +205,7 @@ export const router = createBrowserRouter([
             element: <CreateConcertRecord type="edit" />,
             handle: { title: '공연 기록 수정' },
           },
+          { path: '/chat/:id/join', element: <JoinChat />, handle: { title: '채팅 참여' } },
         ],
       },
     ],
