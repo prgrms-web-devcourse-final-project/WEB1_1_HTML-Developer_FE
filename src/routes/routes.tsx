@@ -4,6 +4,7 @@ import { createBrowserRouter, Outlet } from 'react-router-dom';
 import ModalRenderer from 'components/modalRenderer/ModalRenderer';
 import ToastRenderer from 'components/toast/ToastRenderer';
 import { FullLayout, TitleHeaderLayout } from 'layout';
+import { ChatRoomLayout } from 'layout/ChatRoomLayout';
 import { AuthHeaderLayout, AuthTitleHeaderLayout, PublicOnlyLayout } from 'layout/ProtectedRoutes';
 import SearchLayout from 'layout/SearchLayout';
 import Callback from 'pages/callback/Callback';
@@ -39,6 +40,8 @@ const CreateConcertRecord = lazy(() => import('pages/createConcertRecord/CreateC
 
 const Chat = lazy(() => import('pages/chat/Chat'));
 const JoinChat = lazy(() => import('pages/joinChat/JoinChat'));
+const PrivateChatRoom = lazy(() => import('pages/chatRoom/PrivateChatRoom'));
+const GroupChatRoom = lazy(() => import('pages/chatRoom/GroupChatRoom'));
 
 export const router = createBrowserRouter([
   {
@@ -206,6 +209,20 @@ export const router = createBrowserRouter([
             handle: { title: '공연 기록 수정' },
           },
           { path: '/chat/:id/join', element: <JoinChat />, handle: { title: '채팅 참여' } },
+        ],
+      },
+
+      {
+        element: <ChatRoomLayout />,
+        children: [
+          {
+            path: '/chat/private/:id',
+            element: <PrivateChatRoom />,
+          },
+          {
+            path: '/chat/group/:id',
+            element: <GroupChatRoom />,
+          },
         ],
       },
     ],
