@@ -42,6 +42,7 @@ const Chat = lazy(() => import('pages/chat/Chat'));
 const JoinChat = lazy(() => import('pages/joinChat/JoinChat'));
 const PrivateChatRoom = lazy(() => import('pages/chatRoom/PrivateChatRoom'));
 const GroupChatRoom = lazy(() => import('pages/chatRoom/GroupChatRoom'));
+const EditChat = lazy(() => import('pages/editChat/EditChat'));
 
 export const router = createBrowserRouter([
   {
@@ -209,6 +210,7 @@ export const router = createBrowserRouter([
             handle: { title: '공연 기록 수정' },
           },
           { path: '/chat/:id/join', element: <JoinChat />, handle: { title: '채팅 참여' } },
+          { path: '/chat/group/:id/edit', element: <EditChat />, handle: { title: '채팅방 수정' } },
         ],
       },
 
