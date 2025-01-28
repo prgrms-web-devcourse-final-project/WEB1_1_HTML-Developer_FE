@@ -18,7 +18,7 @@ export interface ConcertHallLocation {
   address: string;
 }
 
-export interface concertHallDetail {
+export interface ConcertHallDetail {
   name: string;
   seatScale: number;
   star: number;
@@ -26,4 +26,21 @@ export interface concertHallDetail {
   location: ConcertHallLocation;
 }
 
-export type HallDetailResponse = ApiResponse<concertHallDetail>;
+export interface SeatReview {
+  reviewId: number;
+  seat: string;
+  content: string;
+  star: number;
+  memberId: number;
+  hallId: string;
+  viewDate: string;
+  createdAt: string;
+  imageUrls: string[];
+  likeCount: number;
+  liked: boolean;
+}
+
+export type SeatReviewSort = 'CREATED_AT' | 'LIKE_COUNT';
+
+export type HallDetailResponse = ApiResponse<ConcertHallDetail>;
+export type SeatReviewResponse = ApiResponse<SeatReview[]>;

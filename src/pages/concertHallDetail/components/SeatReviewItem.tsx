@@ -5,6 +5,7 @@ import SeatReviewSheet from './SeatReviewSheet';
 
 import { useModalStore } from 'stores';
 import { BodyRegularText } from 'styles/Typography';
+import type { SeatReview } from 'types';
 import { formatDotDate } from 'utils';
 
 const SeatReviewItemContainer = styled.div`
@@ -112,9 +113,9 @@ const dummyData = {
   date: '2025-01-14',
 };
 
-const SeatReviewItem = () => {
-  const { profileImg, username, isWriter, concertName, seatName, images, content, date } =
-    dummyData;
+const SeatReviewItem = (props: SeatReview) => {
+  const { profileImg, username, isWriter, concertName } = dummyData;
+  const { seat, imageUrls, content, viewDate } = props;
 
   const { openModal } = useModalStore(['openModal']);
 
@@ -133,16 +134,16 @@ const SeatReviewItem = () => {
           )}
         </ReviewTop>
         <ConcertName>{concertName}</ConcertName>
-        <SeatName>{seatName}</SeatName>
+        <SeatName>{seat}</SeatName>
       </ReviewInfo>
       <ReviewImageWrapper>
-        {images.map((url) => (
+        {imageUrls.map((url) => (
           <ReviewImage key={url} src={url} />
         ))}
       </ReviewImageWrapper>
       <ReviewContent>
         <BodyRegularText>{content}</BodyRegularText>
-        <BodyRegularText>{formatDotDate(date)}</BodyRegularText>
+        <BodyRegularText>{formatDotDate(viewDate)}</BodyRegularText>
       </ReviewContent>
     </SeatReviewItemContainer>
   );

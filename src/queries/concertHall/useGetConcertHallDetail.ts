@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { requestGetHallDetails } from 'api';
-import type { concertHallDetail } from 'types';
+import type { ConcertHallDetail } from 'types';
 
 export const useGetConcertHallDetail = (id: string) => {
   const fetchHallDetails = async () => {
@@ -9,7 +9,7 @@ export const useGetConcertHallDetail = (id: string) => {
     return data.result;
   };
 
-  return useQuery<concertHallDetail>({
+  return useQuery<ConcertHallDetail>({
     queryKey: ['hallDetails', id],
     queryFn: fetchHallDetails,
     enabled: !!id,

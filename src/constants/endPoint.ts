@@ -50,6 +50,7 @@ export const endPoint = {
   // Concert Hall API
   GET_CONCERT_HALL_LIST: '/concert-halls/list',
   GET_CONCERT_HALL: (hallCode: string) => `/concert-halls/${hallCode}`,
+  GET_SEAT_REVIEW: '/seat-review',
 
   // Search API
   GET_CONCERT_SEARCH: '/search/concert',
