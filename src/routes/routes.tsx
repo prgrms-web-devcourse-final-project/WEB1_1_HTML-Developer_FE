@@ -220,10 +220,12 @@ export const router = createBrowserRouter([
           {
             path: '/chat/private/:id',
             element: <PrivateChatRoom />,
+            handle: { chatType: 'SINGLE' },
           },
           {
             path: '/chat/group/:id',
             element: <GroupChatRoom />,
+            handle: { chatType: 'GROUP' },
           },
         ],
       },
