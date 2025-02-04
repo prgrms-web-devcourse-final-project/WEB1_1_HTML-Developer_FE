@@ -26,6 +26,7 @@ export interface ConcertHallDetail {
   location: ConcertHallLocation;
 }
 
+// Seat Review
 export interface SeatReview {
   reviewId: number;
   seat: string;
@@ -49,5 +50,16 @@ export interface SeatReviewParams {
 
 export type SeatReviewSort = 'CREATED_ASC' | 'CREATED_DESC';
 
+// Relate Concert
+export interface RelateConcert {
+  id: number;
+  title: string;
+  startDate: string;
+  endDate: string;
+  imageUrl: string;
+  viewCount: number;
+}
+
 export type HallDetailResponse = ApiResponse<ConcertHallDetail>;
 export type SeatReviewResponse = ApiResponse<SeatReview[]>;
+export type RelateConcertResponse = ApiResponse<RelateConcert[]>;

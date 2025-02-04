@@ -51,6 +51,7 @@ export const endPoint = {
   GET_CONCERT_HALL_LIST: '/concert-halls/list',
   GET_CONCERT_HALL: (hallCode: string) => `/concert-halls/${hallCode}`,
   GET_SEAT_REVIEW: '/seat-review',
+  GET_RELATE_CONCERT: '/concert-halls/relate/list',
 
   // Search API
   GET_CONCERT_SEARCH: '/search/concert',
