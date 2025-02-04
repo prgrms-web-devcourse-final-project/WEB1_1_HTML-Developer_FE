@@ -25,17 +25,7 @@ const Map = styled.div`
 
 const ConcertHallMap = ({ longitude, latitude }: ConcertHallMapProps) => {
   useEffect(() => {
-    if (document.getElementById('kakao-map-script')) return;
-
-    const script = document.createElement('script');
-    script.id = 'kakao-map-script';
-    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${
-      import.meta.env.VITE_JAVASCRIPT_KEY
-    }&autoload=false`;
-    script.async = true;
-    document.head.appendChild(script);
-
-    script.onload = () => {
+    const initializeMap = () => {
       kakao.maps.load(() => {
         const container = document.getElementById('map');
         if (container) {
@@ -53,6 +43,18 @@ const ConcertHallMap = ({ longitude, latitude }: ConcertHallMapProps) => {
         }
       });
     };
+
+    if (!document.getElementById('kakao-map-script')) {
+      const script = document.createElement('script');
+      script.id = 'kakao-map-script';
+      script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${import.meta.env.VITE_JAVASCRIPT_KEY}&autoload=false`;
+      script.async = true;
+      document.head.appendChild(script);
+
+      script.onload = () => {
+        initializeMap();
+      };
+    } else initializeMap();
   }, [latitude, longitude]);
 
   return (
