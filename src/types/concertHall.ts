@@ -29,18 +29,25 @@ export interface ConcertHallDetail {
 export interface SeatReview {
   reviewId: number;
   seat: string;
+  concertTitle: string;
   content: string;
   star: number;
   memberId: number;
   hallId: string;
   viewDate: string;
   createdAt: string;
-  imageUrls: string[];
-  likeCount: number;
-  liked: boolean;
+  imageUrls: string[] | [];
+  profileImageUrl: string;
+  nickname: string;
+  writer: boolean;
 }
 
-export type SeatReviewSort = 'CREATED_AT' | 'LIKE_COUNT';
+export interface SeatReviewParams {
+  lastId: number | null;
+  lastCreatedAt: string | null;
+}
+
+export type SeatReviewSort = 'CREATED_ASC' | 'CREATED_DESC';
 
 export type HallDetailResponse = ApiResponse<ConcertHallDetail>;
 export type SeatReviewResponse = ApiResponse<SeatReview[]>;

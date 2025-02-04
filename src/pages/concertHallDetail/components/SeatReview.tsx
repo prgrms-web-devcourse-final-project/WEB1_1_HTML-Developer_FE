@@ -36,14 +36,10 @@ const EmptySeatReview = styled.div`
   padding: 8rem 0;
 `;
 
-const SeatReviewList = styled.ul`
-  list-style: none;
-`;
-
 const SeatReview = () => {
   const { id } = useParams();
   const { isLoggedIn } = useAuthStore(['isLoggedIn']);
-  const [sortOrder, setSortOrder] = useState<SeatReviewSort>('CREATED_AT');
+  const [sortOrder, setSortOrder] = useState<SeatReviewSort>('CREATED_DESC');
   const {
     data: reviews,
     fetchNextPage,
@@ -68,14 +64,14 @@ const SeatReview = () => {
     <SeatReviewContainer>
       <ReviewFilterWrapper>
         <ReviewFilter
-          isActive={sortOrder === 'CREATED_AT'}
-          onClick={() => setSortOrder('CREATED_AT')}
+          isActive={sortOrder === 'CREATED_DESC'}
+          onClick={() => setSortOrder('CREATED_DESC')}
         >
           ∙ 최신순
         </ReviewFilter>
         <ReviewFilter
-          isActive={sortOrder === 'LIKE_COUNT'}
-          onClick={() => setSortOrder('LIKE_COUNT')}
+          isActive={sortOrder === 'CREATED_ASC'}
+          onClick={() => setSortOrder('CREATED_ASC')}
         >
           ∙ 오래된순
         </ReviewFilter>
@@ -86,13 +82,9 @@ const SeatReview = () => {
           <BodyRegularText>아직 작성된 리뷰가 없어요</BodyRegularText>
         </EmptySeatReview>
       ) : (
-        reviews?.pages.map((page, pageIndex) => (
-          <SeatReviewList key={pageIndex}>
-            {page.map((item) => (
-              <SeatReviewItem key={item.reviewId} {...item} />
-            ))}
-          </SeatReviewList>
-        ))
+        reviews?.pages.flatMap((page) =>
+          page.map((item) => <SeatReviewItem key={item.reviewId} {...item} />)
+        )
       )}
       <div ref={targetRef} />
     </SeatReviewContainer>

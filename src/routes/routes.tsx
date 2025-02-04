@@ -110,7 +110,7 @@ export const router = createBrowserRouter([
             },
           },
           {
-            path: '/concert-hall/:id',
+            path: '/concert-halls/:id',
             element: <ConcertHallDetail />,
             handle: {
               isSharePage: true,
