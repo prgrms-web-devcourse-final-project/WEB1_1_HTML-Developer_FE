@@ -7,7 +7,14 @@ import App from './App';
 
 import theme from 'styles/theme';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
 // async function enableMocking() {
 //   if (import.meta.env.MODE !== 'development') return;
 
