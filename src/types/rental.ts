@@ -89,10 +89,49 @@ export interface DepositFormData {
   refundAccount: string | null;
 }
 
+export interface ManagingRental {
+  rentId: number;
+  title: string;
+  boardingDate: string;
+  boardingArea: string;
+  rentStartDate: string;
+  rentEndDate: string;
+  recruitmentCount: number;
+  participationCount: number;
+  isClosed: boolean;
+  busSize: BusSize;
+  busType: BusType;
+  maxPassenger: number;
+}
+
+interface RentJoinDetail {
+  rentJoinId: number;
+  applyDate: string;
+  depositorName: string;
+  phone: string;
+  passengerNum: number;
+  boardingType: BoardingType;
+  depositorTime: string;
+  refundType: RefundType;
+  rentAccount: string;
+}
+
+export interface ManagingRentalDetail extends ManagingRental {
+  rentUpCount: number;
+  rentDownCount: number;
+  rentRoundCount: number;
+  additionalDepositCount: number;
+  refundCount: number;
+  rentJoinDetailResponses: RentJoinDetail[];
+}
+
 export interface AllRentalDetail extends RentalDetail, DepositAccount {}
 
 export type RentalListResponse = ApiResponse<RentalList[]>;
 export type RentalDetailResponse = ApiResponse<RentalDetail>;
 export type RentalAccountResponse = ApiResponse<DepositAccount>;
+
+export type ManagingRentalListResponse = ApiResponse<ManagingRental[]>;
+export type ManagingRentalDetailResponse = ApiResponse<ManagingRentalDetail>;
 
 export type DepositFormResponse = ApiResponse<0>;

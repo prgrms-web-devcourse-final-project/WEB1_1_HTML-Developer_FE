@@ -1,6 +1,12 @@
 import { endPoint } from 'constants/endPoint';
 import type { DepositFormResponse, PageParam } from 'types';
-import type { RentalAccountResponse, RentalDetailResponse, RentalListResponse } from 'types';
+import type {
+  RentalAccountResponse,
+  RentalDetailResponse,
+  RentalListResponse,
+  ManagingRentalListResponse,
+  ManagingRentalDetailResponse,
+} from 'types';
 import { publicAxios, tokenAxios } from 'utils';
 
 export const createRentalQuery = (filterQuery: string, pageParam: PageParam) => {
@@ -29,3 +35,23 @@ export const requestGetDepositAccount = async (id: string) => {
 export const requestPostDepositForm = async (formData: string) => {
   return await tokenAxios.post<DepositFormResponse>(`${endPoint.APPLY_RENT_FORM}`, formData);
 };
+
+export const requestGetManagingRentalList = async () => {
+  const { data } = await tokenAxios.get<ManagingRentalListResponse>(endPoint.GET_CREATED_RENT_LIST);
+  return data.result;
+};
+
+export const requestGetManagingRentalDetail = async (id: string, boardingDate: string) => {
+  const { data } = await tokenAxios.get<ManagingRentalDetailResponse>(
+    endPoint.GET_CREATED_RENT_DETAIL(id),
+    {
+      params: {
+        boardingDate,
+      },
+    }
+  );
+
+  return data;
+};
+
+export const requestGetParticipatingRentalList = () => {};

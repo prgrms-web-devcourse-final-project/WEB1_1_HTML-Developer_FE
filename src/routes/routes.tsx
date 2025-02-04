@@ -33,6 +33,7 @@ const EditProfile = lazy(() => import('pages/editProfile/EditProfile'));
 const MyRentalList = lazy(() => import('pages/myRentalList/MyRentalList'));
 const MySurveyList = lazy(() => import('pages/mySurveyList/MySurveyList'));
 const MyRentalManagement = lazy(() => import('pages/myRentalManagement/MyRentalManagement'));
+const ManagingRentalDetail = lazy(() => import('pages/managingRentalDetail/ManagingRentalDetail'));
 const MySurveyManagement = lazy(() => import('pages/mySurveyManagement/MySurveyManagement'));
 const ConcertRecord = lazy(() => import('pages/concertRecord/ConcertRecord'));
 const CreateConcertRecord = lazy(() => import('pages/createConcertRecord/CreateConcertRecord'));
@@ -173,6 +174,11 @@ export const router = createBrowserRouter([
             path: '/rental-management',
             element: <MyRentalManagement />,
             handle: { title: '차량 대절 관리' },
+          },
+          {
+            path: '/rental-management/:id',
+            element: <ManagingRentalDetail />,
+            handle: { title: '차량 대절 관리 상세' },
           },
           {
             path: '/my-survey-list',

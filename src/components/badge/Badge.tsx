@@ -12,12 +12,17 @@ type BadgeColor = 'gray' | 'red';
 interface BadgeStyle {
   variant: BadgeVariant;
   size: BadgeSize;
-  color: BadgeColor;
+  color?: BadgeColor;
 }
 
 interface BadgeProps extends BadgeStyle {
   children: string;
 }
+
+const DefaultStyle = (theme: Theme) => css`
+  background-color: ${theme.colors.primary};
+  color: ${theme.colors.white};
+`;
 
 const GrayStyle = (theme: Theme) => css`
   background-color: ${theme.colors.dark[500]};
@@ -29,6 +34,15 @@ const RedStyle = (theme: Theme) => css`
   color: ${theme.colors.red};
 `;
 
+const getColorStyle = (color: BadgeColor | undefined, theme: Theme) => {
+  const styles = {
+    gray: GrayStyle(theme),
+    red: RedStyle(theme),
+  };
+
+  return color ? styles[color] : DefaultStyle(theme);
+};
+
 const BadgeContainer = styled.div<BadgeStyle>`
   display: flex;
   justify-content: center;
@@ -39,7 +53,7 @@ const BadgeContainer = styled.div<BadgeStyle>`
   padding: ${({ size }) => (size === 'medium' ? '0 1.2rem' : '0 .8rem')};
   border-radius: ${({ variant }) => (variant === 'round' ? '24px' : '4px')};
 
-  ${({ color, theme }) => (color === 'gray' ? GrayStyle(theme) : RedStyle(theme))}
+  ${({ color, theme }) => getColorStyle(color, theme)}
 `;
 
 const Badge = ({ variant, size, color, children }: BadgeProps) => {
