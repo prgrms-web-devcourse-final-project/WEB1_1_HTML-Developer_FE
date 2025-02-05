@@ -5,6 +5,7 @@ import SeatReviewSheet from './SeatReviewSheet';
 
 import { useModalStore } from 'stores';
 import { BodyRegularText } from 'styles/Typography';
+import type { SeatReview } from 'types';
 import { formatDotDate } from 'utils';
 
 const SeatReviewItemContainer = styled.div`
@@ -97,52 +98,38 @@ const ReviewContent = styled.div`
   color: ${({ theme }) => theme.colors.dark[200]};
 `;
 
-const dummyData = {
-  profileImg: 'https://img.danawa.com/prod_img/500000/253/439/img/18439253_1.jpg?_v=20221207094826',
-  username: '포차코',
-  isWriter: true,
-  concertName: 'DAY6 3RD WORLD TOUR, FOREVER YOUNG [인천]',
-  seatName: '3층 309구역 G열 05번',
-  images: [
-    'https://pbs.twimg.com/media/GK9TqisboAAeWIk.jpg:large',
-    'https://i.ytimg.com/vi/drfGUB9-qTc/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCQa7Viw4-buaWVlPAX5SJGxw0R3g',
-    'https://mblogthumb-phinf.pstatic.net/MjAyNDA0MTNfMTEx/MDAxNzEyOTgwNjgwOTUw.QsQuXUDj3u9UicILmMebvnMTwTmXWRI1yw9nxzbRnu0g.zmC3tgzLnNzoz31fK-jBG8m0-1aRvnkRQCwloQXYRQMg.JPEG/SE-247ff122-9c18-4390-906f-97f95880747d.jpg?type=w400',
-  ],
-  content: '생각보다 잘 보여요',
-  date: '2025-01-14',
-};
-
-const SeatReviewItem = () => {
-  const { profileImg, username, isWriter, concertName, seatName, images, content, date } =
-    dummyData;
-
+const SeatReviewItem = (props: SeatReview) => {
   const { openModal } = useModalStore(['openModal']);
+  const { seat, concertTitle, content, imageUrls, viewDate, profileImageUrl, nickname, writer } =
+    props;
 
   return (
     <SeatReviewItemContainer>
       <ReviewInfo>
         <ReviewTop>
           <RevierProfile>
-            <ProfileImg src={profileImg} />
-            <BodyRegularText>{username}</BodyRegularText>
+            <ProfileImg src={profileImageUrl} />
+            <BodyRegularText>{nickname}</BodyRegularText>
           </RevierProfile>
-          {isWriter && (
+          {writer && (
             <MoreButton onClick={() => openModal('bottomSheet', 'list', <SeatReviewSheet />)}>
               <TbDots size={20} />
             </MoreButton>
           )}
         </ReviewTop>
-        <ConcertName>{concertName}</ConcertName>
-        <SeatName>{seatName}</SeatName>
+        <ConcertName>{concertTitle}</ConcertName>
+        <SeatName>{seat}</SeatName>
       </ReviewInfo>
-      <ReviewImageWrapper>
-        {images.map((url) => (
-          <ReviewImage key={url} src={url} />
-        ))}
-      </ReviewImageWrapper>
+      {imageUrls?.filter((x) => x !== null).length !== 0 && (
+        <ReviewImageWrapper>
+          {imageUrls.map((url) => (
+            <ReviewImage key={url} src={url} />
+          ))}
+        </ReviewImageWrapper>
+      )}
       <ReviewContent>
         <BodyRegularText>{content}</BodyRegularText>
-        <BodyRegularText>{formatDotDate(date)}</BodyRegularText>
+        <BodyRegularText>{formatDotDate(viewDate)}</BodyRegularText>
       </ReviewContent>
     </SeatReviewItemContainer>
   );

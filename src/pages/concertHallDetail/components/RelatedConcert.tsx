@@ -1,7 +1,13 @@
 import styled from '@emotion/styled';
+import { useNavigate } from 'react-router-dom';
 
+import { useGetRelateConcert } from 'queries/concertHall';
 import { ChipText, SmallText } from 'styles/Typography';
 import { formatDateRange } from 'utils';
+
+interface RelatedConcertProps {
+  hallCode: string;
+}
 
 const RelatedConcertContainer = styled.div`
   width: 100%;
@@ -41,16 +47,20 @@ const ConcertItem = styled.div`
   &:hover,
   &:active {
     text-decoration: underline;
+    cursor: pointer;
+  }
+
+  &:nth-last-of-type(1) {
+    margin-right: 1.6rem;
   }
 `;
 
 const PosterContainer = styled.div`
   position: relative;
   overflow: hidden;
-  width: 100%;
-  height: 0;
+  width: 15rem;
+  height: 20rem;
   margin-bottom: 1.2rem;
-  padding-top: 133%;
   border-radius: 4px;
 `;
 
@@ -77,38 +87,24 @@ const ConcertDate = styled(SmallText)`
   color: ${({ theme }) => theme.colors.dark[200]};
 `;
 
-const dummyData = [
-  {
-    poster: 'https://tkfile.yes24.com/upload2/PerfBlog/202501/20250108/20250108-52123.jpg',
-    concertName: 'DAY6 3RD WORLD TOUR 〈FOREVER YOUNG〉in BUSAN',
-    stDate: '2025-02-01',
-    edDate: '2025-02-02',
-  },
-  {
-    poster: 'https://ticketimage.interpark.com/Play/image/large/25/25000325_p.gif',
-    concertName: '2025 LEECHANGSUB SOLO CONCERT 〈The Wayfarer〉 ENCORE',
-    stDate: '2025-02-07',
-    edDate: '2025-02-09',
-  },
-  {
-    poster: 'https://ticketimage.interpark.com/Play/image/large/24/24017908_p.gif',
-    concertName: '[2024-25 Theatre 이문세］ - 울산',
-    stDate: '2025-03-07',
-    edDate: '2025-03-08',
-  },
-];
+const RelatedConcert = ({ hallCode }: RelatedConcertProps) => {
+  const { data } = useGetRelateConcert(hallCode);
+  const navigate = useNavigate();
 
-const RelatedConcert = () => {
+  const handleConcertClick = (concertId: number) => {
+    navigate(`/concerts/${concertId}`);
+  };
+
   return (
     <RelatedConcertContainer>
       <ConcertList>
-        {dummyData.map((concert) => (
-          <ConcertItem key={concert.concertName}>
+        {data?.map((concert) => (
+          <ConcertItem key={concert.id} onClick={() => handleConcertClick(concert.id)}>
             <PosterContainer>
-              <PosterImg alt={concert.concertName} src={concert.poster} />
+              <PosterImg alt={concert.title} src={concert.imageUrl} />
             </PosterContainer>
-            <ConcertName>{concert.concertName}</ConcertName>
-            <ConcertDate>{formatDateRange(concert.stDate, concert.edDate)}</ConcertDate>
+            <ConcertName>{concert.title}</ConcertName>
+            <ConcertDate>{formatDateRange(concert.startDate, concert.endDate)}</ConcertDate>
           </ConcertItem>
         ))}
       </ConcertList>

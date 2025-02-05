@@ -18,7 +18,7 @@ export interface ConcertHallLocation {
   address: string;
 }
 
-export interface concertHallDetail {
+export interface ConcertHallDetail {
   name: string;
   seatScale: number;
   star: number;
@@ -26,4 +26,40 @@ export interface concertHallDetail {
   location: ConcertHallLocation;
 }
 
-export type HallDetailResponse = ApiResponse<concertHallDetail>;
+// Seat Review
+export interface SeatReview {
+  reviewId: number;
+  seat: string;
+  concertTitle: string;
+  content: string;
+  star: number;
+  memberId: number;
+  hallId: string;
+  viewDate: string;
+  createdAt: string;
+  imageUrls: string[] | [];
+  profileImageUrl: string;
+  nickname: string;
+  writer: boolean;
+}
+
+export interface SeatReviewParams {
+  lastId: number | null;
+  lastCreatedAt: string | null;
+}
+
+export type SeatReviewSort = 'CREATED_ASC' | 'CREATED_DESC';
+
+// Relate Concert
+export interface RelateConcert {
+  id: number;
+  title: string;
+  startDate: string;
+  endDate: string;
+  imageUrl: string;
+  viewCount: number;
+}
+
+export type HallDetailResponse = ApiResponse<ConcertHallDetail>;
+export type SeatReviewResponse = ApiResponse<SeatReview[]>;
+export type RelateConcertResponse = ApiResponse<RelateConcert[]>;

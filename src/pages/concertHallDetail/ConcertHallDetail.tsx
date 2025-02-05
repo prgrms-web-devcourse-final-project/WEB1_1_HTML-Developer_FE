@@ -188,7 +188,7 @@ const ConcertHallDetail = () => {
       <TabBar onTabClick={handleActiveTab} selectedTab={activeTab} tabList={tabMap['concertTab']} />
       <TabContent>
         {activeTab === '좌석 리뷰' && <SeatReview />}
-        {activeTab === '관련 공연' && <RelatedConcert />}
+        {activeTab === '관련 공연' && <RelatedConcert hallCode={id as string} />}
       </TabContent>
       <BottomButtonWrapper>
         <BaseButton
